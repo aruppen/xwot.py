@@ -6,24 +6,25 @@
 """
 
 from __future__ import absolute_import
+import json
 
 
-class Mounter(object):
+class VocabMounter(object):
 
     def mount(self):
         raise NotImplementedError
 
 
-class FlaskMounter(Mounter):
+class FlaskMounter(VocabMounter):
 
-    def __init__(self, app, annotator):
+    def __init__(self, app, vocab_builder):
         self._app = app
-        self._annotator = annotator
-        self._vocab = None
-        self._class_contexts = None
+        vocab, class_contexts = vocab_builder.output()
+        self._vocab = vocab
+        self._class_contexts = class_contexts
 
         from xwot.util.flask import link
-        doc = annotator.get_documentation()
+        doc = vocab_builder.documentation
         self._link = link(doc.vocab_url)
 
     def _mount_contexts(self):
@@ -50,6 +51,6 @@ class FlaskMounter(Mounter):
         self._app.add_url_rule('/vocab', 'vocab', vocab)
 
     def mount(self):
-        self._vocab, self._class_contexts = self._annotator.build_vocab()
         self._mount_contexts()
         self._mount_vocab()
+

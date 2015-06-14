@@ -36,7 +36,7 @@ def link(vocab_url):
     return wrapped_link
 
 
-def mount(app, annotator):
+def mount_vocab(app, vocab_builder):
     from xwot.util.mount import FlaskMounter
-    mounter = FlaskMounter(app=app, annotator=annotator)
+    mounter = FlaskMounter(app=app, vocab_builder=vocab_builder)
     mounter.mount()

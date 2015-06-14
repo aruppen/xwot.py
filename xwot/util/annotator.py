@@ -244,32 +244,11 @@ class Annotator(object):
     def get_route(self, route):
         return self._routes[route]
 
+    def get_routes(self):
+        return self._routes
+
+    def get_classes(self):
+        return self._classes
+
     def get_documentation(self):
         return self._documentation
-
-    def build_vocab(self):
-        builder = VocabBuilder(self._documentation, self._classes, self._routes)
-        doc, class_contexts = builder.output()
-        json_doc = json.dumps(doc, indent=4, sort_keys=True, separators=(',', ': '))
-
-        class_contexts_json_doc = {}
-        for filename, context in class_contexts.items():
-            json_context_doc = json.dumps(context, indent=4, sort_keys=True, separators=(',', ': '))
-            class_contexts_json_doc[filename] = json_context_doc
-
-        return json_doc, class_contexts_json_doc
-
-    def write_files(self):
-        builder = VocabBuilder(self._documentation, self._classes, self._routes)
-        doc, class_contexts = builder.output()
-        json_doc = json.dumps(doc, indent=4, sort_keys=True, separators=(',', ': '))
-
-        with open('vocab.jsonld', 'w+') as vocab:
-            vocab.write(json_doc)
-
-        class_contexts_json_doc = {}
-        for filename, context in class_contexts.items():
-            json_context_doc = json.dumps(context, indent=4, sort_keys=True, separators=(',', ': '))
-            class_contexts_json_doc[filename] = json_context_doc
-            with open(filename, 'w+') as c:
-                c.write(json_context_doc)

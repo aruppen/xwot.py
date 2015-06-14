@@ -6,12 +6,14 @@ from flask import request
 import models
 from xwot.util.vocab import Hydra
 from xwot.util.vocab import Owl
-from xwot.util.hydra import flask_link
+from xwot.util.flask import link
 from xwot.util import local_ip
 from xwot.util import serializer
 from xwot.util import create_description
 from xwot.util import pretty_json
 from xwot.util import dir_path
+
+from xwot.util.flask import mount_vocab
 
 from test_conf import annotator
 serializer = serializer.Serializer(annotator)
@@ -21,7 +23,7 @@ ip = local_ip()
 port = 3000
 http_addr = "http://%s:%s/" % (ip, port)
 vocab_url = "%s%s#" % (http_addr, 'vocab')
-link = flask_link(vocab_url)
+hydra_link = link(vocab_url)
 
 
 jsonld_description = create_description(xwot_file=os.path.join(dir_path(__file__), "device.xwot"), base=http_addr)
@@ -45,7 +47,7 @@ Entrypoint controller
 """
 @annotator.route('entry_point', method='GET', description='The APIs main entry point.', returns=models.EntryPoint)
 @app.route('/', methods=['GET'])
-@link
+@hydra_link
 def entrypoint_get():
     data = {
       "@context": "/contexts/EntryPoint.jsonld",
@@ -74,7 +76,7 @@ User controller
 """
 @annotator.route('user_collection_retrieve', method='GET', description='Retrieves all User entities', returns=Hydra.Collection())
 @app.route('/users', methods=['GET'])
-@link
+@hydra_link
 def get_user_collection():
     json_doc = pretty_json({})
     resp = Response(response=json_doc, status=200, mimetype='application/ld+json')
@@ -87,7 +89,7 @@ def get_user_collection():
 @annotator.route('user_create', method='POST', description='Creates a new User entity', returns=models.User,
                  expects=models.User, status_codes=[{"code": 201, "description": "If the User entity was created successfully."}])
 @app.route('/users', methods=['POST'])
-@link
+@hydra_link
 def post_user(user_id):
     json_doc = pretty_json({})
     resp = Response(response=json_doc, status=200, mimetype='application/ld+json')
@@ -99,7 +101,7 @@ def post_user(user_id):
 @annotator.route('user_replace', method='PUT', description='Replaces a new User entity', returns=models.User,
                  expects=models.User, status_codes=[{"code": 201, "description": "If the User entity was created successfully."}])
 @app.route('/users', methods=['PUT'])
-@link
+@hydra_link
 def put_user(user_id):
     json_doc = pretty_json({})
     resp = Response(response=json_doc, status=200, mimetype='application/ld+json')
@@ -112,7 +114,7 @@ def put_user(user_id):
 @annotator.route('user_retrieve', method='GET', description='Retrieves a User entity', returns=models.User,
                  status_codes=[{"code": 404, "description": "If the User entity wasn't found."}])
 @app.route('/users/<int:user_id>', methods=['GET'])
-@link
+@hydra_link
 def get_user(user_id):
     json_doc = pretty_json({})
     resp = Response(response=json_doc, status=200, mimetype='application/ld+json')
@@ -125,7 +127,7 @@ def get_user(user_id):
 @annotator.route('user_delete', method='DELETE', description='Deletes a User entity', returns=Owl.Nothing(),
                  status_codes=[{"code": 404, "description": "If the User entity wasn't found."}])
 @app.route('/users/<int:user_id>', methods=['DELETE'])
-@link
+@hydra_link
 def delete_user(user_id):
     data = {}
     json_doc = pretty_json({})
@@ -133,23 +135,24 @@ def delete_user(user_id):
     return resp
 
 
-json_doc, class_contexts_json_doc = annotator.build_vocab()
 #annotator.write_files()
-
-@app.route('/vocab')
-@link
-def vocab():
-    if json_doc is not None:
-        return Response(response=json_doc, status=200, content_type='application/ld+json')
-    else:
-        return Response(status=404)
-
-@app.route('/contexts/<string:file>', methods=['GET'])
-def contexts(file):
-    if file in class_contexts_json_doc:
-        doc = class_contexts_json_doc[file]
-        return Response(response=doc, status=200, content_type='application/ld+json')
-    else:
-        return Response(status=404)
-
+#
+# @app.route('/vocab')
+# @link
+# def vocab():
+#     if json_doc is not None:
+#         return Response(response=json_doc, status=200, content_type='application/ld+json')
+#     else:
+#         return Response(status=404)
+#
+# @app.route('/contexts/<string:file>', methods=['GET'])
+# def contexts(file):
+#     if file in class_contexts_json_doc:
+#         doc = class_contexts_json_doc[file]
+#         return Response(response=doc, status=200, content_type='application/ld+json')
+#     else:
+#         return Response(status=404)
+from xwot.util.vocab_builder import VocabBuilder
+builder = VocabBuilder(annotator)
+mount_vocab(app, builder)
 app.run(host='0.0.0.0', port=port)

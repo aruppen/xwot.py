@@ -6,6 +6,7 @@
 """
 
 import inspect
+import json
 
 
 class VocabBuilder(object):
@@ -113,10 +114,27 @@ class VocabBuilder(object):
         ]
     }
 
-    def __init__(self, documentation, classes, routes):
-        self._documentation = documentation
-        self._classes = classes
-        self._routes = routes
+    def __init__(self, annotator):
+        self._annotator = annotator
+        self._documentation = annotator.get_documentation()
+        self._classes = annotator.get_classes()
+        self._routes = annotator.get_routes()
+
+    @property
+    def annotator(self):
+        return self._annotator
+
+    @property
+    def documentation(self):
+        return self._documentation
+
+    @property
+    def routes(self):
+        return self._routes
+
+    @property
+    def classes(self):
+        return self._classes
 
     def _handle_type(self, obj):
         if isinstance(obj, basestring):
@@ -189,7 +207,7 @@ class VocabBuilder(object):
 
         return prop_dic
 
-    def output(self):
+    def _build_vocab(self):
         context = self.BASE_CONTEXT
         context['vocab'] = self._documentation.vocab_url
         _id = ''
@@ -288,3 +306,14 @@ class VocabBuilder(object):
                 #}
 
         return vocab, class_contexts
+
+    def output(self):
+        doc, class_contexts = self._build_vocab()
+        json_doc = json.dumps(doc, indent=4, sort_keys=True, separators=(',', ': '))
+
+        class_contexts_json_doc = {}
+        for filename, context in class_contexts.items():
+            json_context_doc = json.dumps(context, indent=4, sort_keys=True, separators=(',', ': '))
+            class_contexts_json_doc[filename] = json_context_doc
+
+        return json_doc, class_contexts_json_doc
