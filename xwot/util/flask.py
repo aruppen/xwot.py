@@ -11,7 +11,7 @@ from functools import wraps
 from flask import make_response
 
 
-def add_response_header(headers):
+def _add_response_header(headers):
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
@@ -29,8 +29,14 @@ def link(vocab_url):
 
     def wrapped_link(f):
         @wraps(f)
-        @add_response_header({'Link': link_header})
+        @_add_response_header({'Link': link_header})
         def decorated_function(*args, **kwargs):
             return f(*args, **kwargs)
         return decorated_function
     return wrapped_link
+
+
+def mount(app, annotator):
+    from xwot.util.mount import FlaskMounter
+    mounter = FlaskMounter(app=app, annotator=annotator)
+    mounter.mount()
