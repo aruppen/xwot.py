@@ -27,8 +27,9 @@ sudo python setup.py install
 sudo pip install xwot
 ```
 
+## Commands
 
-## xwotc - xwot compiler
+### xwot compiler - xwotc
 The xwot compiler uses popular micro web frameworks to generate a skeleton application
 for different programming platforms such as:
 
@@ -42,7 +43,7 @@ Currently there are three basic backends implemented for:
  * [flask](http://flask.pocoo.org/)
  * [express.js](http://expressjs.com/)
 
-### Usage
+#### Usage
 
 ```bash
 usage: xwotc [-h] [-p [{flask,sinatra,express}]] [-o [OUTPUT_DIR]] f
@@ -65,7 +66,7 @@ Options:
  * p: platform - can be express, sinatra or flask
  * f: enhanced xwot file - used to generate the code
 
-### Example
+#### Example
 
 ```bash
 xwotc  flask smart-room-example_enhanced.xwot
@@ -73,11 +74,11 @@ xwotc  flask smart-room-example_enhanced.xwot
 ```
 
 
-## xwotd - xwot description builder
+### xwot description builder - xwotd
 The xwot description builder takes as argument a xwot xml file and generates a lightweight
 device description file in the jsonld format.
 
-### Usage
+#### Usage
 ```
 usage: xwotd [-h] [-o [OUTPUT_FILEPATH]] xwot file
 
@@ -93,7 +94,7 @@ optional arguments:
 ```
 
 
-### Example
+#### Example
 
 ```
 xwotd  flask smart-room-example_enhanced.xwot description.jsonld
