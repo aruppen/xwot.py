@@ -220,6 +220,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                            ], ["xwot_device", node.name()])
 
     def output(self):
+
         # get all created files
         files = self._out.flush()
         new_files_dic = {}
@@ -227,5 +228,9 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
         for file_name, pycode in files.items():
             # append to each file its correct file extension
             new_files_dic[file_name + ".py"] = pycode
+
+        # create on the fly a requirements.txt file
+        requirements = "\n".join(['flask'])
+        new_files_dic['requirements.txt'] = requirements
 
         return new_files_dic
