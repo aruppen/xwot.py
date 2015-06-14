@@ -118,7 +118,6 @@ class VocabBuilder(object):
         self._classes = classes
         self._routes = routes
 
-
     def _handle_type(self, obj):
         if isinstance(obj, basestring):
             return obj
@@ -262,6 +261,5 @@ class VocabBuilder(object):
                 #    '@id': iri,
                 #    '@type': '@id'
                 #}
-
 
         return vocab, class_contexts
