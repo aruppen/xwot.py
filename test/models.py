@@ -85,6 +85,7 @@ class EntryPoint(object):
 
 # annotate EntryPoint class
 entrypoint = annotator.klass(EntryPoint)
+entrypoint.add_context('http://xwot.lexruee.ch/contexts/xwot.jsonld')
 entrypoint.describe(title='Entrypoint', description='The main entry point or homepage of the API.',
                     operations=['entry_point'])
 entrypoint.expose('users', description='The collection of all users (for debugging purposes)',

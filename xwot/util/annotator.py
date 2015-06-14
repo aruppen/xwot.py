@@ -20,6 +20,7 @@ class Klass(object):
         self._operations = []
         self._iri = None
         self._title = None
+        self._extra_context = []
 
     def expose(self, name, title=None, type=None, iri=None, description=None, label=None, domain=None, range=None,
                operations=None, required=None, readonly=None, writeonly=None):
@@ -36,6 +37,13 @@ class Klass(object):
         if operations is not None:
             self._operations = operations
         return self
+
+    def add_context(self, context):
+        self._extra_context += [context]
+
+    @property
+    def extra_context(self):
+        return self._extra_context
 
     @property
     def description(self):
@@ -230,10 +238,10 @@ class Annotator(object):
             return f
         return wrapper
 
-    def get_class_annotations(self, klass):
+    def get_class(self, klass):
         return self._classes.get(klass, None)
 
-    def get_route_annotations(self, route):
+    def get_route(self, route):
         return self._routes[route]
 
     def build_vocab(self):

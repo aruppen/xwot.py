@@ -38,17 +38,20 @@ class JSONLDSerializer(object):
         self._annotator = annotator
 
     def build_dic(self, object, url=''):
-        klass = object.__class__
-        annotations = self._annotator.get_class_annotations(klass)
+        py_class = object.__class__
+        klass = self._annotator.get_class(py_class)
+        context = ["%s/contexts/%s.jsonld" % (url, py_class.__name__)]
+
+        context += klass.extra_context
 
         output = {
             '@id': '/',
-            '@context': "%s/contexts/%s.jsonld" % (url, klass.__name__),
-            '@type': klass.__name__
+            '@context': context,
+            '@type': py_class.__name__
         }
 
-        if annotations:
-            for prop_name, prop_options in annotations.exposed_properties:
+        if klass:
+            for prop_name, prop_options in klass.exposed_properties:
                 prop_value = getattr(object, prop_name)
                 output[prop_name] = prop_value
 
@@ -65,21 +68,21 @@ class XMLSerializer(object):
         self._annotator = annotator
 
     def serialize(self, object, url=''):
-        klass = object.__class__
-        annotations = self._annotator.get_class_annotations(klass)
+        py_class = object.__class__
+        klass = self._annotator.get_class(py_class)
 
         output = {
             '@id': '/',
-            '@context': "%s/contexts/%s.jsonld" % (url, klass.__name__),
-            '@type': klass.__name__
+            '@context': "%s/contexts/%s.jsonld" % (url, py_class.__name__),
+            '@type': py_class.__name__
         }
 
-        if annotations:
-            for prop_name, prop_options in annotations.exposed_properties:
+        if klass:
+            for prop_name, prop_options in klass.exposed_properties:
                 prop_value = getattr(object, prop_name)
                 output[prop_name] = prop_value
 
-        xml = dicttoxml.dicttoxml(output, custom_root=klass.__name__)
+        xml = dicttoxml.dicttoxml(output, custom_root=py_class.__name__)
         return parseString(xml).toprettyxml()
 
 
@@ -97,14 +100,14 @@ class HTMLSerializer(object):
         self._JSONLDSerializer = JSONLDSerializer(annotator)
 
     def serialize(self, object, url=''):
-        klass = object.__class__
-        annotations = self._annotator.get_class_annotations(klass)
+        py_class = object.__class__
+        klass = self._annotator.get_class(py_class)
 
         links = []
         props = []
 
-        if annotations:
-            for prop_name, prop_options in annotations.exposed_properties:
+        if klass:
+            for prop_name, prop_options in klass.exposed_properties:
                 prop_value = getattr(object, prop_name)
                 if prop_value[0] == '/':
                     links.append([
@@ -124,7 +127,7 @@ class HTMLSerializer(object):
                 '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.2/semantic.css" type="text/css" >'
             '</head>'],
             ['<body>'],
-                ['<h1>', klass.__name__, '</h1>'],
+                ['<h1>', py_class.__name__, '</h1>'],
                 ['<h2>', 'Properties', '</h2>'],
                 ['<ul>'] + flatten(props) + ['</ul>'],
                 ['<h2>', 'Links', '</h2>'],
