@@ -14,9 +14,11 @@ from xwot.util import pretty_json
 from xwot.util import dir_path
 
 from xwot.util.flask import mount_vocab
+from xwot.util.flask import Serializer as FlaskSerializer
 
 from test_conf import annotator
 serializer = serializer.Serializer(annotator)
+flask_serializer = FlaskSerializer(annotator)
 
 # base config
 ip = local_ip()
@@ -56,15 +58,15 @@ def entrypoint_get():
       "users": "/users/"
     }
 
-    cts = request.accept_mimetypes
-    ct = 'application/ld+json'
+    # cts = request.accept_mimetypes
+    # ct = 'application/ld+json'
+    #
+    # if cts:
+    #     ct,_ = cts[0]
 
-    if cts:
-        ct,_ = cts[0]
-
-    doc = serializer.serialize(entrypoint, content_type=ct)
-    resp = Response(response=doc, status=200, content_type=ct)
-    return resp
+    return flask_serializer.serialize(entrypoint)
+    #resp = Response(response=doc, status=200, content_type=ct)
+    #return resp
 
 
 """
