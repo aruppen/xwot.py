@@ -1,0 +1,5 @@
+DEVICE = "urn:xwot:Device"
+CONTEXT = "urn:xwot:Context"
+SENSOR = "urn:xwot:Sensor"
+ACTUATOR = "urn:xwot:Actuator"
+TAG = "urn:xwot:Tag"

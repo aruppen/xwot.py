@@ -1,0 +1,7 @@
+*.pyc
+.idea
+xwot.egg-info/
+build/
+dist/
+
+out-app/
