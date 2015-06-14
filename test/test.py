@@ -1,5 +1,5 @@
 import json
-
+import os
 from flask import Flask
 from flask import Response
 from flask import request
@@ -11,7 +11,7 @@ from xwot.util import local_ip
 from xwot.util import serializer
 from xwot.util import create_description
 from xwot.util import pretty_json
-
+from xwot.util import dir_path
 
 from test_conf import annotator
 serializer = serializer.Serializer(annotator)
@@ -24,8 +24,8 @@ iri = "%s%s" % (http_addr, 'vocab')
 vocab_url = iri + '#'
 link = flask_link(iri)
 
-jsonld_description = create_description(xml_file="device.xwot", base=http_addr)
-print(jsonld_description)
+
+jsonld_description = create_description(xml_file=os.path.join(dir_path(__file__), "device.xwot"), base=http_addr)
 
 
 annotator.documentation({
