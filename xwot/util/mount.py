@@ -13,11 +13,15 @@ class VocabMounter(object):
     def mount(self):
         raise NotImplementedError
 
+    def update(self):
+        raise NotImplementedError
+
 
 class FlaskMounter(VocabMounter):
 
     def __init__(self, app, vocab_builder):
         self._app = app
+        self._vocab_builder = vocab_builder
         vocab, class_contexts = vocab_builder.output()
         self._vocab = vocab
         self._class_contexts = class_contexts
@@ -25,6 +29,11 @@ class FlaskMounter(VocabMounter):
         from xwot.util.flask import hydra_link
         doc = vocab_builder.documentation
         self._link = hydra_link(doc.vocab_url)
+
+    def update(self):
+        vocab, class_contexts = self._vocab_builder.output()
+        self._vocab = vocab
+        self._class_contexts = class_contexts
 
     def _mount_contexts(self):
         from flask import Response
