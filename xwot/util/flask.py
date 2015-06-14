@@ -43,6 +43,7 @@ def mount_vocab(app, vocab_builder):
     from xwot.util.mount import FlaskMounter
     mounter = FlaskMounter(app=app, vocab_builder=vocab_builder)
     mounter.mount()
+    return mounter
 
 
 class Serializer(object):
