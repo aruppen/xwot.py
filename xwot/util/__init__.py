@@ -19,9 +19,9 @@ def local_ip():
             in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]
 
 
-def create_description(xwot_file, base=''):
+def create_description(xwot_file, site='', base=None):
     description_builder = JSONLDDescriptionBuilder()
-    out = description_builder.build(xml_file=xwot_file, base=base)
+    out = description_builder.build(xml_file=xwot_file, site=site, base=base)
     return out
 
 
