@@ -15,6 +15,7 @@ setup(
         ]
     },
     version=VERSION,
+    install_requires=['dicttoxml'],
     description="xwot",
     author="Alexander Rüedlinger",
     author_email="a.rueedlinger@gmail.com",
