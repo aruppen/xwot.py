@@ -20,21 +20,15 @@ serializer = serializer.Serializer(annotator)
 ip = local_ip()
 port = 3000
 http_addr = "http://%s:%s/" % (ip, port)
-iri = "%s%s" % (http_addr, 'vocab')
-vocab_url = iri + '#'
-link = flask_link(iri)
+vocab_url = "%s%s#" % (http_addr, 'vocab')
+link = flask_link(vocab_url)
 
 
 jsonld_description = create_description(xwot_file=os.path.join(dir_path(__file__), "device.xwot"), base=http_addr)
 
 
-annotator.documentation({
-    'entrypoint': http_addr,
-    'title': 'My Api Doc',
-    'description': 'Awesome xWoT Api documentation.',
-    'id': iri,
-    'vocab': vocab_url
-})
+annotator.documentation(entrypoint=http_addr, title='My Api Doc', description='Awesome xWoT Api documentation.',
+                        vocab_url=vocab_url)
 
 app = Flask(__name__, static_path='')
 
@@ -65,7 +59,6 @@ def entrypoint_get():
 
     if cts:
         ct,_ = cts[0]
-
 
     doc = serializer.serialize(entrypoint, content_type=ct)
     resp = Response(response=doc, status=200, content_type=ct)

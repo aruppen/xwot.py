@@ -26,13 +26,8 @@ class User(object):
 
 # annotate User class
 user = annotator.klass(User)
-user.describe({
-    'title': 'User',
-    'description': 'A User represents a person registered in the system.',
-    'iri': SchemaOrg.Person(),
-    'operation': ['user_retrieve', 'user_replace', 'user_delete']
-
-})
+user.describe(title='User', description='A User represents a person registered in the system.', iri=SchemaOrg.Person(),
+              operations=['user_retrieve', 'user_replace', 'user_delete'])
 user.expose('name', description="The user's full name.", iri=SchemaOrg.name(), required=True, range=Xsd.string())
 user.expose('email', description="The user's email address", range=Xsd.string(), iri=SchemaOrg.email(), required=True)
 user.expose('password', description="The user's password.", range=Xsd.string(), required=True, writeonly=True)
@@ -60,12 +55,8 @@ class Issue(object):
 
 # annotate Issue class
 issue = annotator.klass(Issue)
-issue.describe({
-    'title': 'A issue',
-    'description': 'An Issue tracked by the system.',
-    'operation': ['issue_retrieve', 'issue_replace', 'issue_delete']
-
-})
+issue.describe(title='A issue', description='An Issue tracked by the system.',
+               operations=['issue_retrieve', 'issue_replace', 'issue_delete'])
 issue.expose('title', description="The issue's title.", required=True, range=Xsd.string())
 issue.expose('description', description='A description of the issue', range=Xsd.string(), required=True)
 issue.expose('is_open', description='Is the issue open?\nUse for 1 yes, 0 for no when modifying this value.',
@@ -94,12 +85,8 @@ class EntryPoint(object):
 
 # annotate EntryPoint class
 entrypoint = annotator.klass(EntryPoint)
-entrypoint.describe({
-    'title': 'EntryPoint',
-    'description': 'The main entry point or homepage of the API.',
-    'operation': ['entry_point']
-
-})
+entrypoint.describe(title='Entrypoint', description='The main entry point or homepage of the API.',
+                    operations=['entry_point'])
 entrypoint.expose('users', description='The collection of all users (for debugging purposes)',
                   range=Hydra.Collection(),
                   operations=["user_create", "user_collection_retrieve"],
