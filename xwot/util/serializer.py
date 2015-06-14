@@ -7,12 +7,6 @@
 
 import dicttoxml
 from xml.dom.minidom import parseString
-from pyld import jsonld
-from rdflib import Graph, plugin
-from rdflib.serializer import Serializer
-from rdflib.plugin import register, Parser
-register('json-ld', Parser, 'rdflib_jsonld.parser', 'JsonLDParser')
-
 from xwot.util import pretty_json
 
 
