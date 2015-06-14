@@ -220,7 +220,7 @@ class Annotator(object):
     def __init__(self):
         self._classes = {}
         self._routes = {}
-        self._documentation = None
+        self._documentation = Documentation(vocab_url='')
 
     def klass(self, py_class):
         klass = Klass(py_class, self)
