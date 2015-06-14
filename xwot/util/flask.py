@@ -47,8 +47,8 @@ def mount_vocab(app, vocab_builder):
 
 class Serializer(object):
 
-    def __init__(self, annotator):
-        self._serializer = xwot.util.serializer.Serializer(annotator)
+    def __init__(self, serializer):
+        self._serializer = serializer
 
     def serialize(self, object, url=''):
         cts = request.accept_mimetypes
