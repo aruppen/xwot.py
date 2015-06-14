@@ -7,7 +7,7 @@ VERSION = "0.1.0"
 
 setup(
     name="xwot",
-    packages=find_packages('.'),
+    packages=find_packages('.', exclude=["tests", "test"]),
     entry_points={
         'console_scripts': [
             'xwotc = xwot.cmd:xwotc',
