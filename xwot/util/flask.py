@@ -24,7 +24,7 @@ def _add_response_header(headers):
     return decorator
 
 
-def link(vocab_url):
+def hydra_link(vocab_url):
     link_header = '<' + vocab_url + '>; rel="http://www.w3.org/ns/hydra/core#apiDocumentation"'
 
     def wrapped_link(f):

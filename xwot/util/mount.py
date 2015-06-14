@@ -6,7 +6,6 @@
 """
 
 from __future__ import absolute_import
-import json
 
 
 class VocabMounter(object):
@@ -23,9 +22,9 @@ class FlaskMounter(VocabMounter):
         self._vocab = vocab
         self._class_contexts = class_contexts
 
-        from xwot.util.flask import link
+        from xwot.util.flask import hydra_link
         doc = vocab_builder.documentation
-        self._link = link(doc.vocab_url)
+        self._link = hydra_link(doc.vocab_url)
 
     def _mount_contexts(self):
         from flask import Response

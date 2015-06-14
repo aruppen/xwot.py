@@ -6,7 +6,7 @@ from flask import request
 import models
 from xwot.util.vocab import Hydra
 from xwot.util.vocab import Owl
-from xwot.util.flask import link
+from xwot.util.flask import hydra_link
 from xwot.util import local_ip
 from xwot.util import serializer
 from xwot.util import create_description
@@ -23,7 +23,7 @@ ip = local_ip()
 port = 3000
 http_addr = "http://%s:%s/" % (ip, port)
 vocab_url = "%s%s#" % (http_addr, 'vocab')
-hydra_link = link(vocab_url)
+hydra_link = hydra_link(vocab_url)
 
 
 jsonld_description = create_description(xwot_file=os.path.join(dir_path(__file__), "device.xwot"), base=http_addr)
@@ -152,7 +152,7 @@ def delete_user(user_id):
 #         return Response(response=doc, status=200, content_type='application/ld+json')
 #     else:
 #         return Response(status=404)
-from xwot.util.vocab_builder import VocabBuilder
+from xwot.util.hydra import VocabBuilder
 builder = VocabBuilder(annotator)
 mount_vocab(app, builder)
 app.run(host='0.0.0.0', port=port)
