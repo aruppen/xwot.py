@@ -244,6 +244,9 @@ class Annotator(object):
     def get_route(self, route):
         return self._routes[route]
 
+    def get_documentation(self):
+        return self._documentation
+
     def build_vocab(self):
         builder = VocabBuilder(self._documentation, self._classes, self._routes)
         doc, class_contexts = builder.output()
