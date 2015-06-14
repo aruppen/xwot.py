@@ -1,5 +1,8 @@
 # xwot.py
 
+This repository contains handy tools for the [xWoT meta-model](http://diuf.unifr.ch/drupal/sites/diuf.unifr.ch.drupal.softeng/files/file/publications/ruppena/meta-model.pdf)
+introducded by Andreas Ruppen and Jacques Pasquier.
+
 xwot.py is a python package for creating xWoT web applications.
 It features among others some handy tools and some example xwot models:
  * xwot.compiler - compiler which generates a skeleton xWoT web application based on the xWoT meta-model
