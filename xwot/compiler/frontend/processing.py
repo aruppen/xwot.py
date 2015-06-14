@@ -114,20 +114,26 @@ class JSONLDDescriptionPrinter(Visitor):
     CHILDREN = 'knows'
     TYPE = "@type"
     ID = "@id"
+    CONTEXT = '@context'
 
-    def __init__(self, base=''):
+    def __init__(self, site='', base=None):
         self._output = None
         self._current = None
-        self._base = self._remove_last_forwardslash(base)
-        self._path = [self._base]
+        self._site = self._remove_last_forwardslash(site)
+        self._base = base
+        self._path = [self._site]
 
-    def _remove_last_forwardslash(self, base):
-        _base = base
-        if len(base) > 0:
-            if base[-1] == '/':
-                _base = base[0:-1]
+    def _remove_last_forwardslash(self, site):
+        _site = site
+        if len(site) > 0:
+            if site[-1] == '/':
+                _site = site[0:-1]
 
-        return _base
+        return _site
+
+    @property
+    def site(self):
+        return self._site
 
     @property
     def base(self):
@@ -135,8 +141,12 @@ class JSONLDDescriptionPrinter(Visitor):
 
     @base.setter
     def base(self, value):
-        self._base = self._remove_last_forwardslash(value)
-        self._path[0] = self._base
+        self._base = value
+
+    @site.setter
+    def site(self, value):
+        self._site = self._remove_last_forwardslash(value)
+        self._path[0] = self._site
 
     def path(self):
         return "/".join(self._path)
@@ -153,13 +163,17 @@ class JSONLDDescriptionPrinter(Visitor):
 
         [child.accept(self) for child in node.children() if child.is_virtual()]
 
+        # overwrite entity resource and use the first child as root
+        # entity resource has always at most one child !!!
         self._output = self._output[("%s" % self.CHILDREN)][0]  # hack
-        self._output['@context'] = "http://xwot.lexruee.ch/contexts/xwot.jsonld"
+        self._output[self.CONTEXT] = ["http://xwot.lexruee.ch/contexts/xwot.jsonld"]
 
     def visit_resource(self, node):
         resource = {
             ("%s" % self.ID): self.path() + '/' + node.uri(),
-            'uri': self.path() + '/' + node.uri(),
+            'uri': {
+                "@id": self.path() + '/' + node.uri()
+            },
             'name': node.name(),
             'sameAs': "http://www.productontology.org/id/Web_resource",
             'additionalType': {
@@ -182,7 +196,9 @@ class JSONLDDescriptionPrinter(Visitor):
     def visit_device_resource(self, node):
         device = {
             ("%s" % self.ID): self.path() + '/' + node.uri(),
-            'uri': self.path() + '/' + node.uri(),
+            'uri': {
+                "@id": self.path() + '/' + node.uri()
+            },
             'name': node.name(),
             'sameAs': "http://www.productontology.org/id/Computer_apliance",
             'additionalType': {
@@ -206,7 +222,9 @@ class JSONLDDescriptionPrinter(Visitor):
     def visit_sensor_resource(self, node):
         sensor = {
             ("%s" % self.ID): self.path() + '/' + node.uri(),
-            'uri': self.path() + '/' + node.uri(),
+            'uri': {
+                "@id": self.path() + '/' + node.uri()
+            },
             'name': node.name(),
             'sameAs': "http://www.productontology.org/id/Sensor",
             'additionalType': {
@@ -230,7 +248,9 @@ class JSONLDDescriptionPrinter(Visitor):
     def visit_service_resource(self, node):
         service = {
             ("%s" % self.ID): self.path() + '/' + node.uri(),
-            'uri': self.path() + '/' + node.uri(),
+            'uri': {
+                "@id": self.path() + '/' + node.uri()
+            },
             'name': node.name(),
             'sameAs': "http://www.productontology.org/id/Sensor",
             'additionalType': {
@@ -243,7 +263,9 @@ class JSONLDDescriptionPrinter(Visitor):
     def visit_actuator_resource(self, node):
         actuator = {
             ("%s" % self.ID): self.path() + '/' + node.uri(),
-            'uri': self.path() + '/' + node.uri(),
+            'uri': {
+                "@id": self.path() + '/' + node.uri()
+            },
             'name': node.name(),
             ("%s" % self.TYPE): 'Actuator',
             'sameAs': "http://www.productontology.org/id/Actuator",
@@ -267,7 +289,9 @@ class JSONLDDescriptionPrinter(Visitor):
     def visit_tag_resource(self, node):
         tag = {
             ("%s" % self.ID): self.path() + '/' + node.uri(),
-            'uri': self.path() + '/' + node.uri(),
+            'uri': {
+                "@id": self.path() + '/' + node.uri()
+            },
             'name': node.name(),
             'sameAs': "http://www.productontology.org/id/Automatic_identification_and_data_capture",
             'additionalType': {
@@ -291,7 +315,9 @@ class JSONLDDescriptionPrinter(Visitor):
     def visit_context_resource(self, node):
         context = {
             ("%s" % self.ID): self.path() + '/' + node.uri(),
-            'uri': self.path() + '/' + node.uri(),
+            'uri': {
+                "@id": self.path() + '/' + node.uri()
+            },
             'name': node.name(),
             'sameAs': "http://www.productontology.org/id/Scope_(computer_science)",
             'additionalType': {
@@ -315,7 +341,9 @@ class JSONLDDescriptionPrinter(Visitor):
     def visit_publisher_resource(self, node):
         publisher = {
             ("%s" % self.ID): self.path() + '/' + node.uri(),
-            'uri': self.path() + '/' + node.uri(),
+            'uri': {
+                "@id": self.path() + '/' + node.uri()
+            },
             'name': node.name(),
             'sameAs': "http://www.productontology.org/id/Publish%E2%80%93subscribe_pattern",
             'additionalType': {
@@ -364,6 +392,11 @@ class JSONLDDescriptionPrinter(Visitor):
         self._current.append(tag)
 
     def output(self):
+        if self._base is not None:
+            self._output[self.CONTEXT].append({
+                "@base": self._base
+            })
+
         out = json.dumps(self._output, indent=4, sort_keys=True, separators=(',', ': '))
         return out
 
@@ -374,10 +407,13 @@ class DescriptionBuilder(object):
         self._description_printer = description_printer
         self._out = None
 
-    def build(self, xml_file, base=''):
+    def build(self, xml_file, site='', base=None):
         parser = Parser()
         root_node = parser.parse(xml_file)
-        self._description_printer.base = base
+
+        # set properties for creating absolute paths
+        self._description_printer.site = site  # uses the site path as prefix for all relative uris
+        self._description_printer.base = base  # sets the jsonld @base property in @context
 
         root_node.accept(self._description_printer)
         self._out = self._description_printer.output()
