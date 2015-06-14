@@ -18,7 +18,7 @@ from xwot.util.flask import Serializer as FlaskSerializer
 
 from test_conf import annotator
 serializer = serializer.Serializer(annotator)
-flask_serializer = FlaskSerializer(annotator)
+flask_serializer = FlaskSerializer(serializer)
 
 # base config
 ip = local_ip()
