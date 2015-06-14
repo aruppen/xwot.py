@@ -122,7 +122,13 @@ class VocabBuilder(object):
         if isinstance(obj, basestring):
             return obj
         elif inspect.isclass(obj):
-            return "vocab:%s" % obj.__name__
+            py_class = obj
+            klass = self._classes[py_class]
+            iri = "vocab:%s" % obj.__name__
+
+            if klass.iri is not None:
+                iri = klass.iri
+            return iri
         else:
             return obj
 
@@ -143,21 +149,25 @@ class VocabBuilder(object):
 
     def _create_supported_property(self, klass, property, operations):
         iri = property.iri
+        type = property.type
         property_def = None
 
-        if iri:
-            type = '@id'
-            property_def = {
+        if iri is not None:
+            property_def = iri
+            if type is not None:
+                property_def = {
                     '@id': iri,
                     '@type': type
-            }
+                }
+
         else:
             iri = ("vocab:%s/%s" % (klass.__name__, property.name))
-            type = ''
-            if len(operations):
-                type = self.HYDRA_LINK
-            else:
-                type = self.RDF_PROPERTY
+            if type is None:
+                if len(operations):
+                    type = self.HYDRA_LINK
+                else:
+                    type = self.RDF_PROPERTY
+
             property_def = {
                     '@id': iri,
                     '@type': type,
@@ -181,14 +191,19 @@ class VocabBuilder(object):
 
     def output(self):
         context = self.BASE_CONTEXT
-        context['vocab'] = self._documentation.get('vocab', '')
+        context['vocab'] = self._documentation.vocab_url
+        _id = ''
+
+        if self._documentation.iri is not None:
+            _id = self._documentation.iri
+
         vocab = {
             '@context': context,
             '@type': 'ApiDocumentation',
-            '@id': self._documentation.get('id', ''),
-            ("%s" % self.HYDRA_TITLE): self._documentation.get('title', ''),
-            ("%s" % self.HYDRA_DESCRIPTION): self._documentation.get('description', ''),
-            ("%s" % self.HYDRA_ENTRYPOINT): self._documentation.get('entrypoint', '')
+            '@id': _id,
+            ("%s" % self.HYDRA_TITLE): self._documentation.title,
+            ("%s" % self.HYDRA_DESCRIPTION): self._documentation.description,
+            ("%s" % self.HYDRA_ENTRYPOINT): self._documentation.entrypoint
         }
 
         supported_classes = []
@@ -210,7 +225,7 @@ class VocabBuilder(object):
 
             # add operations to classes
             class_operations = []
-            for operation_key in klass.description.get('operation', []):
+            for operation_key in klass.operations:
                 if operation_key in self._routes:
                     options = self._routes[operation_key]
                     operation = self._create_operation(operation_key, options)
@@ -218,11 +233,16 @@ class VocabBuilder(object):
                 else:
                     print("WARNING: operation %s was not annotated!" % operation_key)
 
+            klass_iri = "vocab:%s" % py_class.__name__
+
+            if klass.iri is not None:
+                klass_iri = klass.iri
+
             supported_classes.append({
-                '@id': ("vocab:%s" % py_class.__name__),
+                '@id': klass_iri,
                 '@type': self.HYDRA_CLASS,
-                ("%s" % self.HYDRA_TITLE): klass.description.get('title', None),
-                ("%s" % self.HYDRA_DESCRIPTION): klass.description.get('description', None),
+                ("%s" % self.HYDRA_TITLE): klass.title,
+                ("%s" % self.HYDRA_DESCRIPTION): klass.description,
                 ("%s" % self.SUPPORTED_PROPERTY): supported_properties,
                 ("%s" % self.SUPPORTED_OPERATION): class_operations
             })
@@ -230,10 +250,15 @@ class VocabBuilder(object):
         class_contexts = {}
         for py_class, klass in self._classes.items():
             key = py_class.__name__ + '.jsonld'
+            klass_iri = "vocab:%s" % py_class.__name__
+
+            if klass.iri is not None:
+                klass_iri = klass.iri
+
             _context = {
-                    'vocab': self._documentation.get('vocab', ''),
+                    'vocab': self._documentation.vocab_url,
                     'hydra': self.HYDRA,
-                    ("%s" % py_class.__name__): "vocab:%s" % py_class.__name__
+                    ("%s" % py_class.__name__): klass_iri
             }
             class_contexts[key] = {
                 '@context': _context

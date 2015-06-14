@@ -17,6 +17,9 @@ class Klass(object):
         self._mapper = mapper
         self._exposed_properties = {}
         self._description = None
+        self._operations = []
+        self._iri = None
+        self._title = None
 
     def expose(self, name, title=None, type=None, iri=None, description=None, label=None, domain=None, range=None,
                operations=None, required=None, readonly=None, writeonly=None):
@@ -26,13 +29,29 @@ class Klass(object):
                                                   required=required, readonly=readonly, writeonly=writeonly)
         return self
 
-    def describe(self, description):
+    def describe(self, title=None, description=None, iri=None, operations=None):
+        self._title = title
         self._description = description
+        self._iri = iri
+        if operations is not None:
+            self._operations = operations
         return self
 
     @property
     def description(self):
         return self._description
+
+    @property
+    def iri(self):
+        return self._iri
+
+    @property
+    def title(self):
+        return self._title
+
+    @property
+    def operations(self):
+        return self._operations
 
 
     @property
@@ -158,23 +177,51 @@ class Operation(object):
         return self._expects
 
 
+class Documentation(object):
+
+    def __init__(self, vocab_url, title=None, description=None, entrypoint=None, iri=None):
+        self._title = title
+        self._description = description
+        self._vocab_url = vocab_url
+        self._entrypoint = entrypoint
+        self._iri = iri
+
+    @property
+    def title(self):
+        return self._title
+
+    @property
+    def vocab_url(self):
+        return self._vocab_url
+
+    @property
+    def description(self):
+        return self._description
+
+    @property
+    def entrypoint(self):
+        return self._entrypoint
+
+    @property
+    def iri(self):
+        return self._iri
+
+
 class Annotator(object):
 
     def __init__(self):
         self._classes = {}
         self._routes = {}
-        self._documentation = {}
+        self._documentation = None
 
     def klass(self, py_class):
         klass = Klass(py_class, self)
         self._classes[py_class] = klass
         return klass
 
-    def documentation(self, options):
-        if options is None:
-            options = {}
-
-        self._documentation = options
+    def documentation(self, vocab_url, title=None, description=None, entrypoint=None):
+        self._documentation = Documentation(vocab_url=vocab_url, title=title, description=description,
+                                            entrypoint=entrypoint)
 
     def route(self, name, method, description=None, returns=None, status_codes=None, expects=None):
         self._routes[name] = Operation(name=name, method=method, description=description, returns=returns,
