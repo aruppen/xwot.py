@@ -1,5 +1,5 @@
 *.pyc
-.idea
+.idea/
 xwot.egg-info/
 build/
 dist/
