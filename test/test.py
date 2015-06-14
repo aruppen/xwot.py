@@ -25,7 +25,7 @@ vocab_url = iri + '#'
 link = flask_link(iri)
 
 
-jsonld_description = create_description(xml_file=os.path.join(dir_path(__file__), "device.xwot"), base=http_addr)
+jsonld_description = create_description(xwot_file=os.path.join(dir_path(__file__), "device.xwot"), base=http_addr)
 
 
 annotator.documentation({
