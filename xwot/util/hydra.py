@@ -7,6 +7,31 @@
 
 import inspect
 import json
+from vocab import Hydra
+
+
+class Collection(object):
+
+    def __init__(self, members=None):
+        if members is None:
+            self._members = []
+        else:
+            self._members = members
+
+    @property
+    def members(self):
+        return self._members
+
+    def get(self, id):
+        return self._members[id]
+
+    @classmethod
+    def annotate(self, annotator):
+        # annotate Collection class
+        collection = annotator.klass(Collection)
+        collection.describe(title='Collection', description='A Collection', iri=Hydra.Collection())
+        collection.expose('members', description="The members of this collection.", iri=Hydra.member(), writeonly=False,
+                          readonly=False)
 
 
 class VocabBuilder(object):
@@ -142,11 +167,7 @@ class VocabBuilder(object):
         elif inspect.isclass(obj):
             py_class = obj
             klass = self._classes[py_class]
-            iri = "vocab:%s" % obj.__name__
-
-            if klass.iri is not None:
-                iri = klass.iri
-            return iri
+            return klass.iri
         else:
             return obj
 
@@ -251,13 +272,8 @@ class VocabBuilder(object):
                 else:
                     print("WARNING: operation %s was not annotated!" % operation_key)
 
-            klass_iri = "vocab:%s" % py_class.__name__
-
-            if klass.iri is not None:
-                klass_iri = klass.iri
-
             supported_classes.append({
-                '@id': klass_iri,
+                '@id': klass.iri,
                 '@type': self.HYDRA_CLASS,
                 ("%s" % self.HYDRA_TITLE): klass.title,
                 ("%s" % self.HYDRA_DESCRIPTION): klass.description,
@@ -268,15 +284,11 @@ class VocabBuilder(object):
         class_contexts = {}
         for py_class, klass in self._classes.items():
             key = py_class.__name__ + '.jsonld'
-            klass_iri = "vocab:%s" % py_class.__name__
-
-            if klass.iri is not None:
-                klass_iri = klass.iri
 
             _context = {
                     'vocab': self._documentation.vocab_url,
                     'hydra': self.HYDRA,
-                    ("%s" % py_class.__name__): klass_iri
+                    ("%s" % py_class.__name__): klass.iri
             }
             class_contexts[key] = {
                 '@context': _context

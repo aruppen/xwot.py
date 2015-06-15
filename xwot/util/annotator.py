@@ -21,6 +21,8 @@ class Klass(object):
         self._iri = None
         self._title = None
         self._extra_context = []
+        self._embedded = False
+        self._path = ''
 
     def expose(self, name, title=None, type=None, iri=None, description=None, label=None, domain=None, range=None,
                operations=None, required=None, readonly=None, writeonly=None):
@@ -30,16 +32,26 @@ class Klass(object):
                                                   required=required, readonly=readonly, writeonly=writeonly)
         return self
 
-    def describe(self, title=None, description=None, iri=None, operations=None):
+    def describe(self, title=None, description=None, iri=None, operations=None, path=None, embedded=False):
         self._title = title
         self._description = description
         self._iri = iri
+        self._path = path
+        self._embedded = embedded
         if operations is not None:
             self._operations = operations
         return self
 
     def add_context(self, context):
         self._extra_context += [context]
+
+    @property
+    def embedded(self):
+        return self._embedded
+
+    @property
+    def path(self):
+        return self._path
 
     @property
     def extra_context(self):
@@ -51,7 +63,10 @@ class Klass(object):
 
     @property
     def iri(self):
-        return self._iri
+        iri = "vocab:%s" % self._klass.__name__
+        if self._iri is not None:
+            iri = self._iri
+        return iri
 
     @property
     def title(self):

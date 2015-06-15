@@ -43,6 +43,7 @@ class Hydra(object):
     HYDRA_DESCRIPTION = 'http://www.w3.org/ns/hydra/core#description'
     HYDRA_CLASS = 'http://www.w3.org/ns/hydra/core#Class'
     HYDRA_OPERATION = 'http://www.w3.org/ns/hydra/core#Operation'
+    HYDRA_MEMBER = 'http://www.w3.org/ns/hydra/core#member'
 
     @classmethod
     def core(cls):
@@ -63,6 +64,10 @@ class Hydra(object):
     @classmethod
     def Property(cls):
         return cls.RDF_PROPERTY
+
+    @classmethod
+    def member(cls):
+        return cls.HYDRA_MEMBER
 
 
 class SchemaOrg(object):

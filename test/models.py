@@ -3,8 +3,37 @@ from xwot.util.vocab import Hydra
 from xwot.util.vocab import SchemaOrg
 from test_conf import annotator
 
+from xwot.util.hydra import Collection as HydraCollection
+
+HydraCollection.annotate(annotator)
+
+
+class Collection(object):
+
+    def __init__(self, members=None):
+        if members is None:
+            self._members = []
+        else:
+            self._members = members
+
+    @property
+    def members(self):
+        return self._members
+
+    def get(self, id):
+        return self._members[id]
+
+
+# annotate Collection class
+# collection = annotator.klass(Collection)
+# collection.describe(title='Collection', description='A Collection', iri=Hydra.Collection())
+# collection.expose('members', description="The members of this collection.", iri=Hydra.member(), writeonly=False,
+#                   readonly=False)
+
 
 class User(object):
+
+    collection = None
 
     def __init__(self, name, email, password):
         self._name = name
@@ -23,11 +52,25 @@ class User(object):
     def password(self):
         return self._password
 
+    @classmethod
+    def user(cls, id):
+        if cls.collection is not None and len(cls.collection.members) > id:
+            return cls.collection.get(id)
+        else:
+            return None
+
+
+alex = User(name='Alexander Rueedlinger', email='a.rueedlinger@gmail.com', password=None)
+peter = User(name='Peter Muller', email='peter.muller@gmail.com', password=None)
+bill = User(name='Bill Gates', email='bill@microsoft.com', password=None)
+User.collection = HydraCollection(members=[alex, peter, bill])
+
+
 
 # annotate User class
 user = annotator.klass(User)
-user.describe(title='User', description='A User represents a person registered in the system.', iri=SchemaOrg.Person(),
-              operations=['user_retrieve', 'user_replace', 'user_delete'])
+user.describe(title='User', description='A User represents a person registered in the system.',
+              operations=['user_retrieve', 'user_replace', 'user_delete'], path='/users', embedded=True, iri=SchemaOrg.Person())
 user.expose('name', description="The user's full name.", iri=SchemaOrg.name(), required=True, range=Xsd.string())
 user.expose('email', description="The user's email address", range=Xsd.string(), iri=SchemaOrg.email(), required=True)
 user.expose('password', description="The user's password.", range=Xsd.string(), required=True, writeonly=True)
@@ -55,7 +98,7 @@ class Issue(object):
 
 # annotate Issue class
 issue = annotator.klass(Issue)
-issue.describe(title='A issue', description='An Issue tracked by the system.',
+issue.describe(title='Issue', description='An Issue tracked by the system.',
                operations=['issue_retrieve', 'issue_replace', 'issue_delete'])
 issue.expose('title', description="The issue's title.", required=True, range=Xsd.string())
 issue.expose('description', description='A description of the issue', range=Xsd.string(), required=True)

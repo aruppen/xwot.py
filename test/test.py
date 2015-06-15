@@ -2,7 +2,6 @@ import json
 import os
 from flask import Flask
 from flask import Response
-from flask import request
 import models
 from xwot.util.vocab import Hydra
 from xwot.util.vocab import Owl
@@ -10,7 +9,6 @@ from xwot.util.flask import hydra_link
 from xwot.util import local_ip
 from xwot.util import serializer
 from xwot.util import create_description
-from xwot.util import pretty_json
 from xwot.util import dir_path
 
 from xwot.util.flask import mount_vocab
@@ -51,23 +49,7 @@ Entrypoint controller
 @app.route('/', methods=['GET'])
 @hydra_link
 def entrypoint_get():
-    data = {
-      "@context": "/contexts/EntryPoint.jsonld",
-      "@id": "/",
-      "@type": "EntryPoint",
-      "users": "/users/"
-    }
-
-    # cts = request.accept_mimetypes
-    # ct = 'application/ld+json'
-    #
-    # if cts:
-    #     ct,_ = cts[0]
-
     return flask_serializer.serialize(entrypoint)
-    #resp = Response(response=doc, status=200, content_type=ct)
-    #return resp
-
 
 """
 User controller
@@ -80,9 +62,9 @@ User controller
 @app.route('/users', methods=['GET'])
 @hydra_link
 def get_user_collection():
-    json_doc = pretty_json({})
-    resp = Response(response=json_doc, status=200, mimetype='application/ld+json')
-    return resp
+    users = models.User.collection
+    print(users)
+    return flask_serializer.serialize(users)
 
 
 """
@@ -93,10 +75,11 @@ def get_user_collection():
 @app.route('/users', methods=['POST'])
 @hydra_link
 def post_user(user_id):
-    json_doc = pretty_json({})
-    resp = Response(response=json_doc, status=200, mimetype='application/ld+json')
-    return resp
-
+    user = models.User.user(user_id)
+    if user:
+        return flask_serializer.serialize(user)
+    else:
+        return Response(status=404)
 """
     PUT User
 """
@@ -105,9 +88,11 @@ def post_user(user_id):
 @app.route('/users', methods=['PUT'])
 @hydra_link
 def put_user(user_id):
-    json_doc = pretty_json({})
-    resp = Response(response=json_doc, status=200, mimetype='application/ld+json')
-    return resp
+    user = models.User.user(user_id)
+    if user:
+        return flask_serializer.serialize(user)
+    else:
+        return Response(status=404)
 
 
 """
@@ -118,9 +103,11 @@ def put_user(user_id):
 @app.route('/users/<int:user_id>', methods=['GET'])
 @hydra_link
 def get_user(user_id):
-    json_doc = pretty_json({})
-    resp = Response(response=json_doc, status=200, mimetype='application/ld+json')
-    return resp
+    user = models.User.user(user_id)
+    if user:
+        return flask_serializer.serialize(user)
+    else:
+        return Response(status=404)
 
 
 """
@@ -131,10 +118,11 @@ def get_user(user_id):
 @app.route('/users/<int:user_id>', methods=['DELETE'])
 @hydra_link
 def delete_user(user_id):
-    data = {}
-    json_doc = pretty_json({})
-    resp = Response(response=json_doc, status=200, mimetype='application/ld+json')
-    return resp
+    user = models.User.user(user_id)
+    if user:
+        return ''
+    else:
+        return Response(status=404)
 
 
 #annotator.write_files()
@@ -157,4 +145,5 @@ def delete_user(user_id):
 from xwot.util.hydra import VocabBuilder
 builder = VocabBuilder(annotator)
 mount_vocab(app, builder)
+app.debug = True
 app.run(host='0.0.0.0', port=port)

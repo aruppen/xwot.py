@@ -10,6 +10,54 @@ from xml.dom.minidom import parseString
 from xwot.util import pretty_json
 
 
+def _build_rec_dic(klass, object, annotator, url, context):
+    output = {}
+
+
+    for prop_name, prop_options in klass.exposed_properties:
+                prop_value = getattr(object, prop_name)
+                py_class = prop_value.__class__
+                prop_klass = annotator.get_class(py_class)
+
+                if prop_klass is not None:
+                    output[prop_name] = _build_rec_dic(prop_klass, object, annotator)
+
+
+
+                elif type(prop_value) is list:
+                    output[prop_name] = []
+                    _set = set()
+                    for index, item in enumerate(prop_value):
+                        item_py_class = item.__class__
+                        item_klass = annotator.get_class(item_py_class)
+                        id = index
+
+
+                        if item_klass is not None:
+                            if hasattr(item, 'id'):
+                                id = getattr(item, 'id')
+                            item_out = {}
+                            item_out['@id'] = "%s/%s" % (item_klass.path, id)
+                            item_out['@type'] = item_klass.iri
+
+                            if item_klass.embedded:
+                                _set.add("%s/contexts/%s.jsonld" % (url, item_py_class.__name__))
+                                _item_out = _build_rec_dic(item_klass, item, annotator, url, context)
+                                item_out.update(_item_out)
+                        else:
+                            item_out = item
+                        output[prop_name].append(item_out)
+
+                    for i in _set:
+                        context.append(i)
+
+                else:
+                    output[prop_name] = prop_value.__str__()
+
+                print(output[prop_name])
+    return output
+
+
 class Serializer(object):
 
     def __init__(self, annotator):
@@ -41,7 +89,6 @@ class JSONLDSerializer(object):
         py_class = object.__class__
         klass = self._annotator.get_class(py_class)
         context = ["%s/contexts/%s.jsonld" % (url, py_class.__name__)]
-
         context += klass.extra_context
 
         output = {
@@ -51,9 +98,9 @@ class JSONLDSerializer(object):
         }
 
         if klass:
-            for prop_name, prop_options in klass.exposed_properties:
-                prop_value = getattr(object, prop_name)
-                output[prop_name] = prop_value
+            _out = _build_rec_dic(klass, object, self._annotator, url, context)
+            print _out
+            output.update(_out)
 
         return output
 
@@ -70,17 +117,16 @@ class XMLSerializer(object):
     def serialize(self, object, url=''):
         py_class = object.__class__
         klass = self._annotator.get_class(py_class)
-
+        context = ["%s/contexts/%s.jsonld" % (url, py_class.__name__)]
         output = {
             '@id': '/',
-            '@context': "%s/contexts/%s.jsonld" % (url, py_class.__name__),
+            '@context': context,
             '@type': py_class.__name__
         }
 
         if klass:
-            for prop_name, prop_options in klass.exposed_properties:
-                prop_value = getattr(object, prop_name)
-                output[prop_name] = prop_value
+            _out = _build_rec_dic(klass, object, self._annotator, url, context)
+            output.update(_out)
 
         xml = dicttoxml.dicttoxml(output, custom_root=py_class.__name__)
         return parseString(xml).toprettyxml()
