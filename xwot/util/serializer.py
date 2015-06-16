@@ -121,6 +121,16 @@ class DictionarySerializer(Visitor, Serializer):
         hook_method = hook_method or (lambda x: x)
         self._hook_methods[visit_method] = hook_method
 
+    def _create_user_object_dic(self, obj):
+        user_object_dic = {}
+        object_properties = [p for p in dir(obj) if not (p.startswith('__') and p.endswith('__'))]
+
+        for key in object_properties:
+            if hasattr(obj, key):
+                user_object_dic[key] = getattr(obj, key)
+
+        return user_object_dic
+
     def serialize(self, obj):
         """
         Serializes a user define type to a dictionary.
@@ -171,7 +181,7 @@ class DictionarySerializer(Visitor, Serializer):
             self.visit(item)
 
         key, pairs = self._output_stack.pop()
-        new_list = map(lambda (k, v): v, pairs.items())
+        new_list = [v for (k, v) in pairs.items()]
         self._output_stack.append((key, new_list))
 
         self._restore_state()
@@ -184,7 +194,7 @@ class DictionarySerializer(Visitor, Serializer):
             self.visit(item)
 
         key, pairs = self._output_stack.pop()
-        new_list = map(lambda (k, v): v, pairs.items())
+        new_list = [v for (k, v) in pairs.items()]
         self._output_stack.append((key, new_list))
 
         self._restore_state()
@@ -199,10 +209,12 @@ class DictionarySerializer(Visitor, Serializer):
         self._restore_state()
 
     def visit_user_object(self, obj):
+        print("visit user_object")
         is_embedded = self._current_key != 'root'  # if the current key is not root then it's a embedded object
         self._save_current_state(self._current_key)
 
-        user_object_dic = vars(obj)
+        user_object_dic = self._create_user_object_dic(obj)
+
         self._call_hook('visit_user_object', (self._current_key, obj, user_object_dic, is_embedded))
         for key, value in user_object_dic.iteritems():
 
@@ -349,8 +361,9 @@ class JSONLDSerializer(Serializer):
             if mapping.type is not False:
                 dic['@type'] = mapping.type
 
-            if mapping.id is not False and hasattr(obj, mapping.id):
-                dic['@id'] = getattr(obj, mapping.id)
+            if mapping.id not in [False, None]:
+                if hasattr(obj, mapping.id):
+                    dic['@id'] = getattr(obj, mapping.id)
 
             if mapping.context is not False:
                 dic['@context'] = mapping.context
@@ -538,12 +551,14 @@ class ContentTypeSerializer(Serializer):
             del self._serializers[content_type]
 
     def serialize(self, obj, content_type=None):
+        _content_type = content_type
         if content_type in self._serializers:
             serializer = self._serializers[content_type]
         else:
             serializer = self._serializers[self._default]
+            _content_type = self._default
 
-        return serializer.serialize(obj)
+        return serializer.serialize(obj), _content_type
 
 #
 # Some helper functions
@@ -572,7 +587,7 @@ def unregister_serializer(content_type):
     SERIALIZER.unregister_serializer(content_type=content_type)
 
 
-def serialize(obj, content_type='application/json'):
+def serialize(obj, content_type):
     """
     Serialize an object based on the provided content type.
     If the correspond serializer is not present the default value of content_type is used.
@@ -581,5 +596,5 @@ def serialize(obj, content_type='application/json'):
     :return:
     """
 
-    doc = SERIALIZER.serialize(obj=obj, content_type=content_type)
+    doc, content_type = SERIALIZER.serialize(obj=obj, content_type=content_type)
     return doc
