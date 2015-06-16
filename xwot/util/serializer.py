@@ -518,7 +518,7 @@ class HTMLSerializer(Serializer):
 
 class ContentTypeSerializer(Serializer):
 
-    def __init__(self):
+    def __init__(self, default='application/json'):
         self._serializers = {
             'application/ld+json': JSONLDSerializer(),
             'application/xml': XMLSerializer(),
@@ -526,6 +526,9 @@ class ContentTypeSerializer(Serializer):
             'text/html': HTMLSerializer(),
             'text/plain': HTMLSerializer()
         }
+
+        if default in self._serializers:
+            self._default = default
 
     def register_serializer(self, content_type, serializer):
         self._serializers[content_type] = serializer
@@ -537,7 +540,7 @@ class ContentTypeSerializer(Serializer):
         if content_type in self._serializers:
             serializer = self._serializers[content_type]
         else:
-            serializer = self._serializers['application/ld+json']
+            serializer = self._serializers[self._default]
 
         return serializer.serialize(obj)
 
