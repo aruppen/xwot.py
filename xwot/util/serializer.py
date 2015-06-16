@@ -545,3 +545,41 @@ class ContentTypeSerializer(Serializer):
 
         return serializer.serialize(obj)
 
+#
+# Some helper functions
+#
+
+# global serializer variable
+SERIALIZER = ContentTypeSerializer()
+
+
+def register_serializer(content_type, serializer):
+    """
+    Associates a serializer to the provided cotent_type and registers it to the global serializer().
+    :param content_type:
+    :param serializer:
+    :return:
+    """
+    SERIALIZER.register_serializer(content_type=content_type, serializer=serializer)
+
+
+def unregister_serializer(content_type):
+    """
+    Removes a serializer from the global serializer.
+    :param content_type:
+    :return:
+    """
+    SERIALIZER.unregister_serializer(content_type=content_type)
+
+
+def serialize(obj, content_type='application/json'):
+    """
+    Serialize an object based on the provided content type.
+    If the correspond serializer is not present the default value of content_type is used.
+    :param obj:
+    :param content_type:
+    :return:
+    """
+
+    doc = SERIALIZER.serialize(obj=obj, content_type=content_type)
+    return doc
