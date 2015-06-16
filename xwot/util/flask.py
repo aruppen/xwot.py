@@ -10,8 +10,6 @@ from functools import wraps
 
 from flask import make_response
 from flask import request
-from flask import Response
-from xwot.util.serializer import ContentTypeSerializer
 
 
 def _add_response_header(headers):
@@ -51,16 +49,14 @@ def mount_vocab(app, vocabbuilder):
     return mounter
 
 
-SERIALIZER = ContentTypeSerializer()
+from xwot.util.serializer import SERIALIZER
 
 
-def serialize(obj, content_type=None):
-    if content_type is None:
-        cts = request.accept_mimetypes
-        content_type = 'application/json'
+def serialize(obj, content_type='application/json'):
+    cts = request.accept_mimetypes
 
-        if cts:
-            content_type, _ = cts[0]
+    if cts:
+        content_type, _ = cts[0]
 
     doc = SERIALIZER.serialize(obj=obj, content_type=content_type)
     return doc
