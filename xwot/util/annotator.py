@@ -250,6 +250,9 @@ class Annotator(object):
     def get_class(self, klass):
         return self._classes.get(klass, None)
 
+    def get_class_from_instance(self, obj):
+        return self.get_class(obj.__class__)
+
     def get_route(self, route):
         return self._routes[route]
 
