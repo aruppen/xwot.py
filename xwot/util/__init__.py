@@ -8,7 +8,6 @@
 __author__ = 'Alexander Rüedlinger'
 
 import os
-import json
 import socket
 from xwot.compiler.frontend.processing import JSONLDDescriptionBuilder
 
@@ -23,11 +22,6 @@ def create_description(xwot_file, site='', base=None):
     description_builder = JSONLDDescriptionBuilder()
     out = description_builder.build(xml_file=xwot_file, site=site, base=base)
     return out
-
-
-def pretty_json(dic):
-    json_doc = json.dumps(dic, indent=4, sort_keys=True, separators=(',', ': '))
-    return json_doc
 
 
 def dir_path(file):

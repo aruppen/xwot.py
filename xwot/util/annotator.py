@@ -1,17 +1,12 @@
-#encoding: utf-8
+# encoding: utf-8
 """
 @author     Alexander Rüedlinger <a.rueedlinger@gmail.com>
 @date       4.06.2015
 
 """
 
-import json
-
-from vocab_builder import VocabBuilder
-
 
 class Klass(object):
-
     def __init__(self, klass, mapper):
         self._klass = klass
         self._mapper = mapper
@@ -87,8 +82,8 @@ class Klass(object):
 
 
 class Property(object):
-
-    def __init__(self, name, title, iri, description, type, label, domain, range, operations, required, readonly, writeonly):
+    def __init__(self, name, title, iri, description, type, label, domain, range, operations, required, readonly,
+                 writeonly):
         self._name = name
         self._title = title
         self._description = description
@@ -161,7 +156,6 @@ class Property(object):
 
 
 class Operation(object):
-
     def __init__(self, name, method, description=None, returns=None, status_codes=None, expects=None):
         self._name = name
         self._method = method
@@ -201,7 +195,6 @@ class Operation(object):
 
 
 class Documentation(object):
-
     def __init__(self, vocab_url, title=None, description=None, entrypoint=None, iri=None):
         self._title = title
         self._description = description
@@ -231,7 +224,6 @@ class Documentation(object):
 
 
 class Annotator(object):
-
     def __init__(self):
         self._classes = {}
         self._routes = {}
@@ -249,8 +241,10 @@ class Annotator(object):
     def route(self, name, method, description=None, returns=None, status_codes=None, expects=None):
         self._routes[name] = Operation(name=name, method=method, description=description, returns=returns,
                                        expects=expects, status_codes=status_codes)
+
         def wrapper(f):
             return f
+
         return wrapper
 
     def get_class(self, klass):

@@ -1,4 +1,4 @@
-#encoding: utf-8
+# encoding: utf-8
 """
 @author     Alexander Rüedlinger <a.rueedlinger@gmail.com>
 @date       4.06.2015
@@ -11,7 +11,7 @@ from functools import wraps
 from flask import make_response
 from flask import request
 from flask import Response
-import xwot.util.serializer
+from xwot.util.serializer import ContentTypeSerializer
 
 
 def _add_response_header(headers):
@@ -23,7 +23,9 @@ def _add_response_header(headers):
             for header, value in headers.items():
                 h[header] = value
             return resp
+
         return decorated_function
+
     return decorator
 
 
@@ -35,29 +37,31 @@ def hydra_link(vocab_url):
         @_add_response_header({'Link': link_header})
         def decorated_function(*args, **kwargs):
             return f(*args, **kwargs)
+
         return decorated_function
+
     return wrapped_link
 
 
-def mount_vocab(app, vocab_builder):
+def mount_vocab(app, vocabbuilder):
     from xwot.util.mount import FlaskMounter
-    mounter = FlaskMounter(app=app, vocab_builder=vocab_builder)
+
+    mounter = FlaskMounter(app=app, vocabbuilder=vocabbuilder)
     mounter.mount()
     return mounter
 
 
-class Serializer(object):
+SERIALIZER = ContentTypeSerializer()
 
-    def __init__(self, serializer):
-        self._serializer = serializer
 
-    def serialize(self, object, url=''):
+def serialize(obj, content_type=None):
+    if content_type is None:
         cts = request.accept_mimetypes
-        ct = 'application/ld+json'
+        content_type = 'application/ld+json'
 
         if cts:
-            ct, _ = cts[0]
+            content_type, _ = cts[0]
 
-        doc = self._serializer.serialize(object=object, content_type=ct, url=url)
-        resp = Response(response=doc, status=200, content_type=ct)
-        return resp
+    doc = SERIALIZER.serialize(obj=obj, content_type=content_type)
+    resp = Response(response=doc, status=200, content_type=content_type)
+    return resp

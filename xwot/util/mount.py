@@ -19,15 +19,15 @@ class VocabMounter(object):
 
 class FlaskMounter(VocabMounter):
 
-    def __init__(self, app, vocab_builder):
+    def __init__(self, app, vocabbuilder):
         self._app = app
-        self._vocab_builder = vocab_builder
-        vocab, class_contexts = vocab_builder.output()
+        self._vocab_builder = vocabbuilder
+        vocab, class_contexts = vocabbuilder.output()
         self._vocab = vocab
         self._class_contexts = class_contexts
 
         from xwot.util.flask import hydra_link
-        doc = vocab_builder.documentation
+        doc = vocabbuilder.documentation
         self._link = hydra_link(doc.vocab_url)
 
     def update(self):
