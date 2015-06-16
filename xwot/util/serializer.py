@@ -122,6 +122,13 @@ class DictionarySerializer(Visitor, Serializer):
         self._hook_methods[visit_method] = hook_method
 
     def serialize(self, obj):
+        """
+        Serializes a user define type to a dictionary.
+
+        :param obj
+        :return dict
+        """
+
         self._set_initial_state()
         self.visit(obj)
         out = self._get_output()
@@ -221,6 +228,11 @@ class JSONSerializer(Serializer):
         self._ds = DictionarySerializer()
 
     def serialize(self, obj):
+        """
+        :param obj:
+        :return: json string
+        """
+
         out = self._ds.serialize(obj)
         json_str = pretty_json(out)
         return json_str
@@ -230,6 +242,7 @@ class JSONLDSerializer(Serializer):
     """
     The jsonld serializer serializes a dictionary, list or a user defined type to jsonld.
     """
+
     class Mapping(object):
 
         def __init__(self, key, type, id, context, is_iri):
@@ -268,6 +281,24 @@ class JSONLDSerializer(Serializer):
         self._ds.hook_in('visit_primitives', self._hook_method_primitives)
 
     def map(self, mapping):
+        """
+        Maps user defined types and properties to @id, @type and @context properties.
+
+        Example:
+        obj.map(mapping={
+            User: {
+                '@type': 'Person',
+                '@id', 'id', # valid property of the User object
+                '@context': 'http://schema.org/'
+            },
+            'url': {
+                'is_iri': True
+            }
+        })
+        :param mapping:
+        :return:
+        """
+
         mapping = mapping or {}
         for key, mapping_for_key in mapping.items():
             _type = mapping_for_key.get('@type', False)
@@ -302,7 +333,6 @@ class JSONLDSerializer(Serializer):
         key, obj, dic = args
         py_class = obj.__class__
 
-        print(py_class)
         if py_class in self._mappings:
             mapping = self._mappings[py_class]
             if mapping.type is not False:
@@ -315,6 +345,17 @@ class JSONLDSerializer(Serializer):
                 dic['@context'] = mapping.context
 
     def serialize(self, obj, id=False, type=False, context=False):
+        """
+        Serializes the object obj and sets the top level jsonld '@id', '@type' and '@context' properties.
+        If the default values are used then the corresponding properties are not set.
+
+        :param obj:
+        :param id: jsonld top level @id
+        :param type: jsonld top level @type
+        :param context: jsonld top level @context
+        :return: jsonld string
+        """
+
         dic = self._ds.serialize(obj)
 
         if context is not False:
@@ -339,6 +380,16 @@ class XMLSerializer(Serializer):
         self._ds = DictionarySerializer()
 
     def serialize(self, obj, root=None, pretty=True):
+        """
+        Serialize the object 'obj' and uses the value of 'root' as the name of the root element.
+        The pretty options pretty prints the xml output.
+
+        :param obj:
+        :param root:
+        :param pretty:
+        :return: xml string
+        """
+
         if root is None:
             root = obj.__class__.__name__.lower()
         out = self._ds.serialize(obj)
@@ -414,6 +465,15 @@ class HTMLSerializer(Serializer):
             self._output.append(value)
 
     def serialize(self, obj, title=None):
+        """
+        Serialize a user define type to html.
+        The title properties specifies the title of the produced html page.
+
+        :param obj:
+        :param title:
+        :return:
+        """
+
         self._set_initial_state()
         dic = self._ds.serialize(obj)
         self._visit(dic)
