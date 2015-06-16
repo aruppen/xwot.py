@@ -16,7 +16,7 @@ class Klass(object):
         self._iri = None
         self._title = None
         self._extra_context = []
-        self._embedded = False
+        self._embed = False
         self._path = ''
         self._id_property = None
 
@@ -28,12 +28,12 @@ class Klass(object):
                                                   required=required, readonly=readonly, writeonly=writeonly)
         return self
 
-    def describe(self, title=None, description=None, iri=None, operations=None, path=None, embedded=False, id=None):
+    def describe(self, title=None, description=None, iri=None, operations=None, path=None, embed=False, id=None):
         self._title = title
         self._description = description
         self._iri = iri
         self._path = path
-        self._embedded = embedded
+        self._embed = embed
         self._id_property = id
         if operations is not None:
             self._operations = operations
@@ -47,8 +47,8 @@ class Klass(object):
         return self._id_property
 
     @property
-    def embedded(self):
-        return self._embedded
+    def embed(self):
+        return self._embed
 
     @property
     def path(self):
