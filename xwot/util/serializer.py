@@ -533,8 +533,9 @@ class ContentTypeSerializer(Serializer):
     def register_serializer(self, content_type, serializer):
         self._serializers[content_type] = serializer
 
-    def unregister_serializer(self, content_type, serializer):
-        self._serializers[content_type] = serializer
+    def unregister_serializer(self, content_type):
+        if content_type in self._serializers:
+            del self._serializers[content_type]
 
     def serialize(self, obj, content_type=None):
         if content_type in self._serializers:
