@@ -199,9 +199,11 @@ class DictionarySerializer(Visitor, Serializer):
         self._restore_state()
 
     def visit_user_object(self, obj):
+        is_embedded = self._current_key != 'root'  # if the current key is not root then it's a embedded object
         self._save_current_state(self._current_key)
+
         user_object_dic = vars(obj)
-        self._call_hook('visit_user_object', (self._current_key, obj, user_object_dic))
+        self._call_hook('visit_user_object', (self._current_key, obj, user_object_dic, is_embedded))
         for key, value in user_object_dic.iteritems():
 
             if str(key).startswith('_') is False or self._ignore_hidden is False:
@@ -245,12 +247,17 @@ class JSONLDSerializer(Serializer):
 
     class Mapping(object):
 
-        def __init__(self, key, type, id, context, is_iri):
+        def __init__(self, key, type, id, context, is_iri, embed):
             self._id = id
             self._key = key
             self._type = type
             self._context = context
             self._is_iri = is_iri
+            self._embed = embed
+
+        @property
+        def embed(self):
+            return self._embed
 
         @property
         def is_iri(self):
@@ -289,7 +296,8 @@ class JSONLDSerializer(Serializer):
             User: {
                 '@type': 'Person',
                 '@id', 'id', # valid property of the User object
-                '@context': 'http://schema.org/'
+                '@context': 'http://schema.org/',
+                'embed': False
             },
             'url': {
                 'is_iri': True
@@ -303,9 +311,11 @@ class JSONLDSerializer(Serializer):
         for key, mapping_for_key in mapping.items():
             _type = mapping_for_key.get('@type', False)
             _id = mapping_for_key.get('@id', False)
-            _is_iri = _id = mapping_for_key.get('is_iri', False)
+            _is_iri = mapping_for_key.get('is_iri', False)
             _context = mapping_for_key.get('@context', False)
-            self._mappings[key] = self.Mapping(key=key, type=_type, id=_id, context=_context, is_iri=_is_iri)
+            _embed = mapping_for_key.get('embed', False)
+            self._mappings[key] = self.Mapping(key=key, type=_type, id=_id, context=_context, is_iri=_is_iri,
+                                               embed=_embed)
 
     def _hook_method_primitives(self, args):
         key, val = args
@@ -330,11 +340,12 @@ class JSONLDSerializer(Serializer):
                 dic['@context'] = mapping.context
 
     def _hook_method_object(self, args):
-        key, obj, dic = args
+        key, obj, dic, is_embedded = args
         py_class = obj.__class__
 
         if py_class in self._mappings:
             mapping = self._mappings[py_class]
+
             if mapping.type is not False:
                 dic['@type'] = mapping.type
 
@@ -343,6 +354,13 @@ class JSONLDSerializer(Serializer):
 
             if mapping.context is not False:
                 dic['@context'] = mapping.context
+
+            # check if we should embed this object
+            if mapping.embed is False and is_embedded is True:
+                # if not then we need to delete all properties
+                for key, item in dic.items():
+                    if key not in ['@context', '@id', '@type']:  # do not delete ['@context', '@id', '@type'] props
+                        del dic[key]
 
     def serialize(self, obj, id=False, type=False, context=False):
         """
