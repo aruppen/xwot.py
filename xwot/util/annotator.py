@@ -18,6 +18,7 @@ class Klass(object):
         self._extra_context = []
         self._embedded = False
         self._path = ''
+        self._id_property = None
 
     def expose(self, name, title=None, type=None, iri=None, description=None, label=None, domain=None, range=None,
                operations=None, required=None, readonly=None, writeonly=None):
@@ -27,18 +28,23 @@ class Klass(object):
                                                   required=required, readonly=readonly, writeonly=writeonly)
         return self
 
-    def describe(self, title=None, description=None, iri=None, operations=None, path=None, embedded=False):
+    def describe(self, title=None, description=None, iri=None, operations=None, path=None, embedded=False, id=None):
         self._title = title
         self._description = description
         self._iri = iri
         self._path = path
         self._embedded = embedded
+        self._id_property = id
         if operations is not None:
             self._operations = operations
         return self
 
     def add_context(self, context):
         self._extra_context += [context]
+
+    @property
+    def id_property(self):
+        return self._id_property
 
     @property
     def embedded(self):
