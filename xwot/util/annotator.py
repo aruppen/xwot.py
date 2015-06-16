@@ -7,9 +7,9 @@
 
 
 class Klass(object):
-    def __init__(self, klass, mapper):
-        self._klass = klass
-        self._mapper = mapper
+    def __init__(self, py_class, annotator):
+        self._py_class = py_class
+        self._annotator = annotator
         self._exposed_properties = {}
         self._description = None
         self._operations = []
@@ -58,7 +58,7 @@ class Klass(object):
 
     @property
     def iri(self):
-        iri = "vocab:%s" % self._klass.__name__
+        iri = "vocab:%s" % self._py_class.__name__
         if self._iri is not None:
             iri = self._iri
         return iri
@@ -75,10 +75,6 @@ class Klass(object):
     @property
     def exposed_properties(self):
         return self._exposed_properties.items()
-
-    @property
-    def mapper(self):
-        return self._mapper
 
 
 class Property(object):
