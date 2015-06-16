@@ -302,7 +302,7 @@ class HydraVocabBuilder(object):
 
     def output(self):
         self._build_vocab()
-        class_contexts = self._classes
+        class_contexts = self._class_contexts
         doc = self._vocab
         json_doc = json.dumps(doc, indent=4, sort_keys=True, separators=(',', ': '))
 
