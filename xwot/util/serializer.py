@@ -466,7 +466,7 @@ class HTMLSerializer(Serializer):
 
     def serialize(self, obj, title=None):
         """
-        Serialize a user define type to html.
+        Serialize a user defined type, list or dictionary to html.
         The title properties specifies the title of the produced html page.
 
         :param obj:
