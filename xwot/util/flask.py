@@ -44,9 +44,9 @@ def hydra_link(vocab_url):
 
 
 def mount_vocab(app, vocabbuilder):
-    from xwot.util.mount import FlaskMounter
+    from xwot.util.mounter import FlaskVocabMounter
 
-    mounter = FlaskMounter(app=app, vocabbuilder=vocabbuilder)
+    mounter = FlaskVocabMounter(app=app, vocabbuilder=vocabbuilder)
     mounter.mount()
     return mounter
 
