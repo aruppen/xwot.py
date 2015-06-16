@@ -57,11 +57,10 @@ SERIALIZER = ContentTypeSerializer()
 def serialize(obj, content_type=None):
     if content_type is None:
         cts = request.accept_mimetypes
-        content_type = 'application/ld+json'
+        content_type = 'application/json'
 
         if cts:
             content_type, _ = cts[0]
 
     doc = SERIALIZER.serialize(obj=obj, content_type=content_type)
-    resp = Response(response=doc, status=200, content_type=content_type)
-    return resp
+    return doc
