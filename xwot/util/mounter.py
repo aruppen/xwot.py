@@ -8,7 +8,7 @@
 from __future__ import absolute_import
 
 
-class VocabMounter(object):
+class Mounter(object):
 
     def mount(self):
         raise NotImplementedError
@@ -17,7 +17,7 @@ class VocabMounter(object):
         raise NotImplementedError
 
 
-class FlaskMounter(VocabMounter):
+class FlaskVocabMounter(Mounter):
 
     def __init__(self, app, vocabbuilder):
         self._app = app
