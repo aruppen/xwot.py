@@ -44,8 +44,10 @@ class JSONLDSerializer(Serializer):
         Collection.annotate(self._annotator)
 
         for py_class, klass in self._annotator.get_classes().items():
+            contexts = ["/contexts/%s.jsonld" % py_class.__name__]
+            contexts += klass.extra_context
             self._mapping[py_class] = {
-                '@context': "/contexts/%s.jsonld" % py_class.__name__,  # quick and dirty solution
+                '@context': contexts,  # quick and dirty solution
                 '@type': "%s" % py_class.__name__,
                 '@id': klass.id_property,
                 'embed': klass.embed,
