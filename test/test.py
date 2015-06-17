@@ -7,16 +7,19 @@ from xwot.util.vocab import Hydra
 from xwot.util.vocab import Owl
 from xwot.util.flask import hydra_link
 from xwot.util import local_ip
-from xwot.util import serializer
 from xwot.util import create_description
 from xwot.util import dir_path
 
+from xwot.util.hydra import JSONLDSerializer
 from xwot.util.flask import mount_vocab
-from xwot.util.flask import Serializer as FlaskSerializer
-
+from xwot.util.flask import make_response
+from xwot.util.serializer import register_serializer
 from test_conf import annotator
-serializer = serializer.Serializer(annotator)
-flask_serializer = FlaskSerializer(serializer)
+
+register_serializer('application/ld+json', JSONLDSerializer(annotator))
+
+
+
 
 # base config
 ip = local_ip()
@@ -35,7 +38,6 @@ annotator.documentation(entrypoint=http_addr, title='My Api Doc', description='A
 app = Flask(__name__, static_path='')
 
 
-
 entrypoint = models.EntryPoint()
 
 """
@@ -49,7 +51,7 @@ Entrypoint controller
 @app.route('/', methods=['GET'])
 @hydra_link
 def entrypoint_get():
-    return flask_serializer.serialize(entrypoint)
+    return make_response(entrypoint)
 
 """
 User controller
@@ -62,9 +64,8 @@ User controller
 @app.route('/users', methods=['GET'])
 @hydra_link
 def get_user_collection():
-    users = models.User.collection
-    print(users)
-    return flask_serializer.serialize(users)
+    users = models.User.users()
+    return make_response(users)
 
 
 """
@@ -77,7 +78,7 @@ def get_user_collection():
 def post_user(user_id):
     user = models.User.user(user_id)
     if user:
-        return flask_serializer.serialize(user)
+        return make_response(user)
     else:
         return Response(status=404)
 """
@@ -90,7 +91,7 @@ def post_user(user_id):
 def put_user(user_id):
     user = models.User.user(user_id)
     if user:
-        return flask_serializer.serialize(user)
+        return make_response(user)
     else:
         return Response(status=404)
 
@@ -105,7 +106,7 @@ def put_user(user_id):
 def get_user(user_id):
     user = models.User.user(user_id)
     if user:
-        return flask_serializer.serialize(user)
+        return make_response(user)
     else:
         return Response(status=404)
 
@@ -125,25 +126,8 @@ def delete_user(user_id):
         return Response(status=404)
 
 
-#annotator.write_files()
-#
-# @app.route('/vocab')
-# @link
-# def vocab():
-#     if json_doc is not None:
-#         return Response(response=json_doc, status=200, content_type='application/ld+json')
-#     else:
-#         return Response(status=404)
-#
-# @app.route('/contexts/<string:file>', methods=['GET'])
-# def contexts(file):
-#     if file in class_contexts_json_doc:
-#         doc = class_contexts_json_doc[file]
-#         return Response(response=doc, status=200, content_type='application/ld+json')
-#     else:
-#         return Response(status=404)
-from xwot.util.hydra import VocabBuilder
-builder = VocabBuilder(annotator)
+from xwot.util.vocabbuilder import HydraVocabBuilder
+builder = HydraVocabBuilder(annotator)
 mount_vocab(app, builder)
 app.debug = True
 app.run(host='0.0.0.0', port=port)
