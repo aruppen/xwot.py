@@ -7,7 +7,6 @@ from xwot.util.hydra import Collection
 
 
 class User(object):
-
     __COLLECTION__ = None
 
     def __init__(self, name, email, password, id):
@@ -52,17 +51,20 @@ User.__COLLECTION__ = Collection(members=[alex, peter, bill])
 
 
 # annotate User class
-user = annotator.klass(User)
-user.describe(title='User', description='A User represents a person registered in the system.',
-              operations=['user_retrieve', 'user_replace', 'user_delete'], id_prefix='/users/', embed=True, id='id',
-              iri=SchemaOrg.Person())
-user.expose('name', description="The user's full name.", iri=SchemaOrg.name(), required=True, range=Xsd.string())
-user.expose('email', description="The user's email address", range=Xsd.string(), iri=SchemaOrg.email(), required=True)
-user.expose('password', description="The user's password.", range=Xsd.string(), required=True, writeonly=True)
+user_klass = annotator.klass(User)
+user_klass.describe_class(title='User', description='A User represents a person registered in the system.',
+                          operations=['user_retrieve', 'user_replace', 'user_delete'], id_prefix='/users/', embed=True,
+                          id='id',
+                          iri=SchemaOrg.Person())
+user_klass.describe_property('name', description="The user's full name.", iri=SchemaOrg.name(), required=True,
+                             range=Xsd.string())
+user_klass.describe_property('email', description="The user's email address", range=Xsd.string(), iri=SchemaOrg.email(),
+                             required=True)
+user_klass.describe_property('password', description="The user's password.", range=Xsd.string(), required=True,
+                             writeonly=True)
 
 
 class EntryPoint(object):
-
     def __init__(self):
         self._users = '/users'
 
@@ -76,12 +78,13 @@ class EntryPoint(object):
 
 
 # annotate EntryPoint class
-entrypoint = annotator.klass(EntryPoint)
-#entrypoint.add_context('http://xwot.lexruee.ch/contexts/xwot.jsonld')
-entrypoint.describe(title='Entrypoint', description='The main entry point or homepage of the API.',
-                    operations=['entry_point'])
-entrypoint.expose('users', description='The collection of all users (for debugging purposes)',
-                  range=Hydra.Collection(),
-                  operations=["user_create", "user_collection_retrieve"],
-                  type=Hydra.Link())
-entrypoint.expose('name', description="The entrypoint's name", range=Xsd.string(), iri=SchemaOrg.name())
+entrypoint_klass = annotator.klass(EntryPoint)
+# entrypoint.add_context('http://xwot.lexruee.ch/contexts/xwot.jsonld')
+entrypoint_klass.describe_class(title='Entrypoint', description='The main entry point or homepage of the API.',
+                                operations=['entry_point'])
+entrypoint_klass.describe_property('users', description='The collection of all users (for debugging purposes)',
+                                   range=Hydra.Collection(),
+                                   operations=["user_create", "user_collection_retrieve"],
+                                   type=Hydra.Link())
+entrypoint_klass.describe_property('name', description="The entrypoint's name", range=Xsd.string(),
+                                   iri=SchemaOrg.name())
