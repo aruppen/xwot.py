@@ -57,10 +57,13 @@ class JSONLDSerializer(Serializer):
         self._jsld.map(mapping=self._mapping)
 
     def serialize(self, obj):
+        contexts = []
+
         # set the context for the top level object
-        py_class = obj.__class__
         klass = self._annotator.get_class_from_instance(obj)
-        contexts = ["/contexts/%s.jsonld" % py_class.__name__]  # example: /contexts/User.jsonld
+        if klass is not None:
+            py_class = obj.__class__
+            contexts = ["/contexts/%s.jsonld" % py_class.__name__]  # example: /contexts/User.jsonld
 
         # and add extra content
         contexts += klass.extra_context
