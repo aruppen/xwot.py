@@ -27,7 +27,7 @@ class Collection(object):
     def annotate(self, annotator):
         # annotate Collection class
         collection = annotator.klass(Collection)
-        collection.describe(title='Collection', description='A Collection', iri='Collection')
+        collection.describe(title='Collection', description='A Collection', iri=Hydra.Collection())
         collection.expose('members', description="The members of this collection.", iri=Hydra.member(), writeonly=False,
                           readonly=False)
 
@@ -46,9 +46,10 @@ class JSONLDSerializer(Serializer):
         for py_class, klass in self._annotator.get_classes().items():
             self._mapping[py_class] = {
                 '@context': "/contexts/%s.jsonld" % py_class.__name__,  # quick and dirty solution
-                '@type': "vocab:%s" % py_class.__name__,
+                '@type': "%s" % py_class.__name__,
                 '@id': klass.id_property,
-                'embed': klass.embed
+                'embed': klass.embed,
+                'id_prefix': klass.id_prefix
             }
 
         self._jsld.map(mapping=self._mapping)
@@ -63,4 +64,4 @@ class JSONLDSerializer(Serializer):
         contexts += klass.extra_context
 
         # set @id, @type and @context for the top level obj
-        return self._jsld.serialize(obj=obj, id='/', type=klass.iri, context=contexts)
+        return self._jsld.serialize(obj=obj, id='/', type=py_class.__name__, context=contexts)
