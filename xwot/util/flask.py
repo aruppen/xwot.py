@@ -8,11 +8,13 @@
 from __future__ import absolute_import
 from functools import wraps
 
-from flask import make_response
 from flask import request
+from flask import Response
 
 
 def _add_response_header(headers):
+    from flask import make_response
+
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
@@ -52,11 +54,22 @@ def mount_vocab(app, vocabbuilder):
 from xwot.util.serializer import SERIALIZER
 
 
+def make_response(obj, content_type='application/json', status=200):
+    cts = request.accept_mimetypes
+
+    if cts:
+        content_type, _ = cts[0]
+
+    doc, _content_type = SERIALIZER.serialize(obj=obj, content_type=content_type)
+
+    return Response(response=doc, status=status, content_type=_content_type)
+
+
 def serialize(obj, content_type='application/json'):
     cts = request.accept_mimetypes
 
     if cts:
         content_type, _ = cts[0]
 
-    doc = SERIALIZER.serialize(obj=obj, content_type=content_type)
+    doc, content_type = SERIALIZER.serialize(obj=obj, content_type=content_type)
     return doc
