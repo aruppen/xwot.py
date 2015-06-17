@@ -126,7 +126,7 @@ class DictionarySerializer(Visitor, Serializer):
         object_properties = [p for p in dir(obj) if not (p.startswith('__') and p.endswith('__'))]
 
         for key in object_properties:
-            if hasattr(obj, key):
+            if hasattr(obj, key) and not key.isupper():
                 user_object_dic[key] = getattr(obj, key)
 
         return user_object_dic
