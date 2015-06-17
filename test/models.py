@@ -4,9 +4,10 @@ from xwot.util.vocab import SchemaOrg
 from test_conf import annotator
 
 from xwot.util.hydra import Collection
-
+from xwot.util.vocab import SchemaOrg
 
 class User(object):
+
     __COLLECTION__ = None
 
     def __init__(self, name, email, password, id):
@@ -14,6 +15,14 @@ class User(object):
         self._email = email
         self._password = password
         self._id = id
+
+    @property
+    def url(self):
+        return '/users/' + str(self._id)
+
+    @property
+    def additionalType(self):
+        return {'@id': SchemaOrg.Person()}
 
     @property
     def id(self):
