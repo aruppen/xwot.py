@@ -28,7 +28,7 @@ class Klass(object):
                                                   required=required, readonly=readonly, writeonly=writeonly)
         return self
 
-    def describe(self, title=None, description=None, iri=None, operations=None, path=None, embed=False, id=None):
+    def describe(self, title=None, description=None, iri=None, operations=None, path='', embed=False, id=None):
         self._title = title
         self._description = description
         self._iri = iri
