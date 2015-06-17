@@ -26,10 +26,10 @@ class Collection(object):
     @classmethod
     def annotate(self, annotator):
         # annotate Collection class
-        collection = annotator.klass(Collection)
-        collection.describe(title='Collection', description='A Collection', iri=Hydra.Collection())
-        collection.expose('members', description="The members of this collection.", iri=Hydra.member(), writeonly=False,
-                          readonly=False)
+        klass = annotator.klass(Collection)
+        klass.describe_class(title='Collection', description='A Collection', iri=Hydra.Collection())
+        klass.describe_property('members', description="The members of this collection.", iri=Hydra.member(),
+                                writeonly=False, readonly=False)
 
 
 class JSONLDSerializer(Serializer):

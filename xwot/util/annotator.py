@@ -20,7 +20,7 @@ class Klass(object):
         self._id_prefix = ''
         self._id_property = None
 
-    def expose(self, name, title=None, type=None, iri=None, description=None, label=None, domain=None, range=None,
+    def describe_property(self, name, title=None, type=None, iri=None, description=None, label=None, domain=None, range=None,
                operations=None, required=None, readonly=None, writeonly=None):
 
         self._exposed_properties[name] = Property(name=name, title=title, type=type, iri=iri, description=description,
@@ -28,7 +28,7 @@ class Klass(object):
                                                   required=required, readonly=readonly, writeonly=writeonly)
         return self
 
-    def describe(self, title=None, description=None, iri=None, operations=None, id_prefix='', embed=False, id=None):
+    def describe_class(self, title=None, description=None, iri=None, operations=None, id_prefix='', embed=False, id=None):
         self._title = title
         self._description = description
         self._iri = iri
