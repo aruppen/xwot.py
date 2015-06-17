@@ -347,7 +347,7 @@ class JSONLDSerializer(Serializer):
 
             if mapping.id is not False:
                 if dic.get(mapping.id, False) is not False:
-                    dic['@id'] = dic[mapping.id]
+                    dic['@id'] = str(dic[mapping.id])
                     del dic[mapping.id]
 
             if mapping.context is not False:
@@ -365,7 +365,8 @@ class JSONLDSerializer(Serializer):
 
             if mapping.id not in [False, None]:
                 if hasattr(obj, mapping.id):
-                    dic['@id'] = getattr(obj, mapping.id)
+                    _id = getattr(obj, mapping.id)
+                    dic['@id'] = str(_id)
                     del dic[mapping.id]
 
             if mapping.context is not False:
