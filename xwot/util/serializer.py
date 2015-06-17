@@ -259,13 +259,18 @@ class JSONLDSerializer(Serializer):
 
     class Mapping(object):
 
-        def __init__(self, key, type, id, context, is_iri, embed):
+        def __init__(self, key, type, id, context, is_iri, embed, id_prefix):
             self._id = id
             self._key = key
             self._type = type
             self._context = context
             self._is_iri = is_iri
             self._embed = embed
+            self._id_prefix = id_prefix
+
+        @property
+        def id_prefix(self):
+            return self._id_prefix
 
         @property
         def embed(self):
@@ -326,8 +331,9 @@ class JSONLDSerializer(Serializer):
             _is_iri = mapping_for_key.get('is_iri', False)
             _context = mapping_for_key.get('@context', False)
             _embed = mapping_for_key.get('embed', False)
+            _id_prefix = mapping_for_key.get('id_prefix', '')
             self._mappings[key] = self.Mapping(key=key, type=_type, id=_id, context=_context, is_iri=_is_iri,
-                                               embed=_embed)
+                                               embed=_embed, id_prefix=_id_prefix)
 
     def _hook_method_primitives(self, args):
         key, val = args
@@ -347,7 +353,7 @@ class JSONLDSerializer(Serializer):
 
             if mapping.id is not False:
                 if dic.get(mapping.id, False) is not False:
-                    dic['@id'] = str(dic[mapping.id])
+                    dic['@id'] = mapping.id_prefix + str(dic[mapping.id])
                     del dic[mapping.id]
 
             if mapping.context is not False:
@@ -366,7 +372,7 @@ class JSONLDSerializer(Serializer):
             if mapping.id not in [False, None]:
                 if hasattr(obj, mapping.id):
                     _id = getattr(obj, mapping.id)
-                    dic['@id'] = str(_id)
+                    dic['@id'] = mapping.id_prefix + str(_id)
                     del dic[mapping.id]
 
             if mapping.context is not False:
