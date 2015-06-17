@@ -209,7 +209,6 @@ class DictionarySerializer(Visitor, Serializer):
         self._restore_state()
 
     def visit_user_object(self, obj):
-        print("visit user_object")
         is_embedded = self._current_key != 'root'  # if the current key is not root then it's a embedded object
         self._save_current_state(self._current_key)
 
