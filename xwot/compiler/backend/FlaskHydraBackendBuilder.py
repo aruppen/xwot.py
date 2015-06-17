@@ -30,7 +30,6 @@ class FlaskHydraBackendBuilder(FlaskBackendBuilder):
                            'from xwot.util import create_description',
                            'from xwot.util.flask import hydra_link',
                            'from xwot.util.annotator import Annotator',
-                           'from xwot.util.serializer import Serializer',
                            'from xwot.util.serializer import register_serializer',
                            'from xwot.util.hydra import JSONLDSerializer',
                            'from xwot.util import dir_path',
