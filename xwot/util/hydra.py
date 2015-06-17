@@ -36,8 +36,8 @@ class JSONLDSerializer(Serializer):
 
     def __init__(self, annotator):
         self._annotator = annotator
-        from serializer import JSONLDSerializer as RealJSONLDSerializer
-        self._jsld = RealJSONLDSerializer()
+        from serializer import JSONLDSerializer as _JSONLDSerializer
+        self._jsld = _JSONLDSerializer()
         self._mapping = {}
 
         # annotate Collection
