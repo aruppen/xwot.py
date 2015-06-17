@@ -17,7 +17,7 @@ class Klass(object):
         self._title = None
         self._extra_context = []
         self._embed = False
-        self._path = ''
+        self._id_prefix = ''
         self._id_property = None
 
     def expose(self, name, title=None, type=None, iri=None, description=None, label=None, domain=None, range=None,
@@ -28,11 +28,11 @@ class Klass(object):
                                                   required=required, readonly=readonly, writeonly=writeonly)
         return self
 
-    def describe(self, title=None, description=None, iri=None, operations=None, path='', embed=False, id=None):
+    def describe(self, title=None, description=None, iri=None, operations=None, id_prefix='', embed=False, id=None):
         self._title = title
         self._description = description
         self._iri = iri
-        self._path = path
+        self._id_prefix = id_prefix
         self._embed = embed
         self._id_property = id
         if operations is not None:
@@ -51,8 +51,8 @@ class Klass(object):
         return self._embed
 
     @property
-    def path(self):
-        return self._path
+    def id_prefix(self):
+        return self._id_prefix
 
     @property
     def extra_context(self):
