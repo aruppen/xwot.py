@@ -52,6 +52,7 @@ User.__COLLECTION__ = Collection(members=[alex, peter, bill])
 
 # annotate User class
 user_klass = annotator.klass(User)
+user_klass.add_context('http://xwot.lexruee.ch/contexts/xwot.jsonld')
 user_klass.describe_class(title='User', description='A User represents a person registered in the system.',
                           operations=['user_retrieve', 'user_replace', 'user_delete'], id_prefix='/users/', embed=True,
                           id='id',
@@ -79,7 +80,7 @@ class EntryPoint(object):
 
 # annotate EntryPoint class
 entrypoint_klass = annotator.klass(EntryPoint)
-# entrypoint.add_context('http://xwot.lexruee.ch/contexts/xwot.jsonld')
+entrypoint_klass.add_context('http://xwot.lexruee.ch/contexts/xwot.jsonld')
 entrypoint_klass.describe_class(title='Entrypoint', description='The main entry point or homepage of the API.',
                                 operations=['entry_point'])
 entrypoint_klass.describe_property('users', description='The collection of all users (for debugging purposes)',
