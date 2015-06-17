@@ -44,7 +44,7 @@ class Visitor(object):
         elif self._is_not_builtin(obj):  # check if obj is a user defined type
             self.visit_user_object(obj)
         else:
-            raise NotImplementedError
+            pass
 
     def visit_none(self, val):
         raise NotImplementedError
@@ -346,7 +346,9 @@ class JSONLDSerializer(Serializer):
                 dic['@type'] = mapping.type
 
             if mapping.id is not False:
-                dic['@id'] = mapping.id
+                if dic.get(mapping.id, False) is not False:
+                    dic['@id'] = dic[mapping.id]
+                    del dic[mapping.id]
 
             if mapping.context is not False:
                 dic['@context'] = mapping.context
@@ -364,6 +366,7 @@ class JSONLDSerializer(Serializer):
             if mapping.id not in [False, None]:
                 if hasattr(obj, mapping.id):
                     dic['@id'] = getattr(obj, mapping.id)
+                    del dic[mapping.id]
 
             if mapping.context is not False:
                 dic['@context'] = mapping.context
