@@ -63,6 +63,7 @@ User.__COLLECTION__ = Collection(members=[alex, peter, bill])
 
 # annotate User class
 user_klass = annotator.klass(User)
+#user_klass.add_type(SchemaOrg.Person())
 user_klass.add_context('http://xwot.lexruee.ch/contexts/xwot.jsonld')
 user_klass.describe_class(title='User', description='A User represents a person registered in the system.',
                           operations=['user_retrieve', 'user_replace', 'user_delete'], id_prefix='/users/', embed=True,
