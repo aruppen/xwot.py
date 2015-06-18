@@ -27,9 +27,9 @@ sudo python setup.py install
 sudo pip install xwot
 ```
 
-## Commands
+## xWoT Commands
 
-### xwot compiler - xwotc
+### xwotc: xwot compiler
 The xwot compiler uses popular micro web frameworks to generate a skeleton application
 for different programming platforms such as:
 
@@ -74,7 +74,7 @@ xwotc  flask smart-room-example_enhanced.xwot
 ```
 
 
-### xwot description builder - xwotd
+### xwotd: xwot description builder
 The xwot description builder takes as argument a xwot xml file and generates a lightweight
 device description file in the jsonld format.
 
