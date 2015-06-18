@@ -8,7 +8,7 @@
 import util
 
 
-class Plant(object):
+class WaterDispenser(object):
 
     OPEN_SOLENOID_VALVE = 0x01
     CLOSE_SOLENOID_VALVE = 0x02
