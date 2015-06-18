@@ -123,10 +123,13 @@ class DictionarySerializer(Visitor, Serializer):
 
     def _create_user_object_dic(self, obj):
         user_object_dic = {}
-        object_properties = [p for p in dir(obj) if not (p.startswith('__') and p.endswith('__'))]
+        exposed_props = []
 
-        for key in object_properties:
-            if hasattr(obj, key) and not key.isupper():
+        if hasattr(obj, '__expose__'):
+            exposed_props = getattr(obj, '__expose__')
+
+        for key in exposed_props:
+            if hasattr(obj, key):
                 user_object_dic[key] = getattr(obj, key)
 
         return user_object_dic

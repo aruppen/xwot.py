@@ -10,6 +10,9 @@ from serializer import Serializer
 
 
 class Collection(object):
+
+    __expose__ = ['members']
+
     def __init__(self, members=None):
         if members is None:
             self._members = []
