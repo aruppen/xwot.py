@@ -10,7 +10,7 @@ class User(object):
 
     __COLLECTION__ = None
 
-    __expose__ = ['additionalType', 'id', 'email', 'password']
+    __expose__ = ['href', 'additionalType', 'id', 'email', 'password']
 
     def __init__(self, name, email, password, id):
         self._name = name
@@ -19,7 +19,7 @@ class User(object):
         self._id = id
 
     @property
-    def url(self):
+    def href(self):
         return '/users/' + str(self._id)
 
     @property
