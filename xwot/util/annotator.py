@@ -15,7 +15,8 @@ class Klass(object):
         self._operations = []
         self._iri = None
         self._title = None
-        self._extra_context = []
+        self._extra_contexts = []
+        self._extra_types = []
         self._embed = False
         self._id_prefix = ''
         self._id_property = None
@@ -40,7 +41,10 @@ class Klass(object):
         return self
 
     def add_context(self, context):
-        self._extra_context += [context]
+        self._extra_contexts += [context]
+
+    def add_type(self, type):
+        self._extra_types += [type]
 
     @property
     def id_property(self):
@@ -55,8 +59,12 @@ class Klass(object):
         return self._id_prefix
 
     @property
-    def extra_context(self):
-        return self._extra_context
+    def extra_contexts(self):
+        return self._extra_contexts
+
+    @property
+    def extra_types(self):
+        return self._extra_types
 
     @property
     def description(self):

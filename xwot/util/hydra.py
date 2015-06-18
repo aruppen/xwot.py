@@ -48,10 +48,16 @@ class JSONLDSerializer(Serializer):
 
         for py_class, klass in self._annotator.get_classes().items():
             contexts = ["/contexts/%s.jsonld" % py_class.__name__]
-            contexts += klass.extra_context
+            types = ["%s" % py_class.__name__]
+
+            contexts += klass.extra_contexts
+            types += klass.extra_types
+
+            contexts, types = self._simplify_metadata(contexts, types)
+
             self._mapping[py_class] = {
                 '@context': contexts,  # quick and dirty solution
-                '@type': "%s" % py_class.__name__,
+                '@type': types,
                 '@id': klass.id_property,
                 'embed': klass.embed,
                 'id_prefix': klass.id_prefix
@@ -61,15 +67,32 @@ class JSONLDSerializer(Serializer):
 
     def serialize(self, obj):
         contexts = []
+        types = []
 
         # set the context for the top level object
         klass = self._annotator.get_class_from_instance(obj)
         if klass is not None:
             py_class = obj.__class__
             contexts = ["/contexts/%s.jsonld" % py_class.__name__]  # example: /contexts/User.jsonld
+            types = [py_class.__name__]
 
         # and add extra content
-        contexts += klass.extra_context
+        contexts += klass.extra_contexts
+        types += klass.extra_types
+
+        contexts, types = self._simplify_metadata(contexts, types)
 
         # set @id, @type and @context for the top level obj
-        return self._jsld.serialize(obj=obj, id='/', type=py_class.__name__, context=contexts)
+        return self._jsld.serialize(obj=obj, id='/', type=types, context=contexts)
+
+    def _simplify_metadata(self, contexts, types):
+        if len(contexts) == 0:
+            contexts = False
+        elif len(contexts) == 1:
+            contexts = contexts[0]
+
+        if len(types) == 0:
+            types = False
+        elif len(types) == 1:
+            types = types[0]
+        return contexts, types
