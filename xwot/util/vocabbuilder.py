@@ -232,7 +232,7 @@ class HydraVocabBuilder(object):
             supported_properties = []
 
             # add operations to properties
-            for prop_name, property in klass.exposed_properties:
+            for prop_name, property in klass.properties:
                 supported_property_operations = []
                 for operation_key in property.operations:
                     if operation_key in self._routes:
@@ -275,7 +275,7 @@ class HydraVocabBuilder(object):
                 '@context': _context
             }
 
-            for prop_name, property in klass.exposed_properties:
+            for prop_name, property in klass.properties:
                 iri = property.iri
                 if iri is None:
                     iri = "vocab:%s/%s" % (py_class.__name__, prop_name)

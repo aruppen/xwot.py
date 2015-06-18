@@ -10,7 +10,7 @@ class Klass(object):
     def __init__(self, py_class, annotator):
         self._py_class = py_class
         self._annotator = annotator
-        self._exposed_properties = {}
+        self._properties = {}
         self._description = None
         self._operations = []
         self._iri = None
@@ -23,7 +23,7 @@ class Klass(object):
     def describe_property(self, name, title=None, type=None, iri=None, description=None, label=None, domain=None, range=None,
                operations=None, required=None, readonly=None, writeonly=None):
 
-        self._exposed_properties[name] = Property(name=name, title=title, type=type, iri=iri, description=description,
+        self._properties[name] = Property(name=name, title=title, type=type, iri=iri, description=description,
                                                   label=label, domain=domain, range=range, operations=operations,
                                                   required=required, readonly=readonly, writeonly=writeonly)
         return self
@@ -79,8 +79,8 @@ class Klass(object):
 
 
     @property
-    def exposed_properties(self):
-        return self._exposed_properties.items()
+    def properties(self):
+        return self._properties.items()
 
 
 class Property(object):
