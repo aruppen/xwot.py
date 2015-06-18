@@ -75,6 +75,7 @@ class SchemaOrg(object):
     SCHEMA_ORG_DESCRIPTION = "http://schema.org/description"
     SCHEMA_ORG_NAME = "http://schema.org/name"
     SCHEMA_ORG_EMAIL = "http://schema.org/email"
+    SCHEMA_ORG_URL = "http://schema.org/url"
     SCHEMA_ORG_PERSON = "http://schema.org/Person"
 
     @classmethod
@@ -88,6 +89,10 @@ class SchemaOrg(object):
     @classmethod
     def email(cls):
         return cls.SCHEMA_ORG_EMAIL
+
+    @classmethod
+    def url(cls):
+        return cls.SCHEMA_ORG_URL
 
     @classmethod
     def Person(cls):

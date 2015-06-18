@@ -93,7 +93,7 @@ def pretty_json(dic):
 
 class Serializer(object):
 
-    def serialize(self, obj):
+    def serialize(self, obj, **kwargs):
         raise NotImplementedError
 
 
@@ -102,11 +102,10 @@ class DictionarySerializer(Visitor, Serializer):
     The dictionary serializer serializes built-in types and user defined types into a dictionary.
     """
 
-    def __init__(self, ignore_hidden=True):
+    def __init__(self):
         self._output_stack = None
         self._current_key = None
         self._hook_methods = {}
-        self._ignore_hidden = ignore_hidden
 
     def _set_initial_state(self):
         self._output_stack = [('root', {})]
@@ -134,7 +133,7 @@ class DictionarySerializer(Visitor, Serializer):
 
         return user_object_dic
 
-    def serialize(self, obj):
+    def serialize(self, obj, **kwargs):
         """
         Serializes a user define type to a dictionary.
 
@@ -220,7 +219,7 @@ class DictionarySerializer(Visitor, Serializer):
         self._call_hook('visit_user_object', (self._current_key, obj, user_object_dic, is_embedded))
         for key, value in user_object_dic.iteritems():
 
-            if str(key).startswith('_') is False or self._ignore_hidden is False:
+            if str(key).startswith('_') is False:
                 self._current_key = key
                 self.visit(value)
 
@@ -243,7 +242,7 @@ class JSONSerializer(Serializer):
     def __init__(self):
         self._ds = DictionarySerializer()
 
-    def serialize(self, obj):
+    def serialize(self, obj, **kwargs):
         """
         :param obj:
         :return: json string
@@ -387,7 +386,7 @@ class JSONLDSerializer(Serializer):
                     if key not in ['@context', '@id', '@type']:  # do not delete ['@context', '@id', '@type'] props
                         del dic[key]
 
-    def serialize(self, obj, id=False, type=False, context=False):
+    def serialize(self, obj, **kwargs):
         """
         Serializes the object obj and sets the top level jsonld '@id', '@type' and '@context' properties.
         If the default values are used then the corresponding properties are not set.
@@ -399,13 +398,18 @@ class JSONLDSerializer(Serializer):
         :return: jsonld string
         """
 
+        id = kwargs.get('id', False)
+        type = kwargs.get('type', False)
+        context = kwargs.get('context', False)
+        path = kwargs.get('path', '')
+
         dic = self._ds.serialize(obj)
 
         if context is not False:
             dic['@context'] = context
 
         if id is not False:
-            dic['@id'] = id
+            dic['@id'] = path + id
 
         if type is not False:
             dic['@type'] = type
@@ -422,7 +426,7 @@ class XMLSerializer(Serializer):
     def __init__(self):
         self._ds = DictionarySerializer()
 
-    def serialize(self, obj, root=None, pretty=True):
+    def serialize(self, obj, **kwargs):
         """
         Serialize the object 'obj' and uses the value of 'root' as the name of the root element.
         The pretty options pretty prints the xml output.
@@ -432,6 +436,9 @@ class XMLSerializer(Serializer):
         :param pretty:
         :return: xml string
         """
+
+        root = kwargs.get('root', None)
+        pretty = kwargs.get('pretty', True)
 
         if root is None:
             root = obj.__class__.__name__.lower()
@@ -453,10 +460,12 @@ class HTMLSerializer(Serializer):
         self._ds = DictionarySerializer()
         self._output = None
         self._current_key = None
+        self._path = None
         self._set_initial_state()
 
     def _set_initial_state(self):
         self._output = []
+        self._path = ''
         
     def _visit(self, value):
         if type(value) is dict:
@@ -499,7 +508,9 @@ class HTMLSerializer(Serializer):
     def _visit_literal(self, value):
         value = str(value)
         if len(value) > 0 and value[0] == '/':
-            self._output.append("<a href=\"%s\">" % value)
+            href = self._path + '/' + value
+            href = href.replace('//', '/') # hack
+            self._output.append("<a href=\"%s\">" % href)
             self._output.append(str(self._current_key))
             self._output.append('</a>')
         else:
@@ -507,7 +518,7 @@ class HTMLSerializer(Serializer):
             self._output.append(': ')
             self._output.append(value)
 
-    def serialize(self, obj, title=None):
+    def serialize(self, obj, **kwargs):
         """
         Serialize a user defined type, list or dictionary to html.
         The title properties specifies the title of the produced html page.
@@ -518,9 +529,11 @@ class HTMLSerializer(Serializer):
         """
 
         self._set_initial_state()
+        self._path = kwargs.get('path', '')
         dic = self._ds.serialize(obj)
         self._visit(dic)
 
+        title = kwargs.get('title', None)
         if title is None:
             title = obj.__class__.__name__
 
@@ -562,7 +575,7 @@ class ContentTypeSerializer(Serializer):
         if content_type in self._serializers:
             del self._serializers[content_type]
 
-    def serialize(self, obj, content_type=None):
+    def serialize(self, obj, content_type=None, **kwargs):
         _content_type = content_type
         if content_type in self._serializers:
             serializer = self._serializers[content_type]
@@ -570,7 +583,7 @@ class ContentTypeSerializer(Serializer):
             serializer = self._serializers[self._default]
             _content_type = self._default
 
-        return serializer.serialize(obj), _content_type
+        return serializer.serialize(obj, **kwargs), _content_type
 
 #
 # Some helper functions
@@ -599,14 +612,15 @@ def unregister_serializer(content_type):
     SERIALIZER.unregister_serializer(content_type=content_type)
 
 
-def serialize(obj, content_type):
+def serialize(obj, content_type, **kwargs):
     """
     Serialize an object based on the provided content type.
     If the correspond serializer is not present the default value of content_type is used.
     :param obj:
     :param content_type:
+    :param **kwargs:
     :return:
     """
 
-    doc, content_type = SERIALIZER.serialize(obj=obj, content_type=content_type)
+    doc, content_type = SERIALIZER.serialize(obj=obj, content_type=content_type, **kwargs)
     return doc

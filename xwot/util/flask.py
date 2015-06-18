@@ -56,11 +56,12 @@ from xwot.util.serializer import SERIALIZER
 
 def make_response(obj, content_type='application/json', status=200):
     cts = request.accept_mimetypes
+    path = request.path
 
     if cts:
         content_type, _ = cts[0]
 
-    doc, _content_type = SERIALIZER.serialize(obj=obj, content_type=content_type)
+    doc, _content_type = SERIALIZER.serialize(obj=obj, content_type=content_type, path=path)
 
     return Response(response=doc, status=status, content_type=_content_type)
 

@@ -59,15 +59,16 @@ class JSONLDSerializer(Serializer):
                 '@context': contexts,  # quick and dirty solution
                 '@type': types,
                 '@id': klass.id_property,
-                'embed': klass.embed,
-                'id_prefix': klass.id_prefix
+                'id_prefix': klass.id_prefix,
+                'embed': klass.embed
             }
 
         self._jsld.map(mapping=self._mapping)
 
-    def serialize(self, obj):
+    def serialize(self, obj, **kwargs):
         contexts = []
         types = []
+        path = kwargs.get('path', '/')
 
         # set the context for the top level object
         klass = self._annotator.get_class_from_instance(obj)
@@ -83,7 +84,7 @@ class JSONLDSerializer(Serializer):
         contexts, types = self._simplify_metadata(contexts, types)
 
         # set @id, @type and @context for the top level obj
-        return self._jsld.serialize(obj=obj, id='/', type=types, context=contexts)
+        return self._jsld.serialize(obj=obj, id=str(path), type=types, context=contexts)
 
     def _simplify_metadata(self, contexts, types):
         if len(contexts) == 0:
