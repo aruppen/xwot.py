@@ -10,6 +10,8 @@ class User(object):
 
     __COLLECTION__ = None
 
+    __expose__ = ['additionalType', 'id', 'email', 'password']
+
     def __init__(self, name, email, password, id):
         self._name = name
         self._email = email
@@ -75,6 +77,9 @@ user_klass.describe_property('password', description="The user's password.", ran
 
 
 class EntryPoint(object):
+
+    __expose__ = ['users', 'name']
+
     def __init__(self):
         self._users = '/users'
 
