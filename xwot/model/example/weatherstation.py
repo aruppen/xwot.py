@@ -5,7 +5,7 @@
 
 """
 
-import util
+from xwot.model.example import util
 
 
 class Weatherstation(object):
