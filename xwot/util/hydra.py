@@ -11,27 +11,27 @@ from serializer import Serializer
 
 class Collection(object):
 
-    __expose__ = ['members']
+    __expose__ = ['member']
 
-    def __init__(self, members=None):
-        if members is None:
-            self._members = []
+    def __init__(self, member=None):
+        if member is None:
+            self._member = []
         else:
-            self._members = members
+            self._member = member
 
     @property
     def members(self):
-        return self._members
+        return self._member
 
     def get(self, id):
-        return self._members[id]
+        return self._member[id]
 
     @classmethod
     def annotate(self, annotator):
         # annotate Collection class
         klass = annotator.klass(Collection)
         klass.describe_class(title='Collection', description='A Collection', iri=Hydra.Collection())
-        klass.describe_property('members', description="The members of this collection.", iri=Hydra.member(),
+        klass.describe_property('member', description="The members of this collection.", iri=Hydra.member(),
                                 writeonly=False, readonly=False)
 
 
