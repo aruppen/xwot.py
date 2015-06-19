@@ -11,11 +11,12 @@ setup(
     entry_points={
         'console_scripts': [
             'xwotc = xwot.cmd:xwotc',
-            'xwotd = xwot.cmd:xwotd'
+            'xwotd = xwot.cmd:xwotd',
+#            'xwotp2v = xwot.cmd:xwotp2v'
         ]
     },
     version=VERSION,
-    install_requires=['dicttoxml'],
+    install_requires=['dicttoxml', 'xmltodict'],
     description="xwot",
     author="Alexander Rüedlinger",
     author_email="a.rueedlinger@gmail.com",
