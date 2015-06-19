@@ -508,9 +508,11 @@ class HTMLSerializer(Serializer):
     def _visit_literal(self, value):
         value = str(value)
         if len(value) > 0 and value[0] == '/':
-            href = self._path + '/' + value
-            href = href.replace('//', '/') # hack
-            self._output.append("<a href=\"%s\">" % href)
+            # TODO
+            #href = self._path + '/' + value
+            #href = href.replace('//', '/') # hack
+
+            self._output.append("<a href=\"%s\">" % value)
             self._output.append(str(self._current_key))
             self._output.append('</a>')
         else:
