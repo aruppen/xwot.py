@@ -10,6 +10,8 @@ __author__ = 'Alexander Rüedlinger'
 import os
 import socket
 from xwot.compiler.frontend.processing import JSONLDDescriptionBuilder
+import xmltodict
+import json
 
 
 def local_ip():
@@ -30,3 +32,21 @@ def dir_path(file):
 
 def parent_dir_path(file):
     return os.path.dirname(dir_path(file))
+
+
+
+CONTENT_TYPES = {
+    'application/xml': xmltodict.parse,
+    'application/json': json.loads,
+    'application/ld+json': json.loads
+}
+
+
+def deserialize(data, content_type):
+    print(content_type)
+    print(data)
+    if content_type in CONTENT_TYPES and data:
+        deserializer = CONTENT_TYPES[content_type]
+        res = deserializer(data)
+        return res
+    return {}
