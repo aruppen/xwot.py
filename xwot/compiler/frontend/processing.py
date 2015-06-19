@@ -154,7 +154,7 @@ class JSONLDDescriptionPrinter(Visitor):
     def visit_entity(self, node):
         self._output = {
             ("%s" % self.ID): '/',
-            ("%s" % self.TYPE): 'Entity',
+            ("%s" % self.TYPE): 'Description',
             ("%s" % self.CHILDREN): []
         }
 
@@ -165,7 +165,7 @@ class JSONLDDescriptionPrinter(Visitor):
 
         # overwrite entity resource and use the first child as root
         # entity resource has always at most one child !!!
-        self._output = self._output[("%s" % self.CHILDREN)][0]  # hack
+        #self._output = self._output[("%s" % self.CHILDREN)][0]  # hack
         self._output[self.CONTEXT] = ["http://xwot.lexruee.ch/contexts/xwot.jsonld"]
 
     def visit_resource(self, node):
