@@ -122,6 +122,7 @@ class HydraVocabBuilder(object):
         self._set_initial_state()
 
     def _set_initial_state(self):
+        self._documentation = self._annotator.get_documentation()
         self._vocab = None
         self._class_contexts = None
 
