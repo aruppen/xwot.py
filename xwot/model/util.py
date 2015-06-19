@@ -28,42 +28,48 @@ class I2CAdapter(object):
         Assumes that data is in big endian format: [msb, ..., lsb]
         """
         b = ''.join(chr(i) for i in data)
-        return struct.unpack('>i', b)
+        r = struct.unpack('>i', b)
+        return r[0]
 
     def _to_uint(self, data):
         """
         Assumes that data is in big endian format: [msb, ..., lsb]
         """
         b = ''.join(chr(i) for i in data)
-        return struct.unpack('>I', b)
+        r = struct.unpack('>I', b)
+        return r[0]
 
     def _to_short(self, data):
         """
         Assumes that data is in big endian format: [msb, ..., lsb]
         """
         b = ''.join(chr(i) for i in data)
-        return struct.unpack('>h', b)
+        r = struct.unpack('>h', b)
+        return r[0]
 
     def _to_ushort(self, data):
         """
         Assumes that data is in big endian format: [msb, ..., lsb]
         """
         b = ''.join(chr(i) for i in data)
-        return struct.unpack('>H', b)
+        r = struct.unpack('>H', b)
+        return r[0]
 
     def _to_float(self, data):
         """
         Assumes that data is in big endian format: [msb, ..., lsb]
         """
         b = ''.join(chr(i) for i in data)
-        return struct.unpack('>f', b)
+        r = struct.unpack('>f', b)
+        return r[0]
 
     def _to_double(self, data):
         """
         Assumes that data is in big endian format: [msb, ..., lsb]
         """
         b = ''.join(chr(i) for i in data)
-        return struct.unpack('>d', b)
+        r = struct.unpack('>d', b)
+        return r[0]
 
     def write_byte(self, reg):
         try:
