@@ -29,7 +29,9 @@ sudo pip install xwot
 
 ## xWoT Commands
 
-### xwotp2v: xwot physical to virtual entities preprocessor
+### xwotp2v: xwot preprocessor
+xwot physical to virtual entities preprocessor.
+
 TODO
 
 ### xwotc: xwot compiler
