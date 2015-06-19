@@ -444,7 +444,7 @@ class XMLSerializer(Serializer):
             root = obj.__class__.__name__.lower()
         out = self._ds.serialize(obj)
 
-        xml_str = dicttoxml.dicttoxml(out, custom_root=root)
+        xml_str = dicttoxml.dicttoxml(out, custom_root=root, attr_type=False)
 
         if pretty:
             xml_str = parseString(xml_str).toprettyxml()
