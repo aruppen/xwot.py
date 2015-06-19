@@ -29,6 +29,9 @@ sudo pip install xwot
 
 ## xWoT Commands
 
+### xwotp2v: xwot physical to virtual entities preprocessor
+TODO
+
 ### xwotc: xwot compiler
 The xwot compiler uses popular micro web frameworks to generate a skeleton application
 for different programming platforms such as:
