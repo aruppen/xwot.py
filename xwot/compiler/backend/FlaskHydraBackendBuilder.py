@@ -30,8 +30,6 @@ class FlaskHydraBackendBuilder(FlaskBackendBuilder):
                            'from xwot.util import create_description',
                            'from xwot.util.flask import hydra_link',
                            'from xwot.util.annotator import Annotator',
-                           'from xwot.util.serializer import register_serializer',
-                           'from xwot.util.hydra import JSONLDSerializer',
                            'from xwot.util import dir_path',
                            'from xwot.util import parent_dir_path',
                            'from xwot.util.vocabbuilder import HydraVocabBuilder',
@@ -50,7 +48,6 @@ class FlaskHydraBackendBuilder(FlaskBackendBuilder):
                            'link = hydra_link(iri)',
                            '',
                            'annotator = Annotator()',
-                           "register_serializer('application/ld+json', JSONLDSerializer(annotator))",
                            'vocabbuilder = HydraVocabBuilder(annotator)',
                            '',
                            'jsonld_description_str = create_description(xwot_file=xwot_file, base=http_addr)',
@@ -58,7 +55,10 @@ class FlaskHydraBackendBuilder(FlaskBackendBuilder):
                            '',
                            '',
                            'from flask import Flask',
+                           'from flask.ext.twisted import Twisted',
+                           '',
                            'app = Flask(__name__)',
+                           'Twisted(app)',
                            '',
                            ''
                            ], ["xwot_device", "__init__"])
@@ -95,8 +95,7 @@ class FlaskHydraBackendBuilder(FlaskBackendBuilder):
                            "if __name__ == '__main__':",
                            self._out.indent([
                                'mount_vocab(app, xwot_device.vocabbuilder)',
-                               "app.run(host='0.0.0.0', port=xwot_device.port, debug=True)",
-                               "service.shutdown()"
+                               "app.run(host='0.0.0.0', port=xwot_device.port, debug=True)"
                            ])
                        ], ['runserver'])
 

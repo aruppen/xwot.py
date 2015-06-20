@@ -43,7 +43,10 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                            '',
                            '',
                            'from flask import Flask',
+                           'from flask.ext.twisted import Twisted',
+                           '',
                            'app = Flask(__name__)',
+                           'twisted = Twisted(app)',
                            ], ["xwot_device", "__init__"])
 
     def after(self):
@@ -76,8 +79,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                            "",
                            "if __name__ == '__main__':",
                            self._out.indent([
-                               "app.run(host='0.0.0.0', port=xwot_device.port, debug=True)",
-                               "service.shutdown()"
+                               "app.run(host='0.0.0.0', port=xwot_device.port, debug=True)"
                            ])
                        ], ['runserver'])
 
@@ -233,7 +235,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
             new_files_dic[file_name + ".py"] = pycode
 
         # create on the fly a requirements.txt file
-        requirements = "\n".join(['flask'])
+        requirements = "\n".join(['flask', 'Flask-Twisted', 'twisted'])
         new_files_dic['requirements.txt'] = requirements
 
         return new_files_dic
