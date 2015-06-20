@@ -172,11 +172,6 @@ class DictionarySerializer(Visitor, Serializer):
 
     def visit_primitives(self, val):
         _, output = self._output_stack[-1]
-        new_val = self._call_hook('visit_primitives', (self._current_key, val))
-
-        if new_val is not None:
-            val = new_val
-
         output[self._current_key] = val
 
     def visit_list(self, val):
@@ -224,6 +219,8 @@ class DictionarySerializer(Visitor, Serializer):
         for key, value in user_object_dic.items():
             self._current_key = key
             self.visit(value)
+
+        print(user_object_dic)
 
         self._restore_state()
 
