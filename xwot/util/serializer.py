@@ -173,9 +173,11 @@ class DictionarySerializer(Visitor, Serializer):
         self.visit_primitives(val)
 
     def visit_primitives(self, val):
+        print(val)
         print(self._output_stack)
         _, output = self._output_stack[-1]
         output[self._current_key] = val
+        print(self._output_stack)
 
     def visit_list(self, val):
         self._call_hook('visit_list', (self._current_key, val))
