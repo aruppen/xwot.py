@@ -223,6 +223,7 @@ class DictionarySerializer(Visitor, Serializer):
         print(user_object_dic)
 
         self._restore_state()
+        print(user_object_dic)
 
     def _save_current_state(self, prop):
         self._output_stack.append((prop, {}))
