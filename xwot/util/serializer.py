@@ -127,6 +127,8 @@ class DictionarySerializer(Visitor, Serializer):
         if hasattr(obj, '__expose__'):
             exposed_props = getattr(obj, '__expose__')
 
+        print(exposed_props)
+
         for key in exposed_props:
             if hasattr(obj, key):
                 user_object_dic[key] = getattr(obj, key)
