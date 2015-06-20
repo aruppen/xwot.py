@@ -149,6 +149,7 @@ class DictionarySerializer(Visitor, Serializer):
         self.visit(obj)
         print(self._output_stack)
         out = self._get_output()
+        self._set_initial_state()
         print(out)
         return out
 
