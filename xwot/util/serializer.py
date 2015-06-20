@@ -131,7 +131,9 @@ class DictionarySerializer(Visitor, Serializer):
 
         for key in exposed_props:
             if hasattr(obj, key):
-                user_object_dic[key] = getattr(obj, key)
+                val = getattr(obj, key)
+                print("key%s - %s" % (key, val))
+                user_object_dic[key] = val
 
         return user_object_dic
 
