@@ -173,6 +173,7 @@ class DictionarySerializer(Visitor, Serializer):
         self.visit_primitives(val)
 
     def visit_primitives(self, val):
+        print(self._output_stack)
         _, output = self._output_stack[-1]
         output[self._current_key] = val
 
