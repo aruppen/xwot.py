@@ -61,12 +61,12 @@ class FlaskHydraBackendBuilder(FlaskBackendBuilder):
                            'Twisted(app)',
                            '',
                            ''
-                           ], ["xwot_device", "__init__"])
+                           ], ["xwot_app", "__init__"])
 
     def after(self):
         self._out.code([
                            "import %s" % node.name() for node in self._nodes
-                       ], ["xwot_device", "__init__"])
+                       ], ["xwot_app", "__init__"])
 
         self._out.code([
                            '#',
@@ -75,8 +75,8 @@ class FlaskHydraBackendBuilder(FlaskBackendBuilder):
                            '# Flask xwot application.',
                            '#',
                            '',
-                           'import xwot_device',
-                           'from xwot_device import app',
+                           'import xwot_app',
+                           'from xwot_app import app',
                            'from xwot.util.flask import mount_vocab',
                            '',
                            'import yadp',
@@ -85,17 +85,16 @@ class FlaskHydraBackendBuilder(FlaskBackendBuilder):
                            'from yadp import service',
                            'from yadp.device import Device',
                            '',
-                           "device = Device(urn='urn:xwot:device', url=xwot_device.http_addr, descriptions=[xwot_device.yadp_description])",
+                           "device = Device(urn='urn:xwot:Device', url=xwot_app.http_addr, descriptions=[xwot_app.yadp_description])",
                            '',
                            'service = service()',
-                           'yadp.debug()',
                            'service.register(device=device, passive=True)',
                            '',
                            "",
                            "if __name__ == '__main__':",
                            self._out.indent([
-                               'mount_vocab(app, xwot_device.vocabbuilder)',
-                               "app.run(host='0.0.0.0', port=xwot_device.port, debug=True)"
+                               'mount_vocab(app, xwot_app.vocabbuilder)',
+                               "app.run(host='0.0.0.0', port=xwot_app.port, debug=True)"
                            ])
                        ], ['runserver'])
 

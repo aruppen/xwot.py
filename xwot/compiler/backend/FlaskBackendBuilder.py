@@ -47,12 +47,12 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                            '',
                            'app = Flask(__name__)',
                            'twisted = Twisted(app)',
-                           ], ["xwot_device", "__init__"])
+                           ], ["xwot_app", "__init__"])
 
     def after(self):
         self._out.code([
                            "import %s" % node.name() for node in self._nodes
-                       ], ["xwot_device", "__init__"])
+                       ], ["xwot_app", "__init__"])
 
         self._out.code([
                            '#',
@@ -61,8 +61,8 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                            '# Flask xwot application.',
                            '#',
                            '',
-                           'import xwot_device',
-                           'from xwot_device import app',
+                           'import xwot_app',
+                           'from xwot_app import app',
                            '',
                            'import yadp',
                            'yadp.debug()',
@@ -70,16 +70,15 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                            'from yadp import service',
                            'from yadp.device import Device',
                            '',
-                           "device = Device(urn='urn:xwot:device', url=xwot_device.http_addr, descriptions=[xwot_device.yadp_description])",
+                           "device = Device(urn='urn:xwot:Device', url=xwot_app.http_addr, descriptions=[xwot_app.yadp_description])",
                            '',
                            'service = service()',
-                           'yadp.debug()',
                            'service.register(device=device, passive=True)',
                            '',
                            "",
                            "if __name__ == '__main__':",
                            self._out.indent([
-                               "app.run(host='0.0.0.0', port=xwot_device.port, debug=True)"
+                               "app.run(host='0.0.0.0', port=xwot_app.port, debug=True)"
                            ])
                        ], ['runserver'])
 
@@ -94,9 +93,9 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                            '#',
                            '',
                            'from flask import request',
-                           'from xwot_device import app',
+                           'from xwot_app import app',
                            ''
-                       ], ["xwot_device", node.name()])
+                       ], ["xwot_app", node.name()])
 
     def handle_entity(self, node):
         self._out.code([
@@ -109,16 +108,16 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                            '#',
                            '',
                            'from flask import Response',
-                           'import xwot_device',
-                           'from xwot_device import app',
+                           'import xwot_app',
+                           'from xwot_app import app',
                            '',
                            '',
                            "@app.route('/')",
                            'def home():',
                            self._out.indent([
-                               'return Response(response=xwot_device.jsonld_description_str, status=200, content_type="application/ld+json")'
+                               'return Response(response=xwot_app.jsonld_description_str, status=200, content_type="application/ld+json")'
                            ])
-                       ], ["xwot_device", "RootResource"])
+                       ], ["xwot_app", "RootResource"])
 
     def handle_resource(self, node):
         for method in ['GET', 'POST', 'PUT', 'DELETE']:
@@ -131,7 +130,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
-                           ], ["xwot_device", node.name()])
+                           ], ["xwot_app", node.name()])
 
     def handle_device_resource(self, node):
         for method in ['GET', 'POST', 'PUT']:
@@ -144,7 +143,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
-                           ], ["xwot_device", node.name()])
+                           ], ["xwot_app", node.name()])
 
     def handle_sensor_resource(self, node):
         for method in ['GET']:
@@ -157,7 +156,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
-                           ], ["xwot_device", node.name()])
+                           ], ["xwot_app", node.name()])
 
     def handle_tag_resource(self, node):
         for method in ['GET']:
@@ -170,7 +169,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
-                           ], ["xwot_device", node.name()])
+                           ], ["xwot_app", node.name()])
 
     def handle_context_resource(self, node):
         for method in ['GET', 'POST', 'PUT']:
@@ -183,7 +182,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
-                           ], ["xwot_device", node.name()])
+                           ], ["xwot_app", node.name()])
 
     def handle_service_resource(self, node):
         for method in ['GET', 'POST', 'PUT', 'DELETE']:
@@ -196,7 +195,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
-                           ], ["xwot_device", node.name()])
+                           ], ["xwot_app", node.name()])
 
     def handle_actuator_resource(self, node):
         for method in ['GET', 'PUT']:
@@ -209,7 +208,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
-                           ], ["xwot_device", node.name()])
+                           ], ["xwot_app", node.name()])
 
     def handle_publisher_resource(self, node):
         for method in ['GET', 'POST', 'PUT', 'DELETE']:
@@ -222,7 +221,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
-                           ], ["xwot_device", node.name()])
+                           ], ["xwot_app", node.name()])
 
     def output(self):
 
