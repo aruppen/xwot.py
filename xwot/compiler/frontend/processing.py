@@ -177,7 +177,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'name': node.name(),
             'sameAs': "http://www.productontology.org/id/Web_resource",
             'additionalType': {
-                '@id': "http://www.productontology.org/id/Web_resource"
+                '@id': "http://xwot.lexruee.ch/vocab/core#Resource"
             },
             ("%s" % self.TYPE): 'Resource',
             ("%s" % self.CHILDREN): []
@@ -202,7 +202,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'name': node.name(),
             'sameAs': "http://www.productontology.org/id/Computer_apliance",
             'additionalType': {
-                '@id': "http://www.productontology.org/id/Computer_appliance"
+                '@id': "http://xwot.lexruee.ch/vocab/core#Device"
             },
             ("%s" % self.TYPE): 'Device',
             ("%s" % self.CHILDREN): []
@@ -228,7 +228,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'name': node.name(),
             'sameAs': "http://www.productontology.org/id/Sensor",
             'additionalType': {
-                '@id': "http://www.productontology.org/id/Sensor"
+                '@id': "http://xwot.lexruee.ch/vocab/core#Sensor"
             },
             ("%s" % self.TYPE): 'Sensor',
             ("%s" % self.CHILDREN): []
@@ -252,9 +252,9 @@ class JSONLDDescriptionPrinter(Visitor):
                 "@id": self.path() + '/' + node.uri()
             },
             'name': node.name(),
-            'sameAs': "http://www.productontology.org/id/Sensor",
+            'sameAs': "http://www.productontology.org/id/Service",
             'additionalType': {
-                '@id': "http://www.productontology.org/id/Sensor"
+                '@id': "http://xwot.lexruee.ch/vocab/core#Service"
             },
             ("%s" % self.TYPE): 'Service'
         }
@@ -270,7 +270,7 @@ class JSONLDDescriptionPrinter(Visitor):
             ("%s" % self.TYPE): 'Actuator',
             'sameAs': "http://www.productontology.org/id/Actuator",
             'additionalType': {
-                '@id': "http://www.productontology.org/id/Actuator"
+                '@id': "http://xwot.lexruee.ch/vocab/core#Actuator"
             },
             ("%s" % self.CHILDREN): []
         }
@@ -295,7 +295,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'name': node.name(),
             'sameAs': "http://www.productontology.org/id/Automatic_identification_and_data_capture",
             'additionalType': {
-                '@id': "http://www.productontology.org/id/Automatic_identification_and_data_capture"
+                '@id': "http://xwot.lexruee.ch/vocab/core#Tag"
             },
             ("%s" % self.TYPE): 'Tag',
             ("%s" % self.CHILDREN): []
@@ -319,9 +319,9 @@ class JSONLDDescriptionPrinter(Visitor):
                 "@id": self.path() + '/' + node.uri()
             },
             'name': node.name(),
-            'sameAs': "http://www.productontology.org/id/Scope_(computer_science)",
+            'sameAs': "http://www.productontology.org/id/Context",
             'additionalType': {
-                '@id': "http://www.productontology.org/id/Scope_(computer_science)"
+                '@id': "http://xwot.lexruee.ch/vocab/core#Context"
             },
             ("%s" % self.TYPE): 'Context',
             ("%s" % self.CHILDREN): []
@@ -347,7 +347,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'name': node.name(),
             'sameAs': "http://www.productontology.org/id/Publish%E2%80%93subscribe_pattern",
             'additionalType': {
-                '@id': "http://www.productontology.org/id/Publish%E2%80%93subscribe_pattern"
+                '@id': "http://xwot.lexruee.ch/vocab/core#Publisher"
             },
             ("%s" % self.TYPE): 'Publisher',
             ("%s" % self.CHILDREN): []
