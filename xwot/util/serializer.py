@@ -221,11 +221,9 @@ class DictionarySerializer(Visitor, Serializer):
         user_object_dic = self._create_user_object_dic(obj)
 
         self._call_hook('visit_user_object', (self._current_key, obj, user_object_dic, is_embedded))
-        for key, value in user_object_dic.iteritems():
-
-            if str(key).startswith('_') is False:
-                self._current_key = key
-                self.visit(value)
+        for key, value in user_object_dic.items():
+            self._current_key = key
+            self.visit(value)
 
         self._restore_state()
 
