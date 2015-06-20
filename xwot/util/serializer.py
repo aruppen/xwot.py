@@ -441,7 +441,7 @@ class XMLSerializer(Serializer):
         pretty = kwargs.get('pretty', True)
 
         if root is None:
-            root = obj.__class__.__name__.lower()
+            root = obj.__class__.__name__
         out = self._ds.serialize(obj)
 
         xml_str = dicttoxml.dicttoxml(out, custom_root=root, attr_type=False)
