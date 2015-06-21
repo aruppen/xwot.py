@@ -9,7 +9,7 @@ import struct
 import smbus
 
 
-class I2CAdapter(object):
+class Adapter(object):
 
     def __init__(self, bus=1, i2c_addr=0x04):
         self._bus = smbus.SMBus(bus)

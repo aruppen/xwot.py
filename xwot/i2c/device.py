@@ -6,7 +6,7 @@
 """
 
 
-from xwot.model import util
+from xwot.i2c.util import Adapter
 
 
 class Door(object):
@@ -20,7 +20,7 @@ class Door(object):
     READ_CLOSE_STATE = 0x0A
 
     def __init__(self, bus=1, i2c_addr=0x04):
-        self._adapter = util.I2CAdapter(bus=bus, i2c_addr=i2c_addr)
+        self._adapter = Adapter(bus=bus, i2c_addr=i2c_addr)
 
     def unlock(self):
         return self._adapter.write_byte(self.UNLOCK_DOOR)
@@ -65,7 +65,7 @@ class LightBulb(object):
     READ_ILLUMINANCE = 0x0A
 
     def __init__(self, bus=1, i2c_addr=0x04):
-        self._adapter = util.I2CAdapter(bus=bus, i2c_addr=i2c_addr)
+        self._adapter = Adapter(bus=bus, i2c_addr=i2c_addr)
 
     def switch_on(self):
         return self._adapter.write_byte(self.SWITCH_LIGHT_ON)
@@ -97,7 +97,7 @@ class WaterDispenser(object):
     READ_SOLENOID_VALVE_STATE = 0x0A
 
     def __init__(self, bus=1, i2c_addr=0x04):
-        self._adapter = util.I2CAdapter(bus=bus, i2c_addr=i2c_addr)
+        self._adapter = Adapter(bus=bus, i2c_addr=i2c_addr)
 
     @property
     def soil_moisture(self):
@@ -132,7 +132,7 @@ class Weatherstation(object):
     READ_COLOR_ILLUMINANCE = 0x08
 
     def __init__(self, bus=1, i2c_addr=0x05):
-        self._adapter = util.I2CAdapter(bus=bus, i2c_addr=i2c_addr)
+        self._adapter = Adapter(bus=bus, i2c_addr=i2c_addr)
 
     @property
     def pressure(self):
