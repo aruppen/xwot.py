@@ -9,7 +9,7 @@ from xwot.model import Context
 from xwot.model import Sensor as XWOTSensor
 from xwot.model import Model
 from xwot.model import BaseModel
-
+import time
 
 class LightBulb(Context, BaseModel):
 
@@ -86,6 +86,7 @@ class Switch(Context, Model):
 
     @property
     def state(self):
+        time.sleep(0.5)
         return self._i2c_light_bulb.state
 
     @property
