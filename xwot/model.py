@@ -202,3 +202,36 @@ class Service(Entity):
 
 class Publisher(Entity):
     __type__ = 'xwot:Publisher'
+
+
+class Model(object):
+
+    __mutable_props__ = []
+
+    def update(self, dic, content_type):
+        if content_type in ['application/json', 'application/ld+json']:
+            return self.handle_update(dic)
+        elif content_type in ['application/xml']:
+            dic = dic.get([self.__class__.__name__], {})
+            return self.handle_update(dic)
+        else:
+            return 400
+
+    def handle_update(self, dic):
+        raise NotImplementedError
+
+
+class BaseModel(Model):
+
+    __mutable_props__ = []
+
+    def __init__(self, dic=None):
+        self._dic = dic or {}
+
+    def handle_update(self, dic):
+        valid_keys = [key for key in dic.keys() if key in self.__mutable_props__]
+        for key in valid_keys:
+            self._dic[key] = str(dic[key])
+
+        return 200
+
