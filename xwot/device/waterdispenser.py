@@ -134,7 +134,8 @@ class Sensor(XWOTSensor, Model):
 
     @property
     def measurement(self):
-        return self._adapter.soil_moisture
+        val = self._adapter.soil_moisture
+        return round(val, 2)
 
     def handle_update(self, dic):
         pass
