@@ -40,7 +40,7 @@ class WaterDispenser(XWOTContext, BaseModel):
                (self.name, self.roomAddress, self.streetAddress, self.addressLocality, self.postalCode)
 
     @property
-    def switch(self):
+    def valve(self):
         return '/waterdispenser/valve'
 
     @property
