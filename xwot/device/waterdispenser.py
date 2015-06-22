@@ -70,7 +70,7 @@ from xwot.i2c.adapter import WaterDispenserAdapter
 class Valve(XWOTContext, Model):
 
     __mutable_props__ = ['name', 'state']
-    __expose__ = __mutable_props__ + ['description']
+    __expose__ = __mutable_props__ + ['description', 'waterdispenser']
 
     def __init__(self, name, adapter=WaterDispenserAdapter()):
         super(Valve, self).__init__()
@@ -80,6 +80,12 @@ class Valve(XWOTContext, Model):
         }
         self._adapter = adapter
         self.add_type('http://xwot.lexruee.ch/vocab/core-ext#Valve')
+        self.add_link('waterdispenser')
+
+
+    @property
+    def waterdispenser(self):
+        return '/waterdispenser'
 
     @property
     def description(self):
@@ -105,12 +111,18 @@ class Valve(XWOTContext, Model):
 
 class Sensor(XWOTSensor, Model):
 
-    __expose__ = ['name', 'unit', 'measures', 'description', 'measurement', 'symbol']
+    __expose__ = ['name', 'unit', 'measures', 'description', 'measurement', 'symbol', 'waterdispenser']
 
     def __init__(self, adapter=WaterDispenserAdapter()):
         super(Sensor, self).__init__()
         self._adapter = adapter
         self.add_type('http://xwot.lexruee.ch/vocab/core-ext#SoilMoistureSensor')
+        self.add_link('waterdispenser')
+
+
+    @property
+    def waterdispenser(self):
+        return '/waterdispenser'
 
     @property
     def name(self):
