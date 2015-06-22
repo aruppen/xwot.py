@@ -71,7 +71,7 @@ from xwot.i2c.adapter import LightBulbAdapter
 class Switch(XWOTContext, Model):
 
     __mutable_props__ = ['name', 'state']
-    __expose__ = __mutable_props__ + ['description']
+    __expose__ = __mutable_props__ + ['description', 'lightbulb']
 
     def __init__(self, name, adapter=LightBulbAdapter()):
         super(Switch, self).__init__()
@@ -81,10 +81,15 @@ class Switch(XWOTContext, Model):
         }
         self._adapter = adapter
         self.add_type('http://xwot.lexruee.ch/vocab/core-ext#Switch')
+        self.add_link('lightbulb')
 
     @property
     def description(self):
         return "A switch to turn off or on this light bulb."
+
+    @property
+    def lightbulb(self):
+        return '/lightbulb'
 
     @property
     def state(self):
@@ -107,16 +112,21 @@ class Switch(XWOTContext, Model):
 
 class Sensor(XWOTSensor, Model):
 
-    __expose__ = ['name', 'unit', 'measures', 'description', 'measurement', 'symbol']
+    __expose__ = ['name', 'unit', 'measures', 'description', 'measurement', 'symbol', 'lightbulb']
 
     def __init__(self, adapter=LightBulbAdapter()):
         super(Sensor, self).__init__()
         self._adapter = adapter
         self.add_type('http://xwot.lexruee.ch/vocab/core-ext#IlluminanceSensor')
+        self.add_link('lightbulb')
 
     @property
     def name(self):
         return 'Illuminance sensor'
+
+    @property
+    def lightbulb(self):
+        return '/lightbulb'
 
     @property
     def unit(self):
