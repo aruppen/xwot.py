@@ -11,6 +11,7 @@ import sys
 import os
 import os.path
 
+from backend.KleinBackendBuilder import KleinBackendBuilder
 from backend.FlaskBackendBuilder import FlaskBackendBuilder
 from backend.SinatraBackendBuilder import SinatraBackendBuilder
 from backend.ExpressBackendBuilder import ExpressBackendBuilder
@@ -23,6 +24,7 @@ class Compiler(object):
 
     BACKENDS = {
         'flask': FlaskBackendBuilder,
+        'klein': KleinBackendBuilder,
         'express': ExpressBackendBuilder,
         'sinatra': SinatraBackendBuilder
     }

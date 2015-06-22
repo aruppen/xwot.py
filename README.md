@@ -46,6 +46,7 @@ Currently there are three basic backends implemented for:
 
  * [sinatra](http://www.sinatrarb.com/)
  * [flask](http://flask.pocoo.org/)
+ * [klein](http://klein.readthedocs.org/)
  * [express.js](http://expressjs.com/)
 
 #### Usage
