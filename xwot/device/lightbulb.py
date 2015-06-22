@@ -37,7 +37,7 @@ class LightBulb(XWOTContext, BaseModel):
 
     @property
     def description(self):
-        return "Hi there my name is %s. I am currently present in room %s at the location: %s, %s, %s" % \
+        return "Hi there my name is %s. I'm a light bulb and currently present in room %s at the location: %s, %s, %s" % \
                (self.name, self.roomAddress, self.streetAddress, self.addressLocality, self.postalCode)
 
     @property
@@ -107,7 +107,7 @@ class Switch(XWOTContext, Model):
 
 class Sensor(XWOTSensor, Model):
 
-    __expose__ = ['name', 'unit', 'measures', 'description', 'measurement']
+    __expose__ = ['name', 'unit', 'measures', 'description', 'measurement', 'symbol']
 
     def __init__(self, adapter=LightBulbAdapter()):
         super(Sensor, self).__init__()
@@ -120,11 +120,11 @@ class Sensor(XWOTSensor, Model):
 
     @property
     def unit(self):
-        return 'lx'
+        return 'Lux'
 
     @property
     def description(self):
-        return 'An illuminance sensor that measures the illuminance of this light bulb.'
+        return 'A sensor that measures the illuminance of this light bulb.'
 
     @property
     def measures(self):
@@ -133,6 +133,10 @@ class Sensor(XWOTSensor, Model):
     @property
     def measurement(self):
         return self._adapter.illuminance
+
+    @property
+    def symbol(self):
+        return 'lx'
 
     def handle_update(self, dic):
         pass
