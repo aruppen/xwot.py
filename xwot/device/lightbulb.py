@@ -9,7 +9,6 @@ from xwot.model import Context as XWOTContext
 from xwot.model import Sensor as XWOTSensor
 from xwot.model import Model
 from xwot.model import BaseModel
-import time
 
 
 class LightBulb(XWOTContext, BaseModel):
@@ -93,7 +92,6 @@ class Switch(XWOTContext, Model):
 
     @property
     def state(self):
-        time.sleep(0.5)
         return self._adapter.state
 
     @property
