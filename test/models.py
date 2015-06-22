@@ -1,106 +1,85 @@
 from xwot.util.vocab import Xsd
 from xwot.util.vocab import Hydra
+from xwot.util.vocab import Xwot
+
+from xwot.model import Collection
 from xwot.util.vocab import SchemaOrg
-from test_conf import annotator
+from xwot.model import Resource
+from xwot.util.annotator import Annotator
 
-from xwot.util.hydra import Collection
-from xwot.util.vocab import SchemaOrg
+annotate = Annotator()
 
-class User(object):
 
-    __COLLECTION__ = None
-
-    __expose__ = ['href', 'additionalType', 'id', 'email', 'password']
+@annotate.resource(description='A User represents a person registered in the system.',
+                   routes=['user_retrieve', 'user_replace', 'user_delete'], iri=Xwot.Resource())
+class User(Resource):
+    __expose__ = ['id', 'email', 'name', 'password']
+    __self_link__ = ''
 
     def __init__(self, name, email, password, id):
+        super(User, self).__init__()
         self._name = name
         self._email = email
         self._password = password
         self._id = id
 
     @property
-    def href(self):
-        return '/users/' + str(self._id)
-
-    @property
-    def additionalType(self):
-        return {'@id': SchemaOrg.Person()}
+    @annotate.property(description="The user's email address", iri=SchemaOrg.email(), required=True)
+    def email(self):
+        return self._email
 
     @property
     def id(self):
         return self._id
 
     @property
-    def email(self):
-        return self._email
-
-    @property
+    @annotate.property(description="The user's full name.", iri=SchemaOrg.name(), required=True)
     def name(self):
         return self._name
 
     @property
+    @annotate.property(description="The user's password.", required=True, writeonly=True, range=Xsd.string(),
+                       iri=SchemaOrg.accessCode())
     def password(self):
         return self._password
 
-    @classmethod
-    def user(cls, id):
-        if cls.__COLLECTION__ is not None and len(cls.__COLLECTION__.members) > id:
-            return cls.__COLLECTION__.get(id)
-        else:
-            return None
 
-    @classmethod
-    def users(cls):
-        return cls.__COLLECTION__
+@annotate.resource(description='A collection of users', routes=['user_collection_retrieve', 'user_create'], iri=Hydra.Collection())
+class UserCollection(Collection):
+
+    def __init__(self, users):
+        super(UserCollection, self).__init__()
+        self._users = users
+
+    @property
+    def members(self):
+        return self._users
+
+    def user(self, id):
+        return self._users[id]
 
 
 alex = User(name='Alexander Rueedlinger', email='a.rueedlinger@gmail.com', password=None, id=0)
 peter = User(name='Peter Muller', email='peter.muller@gmail.com', password=None, id=1)
 bill = User(name='Bill Gates', email='bill@microsoft.com', password=None, id=2)
-User.__COLLECTION__ = Collection(members=[alex, peter, bill])
+user_collection = UserCollection(users=[alex, peter, bill])
 
 
-
-# annotate User class
-user_klass = annotator.klass(User)
-#user_klass.add_type(SchemaOrg.Person())
-user_klass.add_context('http://xwot.lexruee.ch/contexts/xwot.jsonld')
-user_klass.describe_class(title='User', description='A User represents a person registered in the system.',
-                          operations=['user_retrieve', 'user_replace', 'user_delete'], id_prefix='/users/', embed=True,
-                          id='id',
-                          iri=SchemaOrg.Person())
-user_klass.describe_property('name', description="The user's full name.", iri=SchemaOrg.name(), required=True,
-                             range=Xsd.string())
-user_klass.describe_property('email', description="The user's email address", range=Xsd.string(), iri=SchemaOrg.email(),
-                             required=True)
-user_klass.describe_property('password', description="The user's password.", range=Xsd.string(), required=True,
-                             writeonly=True)
-
-
-class EntryPoint(object):
-
+@annotate.resource(description='The main entry point or homepage of the API.', routes=['entry_point'], iri=Xwot.Resource())
+class EntryPoint(Resource):
     __expose__ = ['users', 'name']
 
     def __init__(self):
-        self._users = '/users'
+        super(EntryPoint, self).__init__()
+        self.add_link('users')
 
     @property
+    @annotate.property(description='The collection of all users (for debugging purposes)',
+                       routes=["user_create", "user_collection_retrieve"], iri=SchemaOrg.url())
     def users(self):
-        return self._users
+        return '/users'
 
     @property
+    @annotate.property(description="The entrypoint's name", iri=SchemaOrg.name())
     def name(self):
         return 'a name'
-
-
-# annotate EntryPoint class
-entrypoint_klass = annotator.klass(EntryPoint)
-entrypoint_klass.add_context('http://xwot.lexruee.ch/contexts/xwot.jsonld')
-entrypoint_klass.describe_class(title='Entrypoint', description='The main entry point or homepage of the API.',
-                                operations=['entry_point'])
-entrypoint_klass.describe_property('users', description='The collection of all users (for debugging purposes)',
-                                   range=Hydra.Collection(),
-                                   operations=["user_create", "user_collection_retrieve"],
-                                   type=Hydra.Link())
-entrypoint_klass.describe_property('name', description="The entrypoint's name", range=Xsd.string(),
-                                   iri=SchemaOrg.name())
