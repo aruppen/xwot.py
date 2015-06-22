@@ -37,7 +37,7 @@ class LightBulb(Context, BaseModel):
 
     @property
     def description(self):
-        return "This is smart light %s. I am currently present in room %s at the location: %s, %s, %s" % \
+        return "Hi there my name is %s. I am currently present in room %s at the location: %s, %s, %s" % \
                (self.name, self.roomAddress, self.streetAddress, self.addressLocality, self.postalCode)
 
     @property
