@@ -14,7 +14,7 @@ class Resource(object):
         self._properties = {}
         self._description = description or ''
         self._route_keys = route_keys or []
-        self._iri = iri or "apidoc:%s" % self._cls.__name__
+        self._iri = iri or NullIri()
 
     @property
     def description(self):
