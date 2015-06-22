@@ -56,7 +56,7 @@ class TreeWalker(object):
                 if 'name' in dict_attr:
                     name = dict_attr['name']
                 else:
-                    name = None
+                    name = 'Entity'
                 return clazz(name, dict_attr)
 
             return create_node

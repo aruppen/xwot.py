@@ -72,7 +72,7 @@ class BaseVisitor(Visitor):
         pass
 
     def visit_entity(self, node):
-        node.set_name('RootResource')
+        #node.set_name('RootResource')
         self._entity_node = node
         self._nodes.append(node)
         self.before()

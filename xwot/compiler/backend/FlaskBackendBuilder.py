@@ -117,7 +117,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                            self._out.indent([
                                'return Response(response=xwot_app.jsonld_description_str, status=200, content_type="application/ld+json")'
                            ])
-                       ], ["xwot_app", "RootResource"])
+                       ], ["xwot_app", node.name()])
 
     def handle_resource(self, node):
         for method in ['GET', 'POST', 'PUT', 'DELETE']:

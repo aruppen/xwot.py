@@ -154,7 +154,7 @@ class JSONLDDescriptionPrinter(Visitor):
     def visit_entity(self, node):
         self._output = {
             ("%s" % self.ID): '/',
-            ("%s" % self.TYPE): 'Description',
+            ("%s" % self.TYPE): 'xwot:Description',
             ("%s" % self.CHILDREN): []
         }
 
@@ -179,7 +179,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'additionalType': {
                 '@id': "http://xwot.lexruee.ch/vocab/core#Resource"
             },
-            ("%s" % self.TYPE): 'Resource',
+            ("%s" % self.TYPE): 'xwot:Resource',
             ("%s" % self.CHILDREN): []
         }
 
@@ -204,7 +204,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'additionalType': {
                 '@id': "http://xwot.lexruee.ch/vocab/core#Device"
             },
-            ("%s" % self.TYPE): 'Device',
+            ("%s" % self.TYPE): 'xwot:Device',
             ("%s" % self.CHILDREN): []
         }
 
@@ -230,7 +230,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'additionalType': {
                 '@id': "http://xwot.lexruee.ch/vocab/core#Sensor"
             },
-            ("%s" % self.TYPE): 'Sensor',
+            ("%s" % self.TYPE): 'xwot:Sensor',
             ("%s" % self.CHILDREN): []
         }
         self._current.append(sensor)
@@ -256,7 +256,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'additionalType': {
                 '@id': "http://xwot.lexruee.ch/vocab/core#Service"
             },
-            ("%s" % self.TYPE): 'Service'
+            ("%s" % self.TYPE): 'xwot:Service'
         }
         self._current.append(service)
 
@@ -267,7 +267,7 @@ class JSONLDDescriptionPrinter(Visitor):
                 "@id": self.path() + '/' + node.uri()
             },
             'name': node.name(),
-            ("%s" % self.TYPE): 'Actuator',
+            ("%s" % self.TYPE): 'xwot:Actuator',
             'sameAs': "http://www.productontology.org/id/Actuator",
             'additionalType': {
                 '@id': "http://xwot.lexruee.ch/vocab/core#Actuator"
@@ -297,7 +297,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'additionalType': {
                 '@id': "http://xwot.lexruee.ch/vocab/core#Tag"
             },
-            ("%s" % self.TYPE): 'Tag',
+            ("%s" % self.TYPE): 'xwot:Tag',
             ("%s" % self.CHILDREN): []
         }
         self._current.append(tag)
@@ -323,7 +323,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'additionalType': {
                 '@id': "http://xwot.lexruee.ch/vocab/core#Context"
             },
-            ("%s" % self.TYPE): 'Context',
+            ("%s" % self.TYPE): 'xwot:Context',
             ("%s" % self.CHILDREN): []
         }
         self._current.append(context)
@@ -349,7 +349,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'additionalType': {
                 '@id': "http://xwot.lexruee.ch/vocab/core#Publisher"
             },
-            ("%s" % self.TYPE): 'Publisher',
+            ("%s" % self.TYPE): 'xwot:Publisher',
             ("%s" % self.CHILDREN): []
         }
         self._current.append(publisher)
@@ -357,7 +357,7 @@ class JSONLDDescriptionPrinter(Visitor):
     def visit_device(self, node):
         device = {
             'name': node.name(),
-            ("%s" % self.TYPE): 'device',
+            ("%s" % self.TYPE): 'xwot:Device',
             ("%s" % self.CHILDREN): []
         }
 
@@ -373,21 +373,21 @@ class JSONLDDescriptionPrinter(Visitor):
     def visit_sensor(self, node):
         sensor = {
             'name': node.name(),
-            ("%s" % self.TYPE): 'sensor'
+            ("%s" % self.TYPE): 'xwot:Sensor'
         }
         self._current.append(sensor)
 
     def visit_actuator(self, node):
         actuator = {
             'name': node.name(),
-            ("%s" % self.TYPE): 'actuator'
+            ("%s" % self.TYPE): 'xwot:Actuator'
         }
         self._current.append(actuator)
 
     def visit_tag(self, node):
         tag = {
             'name': node.name(),
-            ("%s" % self.TYPE): 'tag'
+            ("%s" % self.TYPE): 'xwot:Tag'
         }
         self._current.append(tag)
 

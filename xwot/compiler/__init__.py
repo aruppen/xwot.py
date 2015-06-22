@@ -12,7 +12,6 @@ import os
 import os.path
 
 from backend.FlaskBackendBuilder import FlaskBackendBuilder
-from backend.FlaskHydraBackendBuilder import FlaskHydraBackendBuilder
 from backend.SinatraBackendBuilder import SinatraBackendBuilder
 from backend.ExpressBackendBuilder import ExpressBackendBuilder
 from frontend.parser import Parser
@@ -24,7 +23,6 @@ class Compiler(object):
 
     BACKENDS = {
         'flask': FlaskBackendBuilder,
-        'flask-hydra': FlaskHydraBackendBuilder,
         'express': ExpressBackendBuilder,
         'sinatra': SinatraBackendBuilder
     }
