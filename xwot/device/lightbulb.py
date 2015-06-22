@@ -5,14 +5,14 @@
 
 """
 
-from xwot.model import Context
+from xwot.model import Context as XWOTContext
 from xwot.model import Sensor as XWOTSensor
 from xwot.model import Model
 from xwot.model import BaseModel
 import time
 
 
-class LightBulb(Context, BaseModel):
+class LightBulb(XWOTContext, BaseModel):
 
     __mutable_props__ = ['name', 'streetAddress', 'roomAddress', 'postalCode', 'addressLocality']
     __expose__ = __mutable_props__ + ['description', 'switch', 'sensor']
@@ -65,21 +65,21 @@ class LightBulb(Context, BaseModel):
         return self._dic['room_address']
 
 
-from xwot.i2c.device import LightBulb as I2C_LightBulb
+from xwot.i2c.adapter import LightBulbAdapter
 
 
-class Switch(Context, Model):
+class Switch(XWOTContext, Model):
 
     __mutable_props__ = ['name', 'state']
     __expose__ = __mutable_props__ + ['description']
 
-    def __init__(self, name, i2c_light_bulb=I2C_LightBulb()):
+    def __init__(self, name, adapter=LightBulbAdapter()):
         super(Switch, self).__init__()
 
         self._dic = {
             'name': name
         }
-        self._i2c_light_bulb = i2c_light_bulb
+        self._adapter = adapter
         self.add_type('http://xwot.lexruee.ch/vocab/core-ext#Switch')
 
     @property
@@ -89,7 +89,7 @@ class Switch(Context, Model):
     @property
     def state(self):
         time.sleep(0.5)
-        return self._i2c_light_bulb.state
+        return self._adapter.state
 
     @property
     def name(self):
@@ -97,10 +97,10 @@ class Switch(Context, Model):
 
     def handle_update(self, dic):
         if dic.get('state') == 'off':
-            self._i2c_light_bulb.switch_off()
+            self._adapter.switch_off()
 
         if dic.get('state') == 'on':
-            self._i2c_light_bulb.switch_on()
+            self._adapter.switch_on()
 
         self._dic['name'] = str(dic.get('name', self._dic['name']))
 
@@ -109,9 +109,9 @@ class Sensor(XWOTSensor, Model):
 
     __expose__ = ['name', 'unit', 'measures', 'description', 'measurement']
 
-    def __init__(self, i2c_light_bulb=I2C_LightBulb()):
+    def __init__(self, adapter=LightBulbAdapter()):
         super(Sensor, self).__init__()
-        self._i2c_light_bulb = i2c_light_bulb
+        self._adapter = adapter
         self.add_type('http://xwot.lexruee.ch/vocab/core-ext#IlluminanceSensor')
 
     @property
@@ -132,7 +132,7 @@ class Sensor(XWOTSensor, Model):
 
     @property
     def measurement(self):
-        return self._i2c_light_bulb.illuminance
+        return self._adapter.illuminance
 
     def handle_update(self, dic):
         pass
