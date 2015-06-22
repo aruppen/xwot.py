@@ -53,7 +53,7 @@ Currently there are four basic backends implemented for:
 #### Usage
 
 ```bash
-usage: xwotc [-h] [-p [{flask,sinatra,express, klein}]] [-o [OUTPUT_DIR]] f
+usage: xwotc [-h] [-p [{flask,sinatra,express,klein}]] [-o [OUTPUT_DIR]] f
 
 xwot compiler
 
@@ -104,5 +104,5 @@ optional arguments:
 #### Example
 
 ```
-xwotd  flask smart-room-example_enhanced.xwot description.jsonld
+xwotd flask smart-room-example_enhanced.xwot description.jsonld
 ```
