@@ -11,6 +11,7 @@ from xwot.model import Model
 from xwot.model import BaseModel
 import time
 
+
 class LightBulb(Context, BaseModel):
 
     __mutable_props__ = ['name', 'streetAddress', 'roomAddress', 'postalCode', 'addressLocality']
@@ -36,7 +37,8 @@ class LightBulb(Context, BaseModel):
 
     @property
     def description(self):
-        return 'A smart light bulb which can be turned on and off.'
+        return "This is smart light %s. I am currently present in room %s at the location: %s, %s, %s" % \
+               (self.name, self.roomAddress, self.streetAddress, self.addressLocality, self.postalCode)
 
     @property
     def switch(self):
@@ -82,7 +84,7 @@ class Switch(Context, Model):
 
     @property
     def description(self):
-        return "Switch to turn off or turn on this light bulb."
+        return "A switch to turn off or on this light bulb."
 
     @property
     def state(self):
@@ -122,7 +124,7 @@ class Sensor(XWOTSensor, Model):
 
     @property
     def description(self):
-        return 'Measures illuminance of this light bulb.'
+        return 'An illuminance sensor that measures the illuminance of this light bulb.'
 
     @property
     def measures(self):
