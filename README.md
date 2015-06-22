@@ -5,9 +5,9 @@ introducded by Andreas Ruppen and Jacques Pasquier.
 
 xwot.py is a python package for creating xWoT web applications.
 It features among others some handy tools and some example xwot models:
- * xwot.compiler - compiler which generates a skeleton xWoT web application based on the xWoT meta-model
+ * xwot.compiler - compiler for generating a skeleton xWoT web application based on the xWoT meta-model
    * xwot.compiler.backend - different backends
-   * xwot.compiler.frontend - visiitor, parser, description builder and processing tools
+   * xwot.compiler.frontend - visitor, parser, description builder and processing tools
  * xwot.device - example xwot devices (weatherstation, water dispenser, light bulb, door)
  * xwot.i2c.adapter - i2c adapters for xwot devices
  * xwot.model - xwot models
