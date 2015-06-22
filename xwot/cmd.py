@@ -46,7 +46,7 @@ def xwotd():
 
     xml_filepath = args.xwot_file[0]
     description_builder = JSONLDDescriptionBuilder()
-    out = description_builder.build(xml_file=xml_filepath, base='')
+    out = description_builder.build(xml_file=xml_filepath)
 
     output_filepath = args.output_filepath
     if output_filepath is None:
