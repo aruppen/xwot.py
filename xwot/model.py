@@ -5,8 +5,6 @@
 
 """
 
-__author__ = 'Alexander Rüedlinger'
-
 import json
 import dicttoxml
 from xml.dom.minidom import parseString
