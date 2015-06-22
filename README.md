@@ -45,12 +45,12 @@ for different programming platforms such as:
  * python
  * nodejs
 
-Currently there are three basic backends implemented for:
+Currently there are four basic backends implemented for:
 
- * [sinatra](http://www.sinatrarb.com/)
- * [flask](http://flask.pocoo.org/)
- * [klein](http://klein.readthedocs.org/)
- * [express.js](http://expressjs.com/)
+ * [sinatra / ruby](http://www.sinatrarb.com/)
+ * [flask / python](http://flask.pocoo.org/)
+ * [klein / python](http://klein.readthedocs.org/)
+ * [express.js / node.js](http://expressjs.com/)
 
 #### Usage
 
