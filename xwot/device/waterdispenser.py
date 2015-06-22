@@ -20,10 +20,10 @@ class WaterDispenser(XWOTContext, BaseModel):
         super(WaterDispenser, self).__init__()
         self._dic = {
             'name': name,
-            'street_address': street_address,
-            'postal_code': postal_code,
-            'address_locality': address_locality,
-            'room_address': room_address
+            'streetAddress': street_address,
+            'postalCode': postal_code,
+            'addressLocality': address_locality,
+            'roomAddress': room_address
         }
 
         self.add_type('http://xwot.lexruee.ch/vocab/core-ext#WaterDispenser')
@@ -49,19 +49,19 @@ class WaterDispenser(XWOTContext, BaseModel):
 
     @property
     def streetAddress(self):
-        return self._dic['street_address']
+        return self._dic['streetAddress']
 
     @property
     def postalCode(self):
-        return self._dic['postal_code']
+        return self._dic['postalCode']
 
     @property
     def addressLocality(self):
-        return self._dic['address_locality']
+        return self._dic['addressLocality']
 
     @property
     def roomAddress(self):
-        return self._dic['room_address']
+        return self._dic['roomAddress']
 
 
 from xwot.i2c.adapter import WaterDispenserAdapter
