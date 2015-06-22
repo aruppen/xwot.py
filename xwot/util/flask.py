@@ -29,8 +29,8 @@ def _add_response_header(headers):
     return decorator
 
 
-def hydra_link(vocab_url):
-    link_header = '<' + vocab_url + '>; rel="http://www.w3.org/ns/hydra/core#apiDocumentation"'
+def hydra_link(apidoc_url):
+    link_header = '<' + apidoc_url + '>; rel="http://www.w3.org/ns/hydra/core#apiDocumentation"'
 
     def wrapped_link(f):
         @wraps(f)
@@ -43,34 +43,49 @@ def hydra_link(vocab_url):
     return wrapped_link
 
 
-def mount_vocab(app, vocabbuilder):
-    from xwot.util.mounter import FlaskVocabMounter
+def mount_apidoc(app, builder):
+    doc = builder.documentation
+    link = hydra_link(doc.apidoc_url)
+    jsonld_doc = builder.build()
 
-    mounter = FlaskVocabMounter(app=app, vocabbuilder=vocabbuilder)
-    mounter.mount()
-    return mounter
+    @link
+    def vocab():
+        if jsonld_doc is not None:
+            return Response(response=jsonld_doc, status=200, content_type='application/ld+json')
+        else:
+            return Response(status=404)
+
+    app.add_url_rule('/vocab', 'vocab', vocab)
 
 
-from xwot.util.serializer import SERIALIZER
+
+SERIALIZERS = {
+    'application/json': lambda obj: obj.to_json(),
+    'application/xml': lambda obj: obj.to_xml(),
+    'text/plain': lambda obj: obj.to_html(),
+    'application/ld+json': lambda obj: obj.to_jsonld()
+}
 
 
-def make_response(obj, content_type='application/json', status=200):
+def make_response(obj, content_type='application/ld+json', status=200):
     cts = request.accept_mimetypes
     path = request.path
 
+    doc = ''
     if cts:
-        content_type, _ = cts[0]
+        _content_type, _ = cts[0]
 
-    doc, _content_type = SERIALIZER.serialize(obj=obj, content_type=content_type, path=path)
+        _content_type = _content_type or content_type
+
+        if _content_type in SERIALIZERS:
+            fun_serializer = SERIALIZERS[_content_type]
+            if path:
+                obj.resource_path = path
+            doc = fun_serializer(obj)
+        else:
+            _content_type = content_type
+            fun_serializer = SERIALIZERS[content_type]
+            doc = fun_serializer(obj)
 
     return Response(response=doc, status=status, content_type=_content_type)
 
-
-def serialize(obj, content_type='application/json'):
-    cts = request.accept_mimetypes
-
-    if cts:
-        content_type, _ = cts[0]
-
-    doc, content_type = SERIALIZER.serialize(obj=obj, content_type=content_type)
-    return doc

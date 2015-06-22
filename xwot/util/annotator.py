@@ -5,66 +5,16 @@
 
 """
 
+from xwot.util.vocab import NullIri
 
-class Klass(object):
-    def __init__(self, py_class, annotator):
-        self._py_class = py_class
-        self._annotator = annotator
+
+class Resource(object):
+    def __init__(self, cls, description=None, iri=None, route_keys=None):
+        self._cls = cls
         self._properties = {}
-        self._description = None
-        self._operations = []
-        self._iri = None
-        self._title = None
-        self._extra_contexts = []
-        self._extra_types = []
-        self._embed = False
-        self._id_prefix = ''
-        self._id_property = None
-
-    def describe_property(self, name, title=None, type=None, iri=None, description=None, label=None, domain=None, range=None,
-               operations=None, required=None, readonly=None, writeonly=None):
-
-        self._properties[name] = Property(name=name, title=title, type=type, iri=iri, description=description,
-                                                  label=label, domain=domain, range=range, operations=operations,
-                                                  required=required, readonly=readonly, writeonly=writeonly)
-        return self
-
-    def describe_class(self, title=None, description=None, iri=None, operations=None, id_prefix='', embed=False, id=None):
-        self._title = title
-        self._description = description
-        self._iri = iri
-        self._id_prefix = id_prefix
-        self._embed = embed
-        self._id_property = id
-        if operations is not None:
-            self._operations = operations
-        return self
-
-    def add_context(self, context):
-        self._extra_contexts += [context]
-
-    def add_type(self, type):
-        self._extra_types += [type]
-
-    @property
-    def id_property(self):
-        return self._id_property
-
-    @property
-    def embed(self):
-        return self._embed
-
-    @property
-    def id_prefix(self):
-        return self._id_prefix
-
-    @property
-    def extra_contexts(self):
-        return self._extra_contexts
-
-    @property
-    def extra_types(self):
-        return self._extra_types
+        self._description = description or ''
+        self._route_keys = route_keys or []
+        self._iri = iri or "apidoc:%s" % self._cls.__name__
 
     @property
     def description(self):
@@ -72,42 +22,33 @@ class Klass(object):
 
     @property
     def iri(self):
-        iri = "vocab:%s" % self._py_class.__name__
-        if self._iri is not None:
-            iri = self._iri
-        return iri
+        return self._iri
 
     @property
-    def title(self):
-        return self._title
+    def name(self):
+        return self._cls.__name__
 
     @property
-    def operations(self):
-        return self._operations
-
+    def route_keys(self):
+        return self._route_keys
 
     @property
     def properties(self):
-        return self._properties.items()
+        return self._properties
+
+    @properties.setter
+    def properties(self, value):
+        self._properties = value
 
 
 class Property(object):
-    def __init__(self, name, title, iri, description, type, label, domain, range, operations, required, readonly,
-                 writeonly):
+    def __init__(self, name, iri, description, route_keys, required, readonly,
+                 writeonly, range):
         self._name = name
-        self._title = title
-        self._description = description
-        self._type = type
-        self._label = label
-        self._domain = domain
         self._range = range
-        self._iri = iri
-
-        if operations is None:
-            self._operations = []
-        else:
-            self._operations = operations
-
+        self._description = description
+        self._iri = iri or NullIri()
+        self._route_keys = route_keys or []
         self._required = required
         self._readonly = readonly
         self._writeonly = writeonly
@@ -117,12 +58,12 @@ class Property(object):
         return self._iri
 
     @property
-    def name(self):
-        return self._name
+    def range(self):
+        return self._range
 
     @property
-    def type(self):
-        return self._type
+    def name(self):
+        return self._name
 
     @property
     def writeonly(self):
@@ -137,47 +78,32 @@ class Property(object):
         return self._required
 
     @property
-    def operations(self):
-        return self._operations
+    def route_keys(self):
+        return self._route_keys
 
     @property
     def description(self):
         return self._description
 
     @property
-    def range(self):
-        return self._range
-
-    @property
-    def domain(self):
-        return self._domain
-
-    @property
-    def label(self):
-        return self._label
-
-    @property
     def description(self):
         return self._description
 
-    @property
-    def title(self):
-        return self._title
 
-
-class Operation(object):
+class Route(object):
     def __init__(self, name, method, description=None, returns=None, status_codes=None, expects=None):
         self._name = name
         self._method = method
         self._description = description
-        self._returns = returns
+
 
         if status_codes is None:
             self._status_codes = []
         else:
             self._status_codes = status_codes
 
-        self._expects = expects
+        self._expects = expects or NullIri()
+        self._returns = returns or NullIri()
 
     @property
     def name(self):
@@ -205,20 +131,19 @@ class Operation(object):
 
 
 class Documentation(object):
-    def __init__(self, vocab_url, title=None, description=None, entrypoint=None, iri=None):
+    def __init__(self, apidoc_url='', title=None, description=None, entrypoint=None):
         self._title = title
         self._description = description
-        self._vocab_url = vocab_url
+        self._apidoc_url = apidoc_url
         self._entrypoint = entrypoint
-        self._iri = iri
 
     @property
     def title(self):
         return self._title
 
     @property
-    def vocab_url(self):
-        return self._vocab_url
+    def apidoc_url(self):
+        return self._apidoc_url
 
     @property
     def description(self):
@@ -228,49 +153,67 @@ class Documentation(object):
     def entrypoint(self):
         return self._entrypoint
 
-    @property
-    def iri(self):
-        return self._iri
-
 
 class Annotator(object):
+
     def __init__(self):
-        self._classes = {}
+        self._documentation = None
+        self._resources = {}
         self._routes = {}
-        self._documentation = Documentation(vocab_url='')
+        self._props = {}
 
-    def klass(self, py_class):
-        klass = Klass(py_class, self)
-        self._classes[py_class] = klass
-        return klass
-
-    def documentation(self, vocab_url, title=None, description=None, entrypoint=None):
-        self._documentation = Documentation(vocab_url=vocab_url, title=title, description=description,
+    def documentation(self, apidoc_url, title=None, description=None, entrypoint=None):
+        self._documentation = Documentation(apidoc_url=apidoc_url, title=title, description=description,
                                             entrypoint=entrypoint)
 
+    def property(self, iri, description=None, routes=None, required=None, readonly=None, writeonly=None,
+                 range=None):
+        def decorator(meth):
+            _prop = Property(name=meth.__name__, iri=iri, description=description, route_keys=routes,
+                             required=required, readonly=readonly, writeonly=writeonly, range=range)
+            self._props[meth.__name__] = _prop
+            return meth
+
+        return decorator
+
+    def resource(self, iri, description=None, routes=None):
+        def decorator(cls):
+            _resource = Resource(cls=cls, description=description, iri=iri, route_keys=routes)
+            _resource.properties = self._props
+
+            self._props = {}
+            self._resources[cls.__name__] = _resource
+            return cls
+
+        return decorator
+
     def route(self, name, method, description=None, returns=None, status_codes=None, expects=None):
-        self._routes[name] = Operation(name=name, method=method, description=description, returns=returns,
-                                       expects=expects, status_codes=status_codes)
+        self._routes[name] = Route(name=name, method=method, description=description, returns=returns,
+                                   expects=expects, status_codes=status_codes)
+        def decorator(route_rule):
+            return route_rule
 
-        def wrapper(f):
-            return f
+        return decorator
 
-        return wrapper
+    def get_resources(self):
+        return self._resources
 
-    def get_class(self, klass):
-        return self._classes.get(klass, None)
-
-    def get_class_from_instance(self, obj):
-        return self.get_class(obj.__class__)
-
-    def get_route(self, route):
-        return self._routes[route]
-
-    def get_routes(self):
+    def routes(self):
         return self._routes
 
-    def get_classes(self):
-        return self._classes
+    def get_properties(self, resource_key):
+        if resource_key in self._resources:
+            return self._resources[resource_key].properties
+        return {}
+
+    def get_routes(self, resource_key):
+        if resource_key in self._resources:
+            route_keys = self._resources[resource_key].route_keys
+            return {route_key: route for (route_key, route) in self._routes.items() if route_key in route_keys}
+        return {}
+
+    def get_routes_from_keys(self, route_keys):
+        return [route for key, route in self._routes.items() if key in route_keys]
 
     def get_documentation(self):
         return self._documentation
