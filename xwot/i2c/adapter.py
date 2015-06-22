@@ -9,7 +9,7 @@
 from xwot.i2c.util import Adapter
 
 
-class Door(object):
+class DoorAdapter(object):
 
     UNLOCK_DOOR = 0x01
     LOCK_DOOR = 0x02
@@ -57,7 +57,7 @@ class Door(object):
             return None
 
 
-class LightBulb(object):
+class LightBulbAdapter(object):
 
     SWITCH_LIGHT_ON = 0x01
     SWITCH_LIGHT_OFF = 0x02
@@ -88,7 +88,7 @@ class LightBulb(object):
         return self._adapter.read_int32(self.READ_ILLUMINANCE)
 
 
-class WaterDispenser(object):
+class WaterDispenserAdapter(object):
 
     OPEN_SOLENOID_VALVE = 0x01
     CLOSE_SOLENOID_VALVE = 0x02
@@ -120,7 +120,7 @@ class WaterDispenser(object):
         self._adapter.write_byte(self.CLOSE_SOLENOID_VALVE)
 
 
-class Weatherstation(object):
+class WeatherstationAdapter(object):
 
     READ_TEMPERATURE_1 = 0x01
     READ_TEMPERATURE_2 = 0x02
