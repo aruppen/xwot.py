@@ -4,3 +4,5 @@
 @date       21.06.2015
 
 """
+
+__author__ = 'Alexander Rüedlinger'
