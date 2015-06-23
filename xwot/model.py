@@ -122,12 +122,20 @@ class Resource(Entity):
     __type__ = 'xwot:Resource'
 
 
+class CollectionMember(Resource):
+    __type__ = ['xwot:Resource']
+
+    @property
+    def id(self):
+        raise NotImplementedError
+
+
 class Collection(Resource):
     __type__ = ['xwot:Resource', 'hydra:Collection']
 
     @property
     def members(self):
-        return []
+        raise NotImplementedError
 
     def _enhance_dic(self, dic):
         dic['type'] = self.__type__
