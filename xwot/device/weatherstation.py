@@ -143,7 +143,7 @@ def create_sensors():
                            adapter=adapter, adapter_measurement_fun=lambda a: a.pressure,
                            type_iri='http://xwot.lexruee.ch/vocab/core-ext#PressureSensor'),
 
-        'humidity': Sensor(id='temperature1', name='humidity sensor', unit='Percentage', symbol='%',
+        'humidity': Sensor(id='humidity', name='humidity sensor', unit='Percentage', symbol='%',
                            measures='Pressure',
                            description='A humidity sensor of this weather station.',
                            adapter=adapter, adapter_measurement_fun=lambda a: a.humidity,
