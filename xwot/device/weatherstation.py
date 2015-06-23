@@ -122,12 +122,12 @@ def create_sensors():
     adapter = WeatherstationAdapter()
 
     _sensors = {
-        'temperature1': BaseSensor(name='Temperature sensor 1', unit='Celsius', symbol='°C', measures='Temperature',
+        'temperature_1': BaseSensor(name='Temperature sensor 1', unit='Celsius', symbol='°C', measures='Temperature',
                                    description='A temperature sensor of this weather station.',
                                    adapter=adapter, adapter_measurement_fun=lambda a: a.temperature_1,
                                    type_iri='http://xwot.lexruee.ch/vocab/core-ext#TemperatureSensor'),
 
-        'temperature2': BaseSensor(name='Temperature sensor 2', unit='Celsius', symbol='°C', measures='Temperature',
+        'temperature_2': BaseSensor(name='Temperature sensor 2', unit='Celsius', symbol='°C', measures='Temperature',
                                    description='A temperature sensor of this weather station.',
                                    adapter=adapter, adapter_measurement_fun=lambda a: a.temperature_1,
                                    type_iri='http://xwot.lexruee.ch/vocab/core-ext#TemperatureSensor'),
