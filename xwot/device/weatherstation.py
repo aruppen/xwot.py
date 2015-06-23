@@ -170,6 +170,9 @@ def create_sensors():
 
 
 class SensorCollection(Collection, Model):
+
+    __expose__ = ['back_link']
+
     def __init__(self, sensors):
         super(SensorCollection, self).__init__()
         self._sensors = sensors
