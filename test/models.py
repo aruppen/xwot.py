@@ -3,6 +3,7 @@ from xwot.util.vocab import Hydra
 from xwot.util.vocab import Xwot
 
 from xwot.model import Collection
+from xwot.model import CollectionMember
 from xwot.util.vocab import SchemaOrg
 from xwot.model import Resource
 from xwot.util.annotator import Annotator
@@ -12,7 +13,7 @@ annotate = Annotator()
 
 @annotate.resource(description='A User represents a person registered in the system.',
                    routes=['user_retrieve', 'user_replace', 'user_delete'], iri=Xwot.Resource())
-class User(Resource):
+class User(CollectionMember):
     __expose__ = ['id', 'email', 'name', 'password']
     __self_link__ = ''
 
