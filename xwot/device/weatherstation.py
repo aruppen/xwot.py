@@ -118,7 +118,7 @@ class BaseSensor(XWOTSensor, Model):
 from xwot.i2c.adapter import WeatherstationAdapter
 
 
-def sensors():
+def create_sensors():
     adapter = WeatherstationAdapter()
 
     _sensors = {
