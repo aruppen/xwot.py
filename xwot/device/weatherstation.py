@@ -135,7 +135,7 @@ def create_sensors():
         'temperature_2': Sensor(id='temperature2', name='Temperature sensor 2', unit='Celsius', symbol='°C',
                                 measures='Temperature',
                                 description='A temperature sensor of this weather station.',
-                                adapter=adapter, adapter_measurement_fun=lambda a: a.temperature_1,
+                                adapter=adapter, adapter_measurement_fun=lambda a: a.temperature_2,
                                 type_iri='http://xwot.lexruee.ch/vocab/core-ext#TemperatureSensor'),
 
         'pressure': Sensor(id='pressure', name='Pressure sensor', unit='Pascal', symbol='pa', measures='Pressure',
