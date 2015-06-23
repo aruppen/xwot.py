@@ -88,7 +88,7 @@ class Sensor(XWOTSensor, Model):
 
     @property
     def back_link2(self):
-        return '/weatherstation',
+        return '/weatherstation'
 
     @property
     def name(self):
