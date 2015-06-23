@@ -168,6 +168,8 @@ class SensorCollection(Collection, Model):
         self._sensors = sensors
         self.add_link('back_link')
 
+
+    @property
     def members(self):
         return self._sensors
 
