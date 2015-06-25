@@ -58,7 +58,6 @@ def mount_apidoc(app, builder):
     app.add_url_rule('/vocab', 'vocab', vocab)
 
 
-
 SERIALIZERS = {
     'application/json': lambda obj: obj.to_json(),
     'application/xml': lambda obj: obj.to_xml(),
