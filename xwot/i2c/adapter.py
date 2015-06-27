@@ -165,3 +165,40 @@ class WeatherstationAdapter(object):
     @property
     def color_illuminance(self):
         return self._adapter.read_int32(self.READ_COLOR_ILLUMINANCE)
+
+
+class DHTProxy(object):
+
+    CMD_SET_DHTX = 0x01
+    CMD_READ_DHTX = 0x02
+    READ_TEMPERATURE = 0x03
+    READ_HUMIDITY = 0x04
+    DHT11 = 11
+    DHT22 = 22
+
+    def __init__(self, bus=1, dhtx=DHT11, i2c_addr=0x04):
+        self._adapter = Adapter(bus=bus, i2c_addr=i2c_addr)
+        self._dhtx = dhtx
+        self._set_dhtx(dhtx)
+
+    def _set_dhtx(self, value):
+        self._adapter.write_byte(self.CMD_SET_DHTX)
+        self._adapter.write_byte(value)
+
+
+    @property
+    def dhtx_version(self):
+        return self._adapter.read_float(self.CMD_READ_DHTX)
+
+    @dhtx_version.setter
+    def dhtx_version(self, value):
+        self._dhtx = value
+        self._set_dhtx(value)
+
+    @property
+    def temperature(self):
+        return self._adapter.read_float(self.READ_TEMPERATURE)
+
+    @property
+    def humidity(self):
+        return self._adapter.read_float(self.READ_HUMIDITY)
