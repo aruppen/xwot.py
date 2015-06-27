@@ -169,7 +169,6 @@ class WeatherstationAdapter(object):
 
 class DHTProxy(object):
 
-    CMD_SET_DHTX = 0x01
     CMD_READ_DHTX = 0x02
     READ_TEMPERATURE = 0x03
     READ_HUMIDITY = 0x04
@@ -182,7 +181,7 @@ class DHTProxy(object):
         self._set_dhtx(dhtx)
 
     def _set_dhtx(self, value):
-        self._adapter.write_word(self.CMD_SET_DHTX, value)
+        self._adapter.write_byte(value)
 
     @property
     def dhtx_version(self):
