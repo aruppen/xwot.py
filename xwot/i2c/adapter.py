@@ -167,7 +167,7 @@ class WeatherstationAdapter(object):
         return self._adapter.read_int32(self.READ_COLOR_ILLUMINANCE)
 
 
-class DHTProxy(object):
+class DHTAdapter(object):
 
     READ_TEMPERATURE = 0x01
     READ_HUMIDITY = 0x02
