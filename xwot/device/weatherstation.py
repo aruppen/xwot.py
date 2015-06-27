@@ -10,6 +10,7 @@ from xwot.model import BaseModel
 from xwot.model import Device as XWOTDevice
 from xwot.model import Sensor as XWOTSensor
 from xwot.model import Collection
+from xwot.model import CollectionMember
 
 
 class WeatherStation(XWOTDevice, BaseModel):
@@ -60,7 +61,7 @@ class WeatherStation(XWOTDevice, BaseModel):
         return self._dic['roomAddress']
 
 
-class Sensor(XWOTSensor, Model):
+class Sensor(XWOTSensor, CollectionMember, Model):
     __expose__ = ['name', 'unit', 'measures', 'description', 'measurement', 'symbol', 'waterdispenser',
                   'back_link1', 'back_link2']
 
