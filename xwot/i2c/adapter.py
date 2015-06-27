@@ -169,28 +169,11 @@ class WeatherstationAdapter(object):
 
 class DHTProxy(object):
 
-    CMD_READ_DHTX = 0x02
-    READ_TEMPERATURE = 0x03
-    READ_HUMIDITY = 0x04
-    DHT11 = 11
-    DHT22 = 22
+    READ_TEMPERATURE = 0x01
+    READ_HUMIDITY = 0x02
 
-    def __init__(self, bus=1, dhtx=DHT11, i2c_addr=0x04):
+    def __init__(self, bus=1, i2c_addr=0x04):
         self._adapter = Adapter(bus=bus, i2c_addr=i2c_addr)
-        self._dhtx = dhtx
-        self._set_dhtx(dhtx)
-
-    def _set_dhtx(self, value):
-        self._adapter.write_byte(value)
-
-    @property
-    def dhtx_version(self):
-        return self._adapter.read_byte(self.CMD_READ_DHTX)
-
-    @dhtx_version.setter
-    def dhtx_version(self, value):
-        self._dhtx = value
-        self._set_dhtx(value)
 
     @property
     def temperature(self):
