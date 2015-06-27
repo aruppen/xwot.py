@@ -78,6 +78,13 @@ class Adapter(object):
         except IOError:
             return False
 
+    def write_word(self, reg, val):
+        try:
+            self._bus.write_word_data(self._i2c_addr, reg, val)
+            return True
+        except IOError:
+            return False
+
     def read_byte(self, reg):
         try:
             return self._bus.read_byte_data(self._i2c_addr, reg)

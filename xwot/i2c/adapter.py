@@ -182,13 +182,11 @@ class DHTProxy(object):
         self._set_dhtx(dhtx)
 
     def _set_dhtx(self, value):
-        self._adapter.write_byte(self.CMD_SET_DHTX)
-        self._adapter.write_byte(value)
-
+        self._adapter.write_word(self.CMD_SET_DHTX, value)
 
     @property
     def dhtx_version(self):
-        return self._adapter.read_float(self.CMD_READ_DHTX)
+        return self._adapter.read_byte(self.CMD_READ_DHTX)
 
     @dhtx_version.setter
     def dhtx_version(self, value):
