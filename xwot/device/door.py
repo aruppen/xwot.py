@@ -10,13 +10,13 @@ from xwot.model import Model
 from xwot.model import BaseModel
 
 
-class LightBulb(XWOTContext, BaseModel):
+class Door(XWOTContext, BaseModel):
 
     __mutable_props__ = ['name', 'streetAddress', 'roomAddress', 'postalCode', 'addressLocality']
     __expose__ = __mutable_props__ + ['description', 'handle', 'lock']
 
     def __init__(self, name, street_address, postal_code, address_locality, room_address):
-        super(LightBulb, self).__init__()
+        super(Door, self).__init__()
         self._dic = {
             'name': name,
             'streetAddress': street_address,
