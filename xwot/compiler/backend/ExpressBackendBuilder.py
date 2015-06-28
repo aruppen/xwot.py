@@ -123,7 +123,7 @@ class ExpressBackendBuilder(visitor.BaseVisitor):
             ], ["xwot", node.name()])
 
     def handle_device_resource(self, node):
-       for method in ['get', 'post', 'put', 'delete']:
+        for method in ['get', 'put']:
             self._out.code([
                 self._out.indent([
                     '/*',
@@ -138,7 +138,7 @@ class ExpressBackendBuilder(visitor.BaseVisitor):
             ], ["xwot", node.name()])
 
     def handle_sensor_resource(self, node):
-       for method in ['get', 'post', 'put', 'delete']:
+        for method in ['get']:
             self._out.code([
                 self._out.indent([
                     '/*',
@@ -153,7 +153,7 @@ class ExpressBackendBuilder(visitor.BaseVisitor):
             ], ["xwot", node.name()])
 
     def handle_tag_resource(self, node):
-       for method in ['get', 'post', 'put', 'delete']:
+        for method in ['get']:
             self._out.code([
                 self._out.indent([
                     '/*',
@@ -168,7 +168,7 @@ class ExpressBackendBuilder(visitor.BaseVisitor):
             ], ["xwot", node.name()])
 
     def handle_context_resource(self, node):
-        for method in ['get', 'post', 'put', 'delete']:
+        for method in ['get', 'put']:
             self._out.code([
                 self._out.indent([
                     '/*',
@@ -198,7 +198,7 @@ class ExpressBackendBuilder(visitor.BaseVisitor):
             ], ["xwot", node.name()])
 
     def handle_actuator_resource(self, node):
-        for method in ['get', 'post', 'put', 'delete']:
+        for method in ['put']:
             self._out.code([
                 self._out.indent([
                     '/*',
@@ -213,7 +213,7 @@ class ExpressBackendBuilder(visitor.BaseVisitor):
             ], ["xwot", node.name()])
 
     def handle_publisher_resource(self, node):
-        for method in ['get', 'post', 'put', 'delete']:
+        for method in ['get', 'post']:
             self._out.code([
                 self._out.indent([
                     '/*',
