@@ -137,7 +137,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                            ], ["xwot_app", node.name()])
 
     def handle_device_resource(self, node):
-        for method in ['GET', 'POST', 'PUT']:
+        for method in ['GET', 'PUT']:
             self._out.code([
                                '#',
                                "# %s '%s'" % (method.upper(), node.fullpath()),
@@ -176,7 +176,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                            ], ["xwot_app", node.name()])
 
     def handle_context_resource(self, node):
-        for method in ['GET', 'POST', 'PUT']:
+        for method in ['GET', 'PUT']:
             self._out.code([
                                '#',
                                "# %s '%s'" % (method.upper(), node.fullpath()),
@@ -202,7 +202,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                            ], ["xwot_app", node.name()])
 
     def handle_actuator_resource(self, node):
-        for method in ['GET', 'PUT']:
+        for method in ['PUT']:
             self._out.code([
                                '#',
                                "# %s '%s'" % (method.upper(), node.fullpath()),
@@ -215,7 +215,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                            ], ["xwot_app", node.name()])
 
     def handle_publisher_resource(self, node):
-        for method in ['GET', 'POST', 'PUT', 'DELETE']:
+        for method in ['GET', 'POST']:
             self._out.code([
                                '#',
                                "# %s '%s'" % (method.upper(), node.fullpath()),
