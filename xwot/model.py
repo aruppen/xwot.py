@@ -45,6 +45,10 @@ class Entity(object):
     def type(self):
         return self.__type__
 
+    @property
+    def types(self):
+        return [self.__type__] + self._types
+
     def add_link(self, name):
         self._links.append(name)
 
@@ -93,8 +97,7 @@ class Entity(object):
         dic = self._get_dict()
         dic['@id'] = self.resource_path
         dic['@context'] = self.__contexts__ + self._contexts
-        dic['@type'] = [self.__type__]
-        dic['@type'] += self._types
+        dic['@type'] = self.types
         #dic['additionalType'] = self._types
         dic['links'] = []
 
@@ -140,7 +143,7 @@ class Collection(Resource):
 
     def _enhance_dic(self, dic):
         dic['type'] = self.__type__
-        dic['additionalType'] = self._types
+        #dic['additionalType'] = self._types
         dic['members'] = []
 
         for member in self.members:
@@ -162,15 +165,15 @@ class Collection(Resource):
         dic = self._get_dict()
         dic['@id'] = self.resource_path
         dic['@context'] = self.__contexts__
-        dic['@type'] = [self.__type__]
-        dic['@type'] += self._types
+        dic['@type'] = self.types
+
         #dic['additionalType'] = self._types
         dic['members'] = []
 
         for member in self.members:
             item_link = member.resource_path
             item_dic = {
-                '@type': member.type,
+                '@type': member.types,
                 '@id': item_link
             }
             dic['members'].append(item_dic)
