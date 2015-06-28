@@ -27,7 +27,7 @@ class WaterDispenser(XWOTDevice, BaseModel):
             'roomAddress': room_address
         }
 
-        self.add_type('http://xwot.lexruee.ch/vocab/core-ext#WaterDispenser')
+        self.add_type('xwot-ext:WaterDispenser')
         self.add_link('valve')
         self.add_link('sensor')
 
@@ -83,7 +83,7 @@ class Valve(XWOTContext, Model):
             'name': name
         }
         self._adapter = adapter
-        self.add_type('http://xwot.lexruee.ch/vocab/core-ext#Valve')
+        self.add_type('xwot-ext:Valve')
         self.add_link('waterdispenser')
 
     @property
@@ -123,7 +123,7 @@ class Sensor(XWOTSensor, Model):
     def __init__(self, adapter=WaterDispenserAdapter()):
         super(Sensor, self).__init__()
         self._adapter = adapter
-        self.add_type('http://xwot.lexruee.ch/vocab/core-ext#SoilMoistureSensor')
+        self.add_type('xwot-ext:SoilMoistureSensor')
         self.add_link('waterdispenser')
 
     @property

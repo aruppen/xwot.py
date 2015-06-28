@@ -27,7 +27,7 @@ class WeatherStation(XWOTDevice, BaseModel):
             'roomAddress': room_address
         }
 
-        self.add_type('http://xwot.lexruee.ch/vocab/core-ext#WeatherStation')
+        self.add_type('xwot-ext:WeatherStation')
         self.add_link('sensors')
 
     @property
@@ -138,40 +138,40 @@ def create_sensors():
                                 measures='Temperature',
                                 description='A temperature sensor of this weather station.',
                                 adapter=adapter, adapter_measurement_fun=lambda a: a.temperature_1,
-                                type_iri='http://xwot.lexruee.ch/vocab/core-ext#TemperatureSensor'),
+                                type_iri='xwot-ext:TemperatureSensor'),
 
         'temperature_2': Sensor(id='temperature2', name='Temperature sensor 2', unit='Celsius', symbol='°C',
                                 measures='Temperature',
                                 description='A temperature sensor of this weather station.',
                                 adapter=adapter, adapter_measurement_fun=lambda a: a.temperature_2,
-                                type_iri='http://xwot.lexruee.ch/vocab/core-ext#TemperatureSensor'),
+                                type_iri='xwot-ext:TemperatureSensor'),
 
         'pressure': Sensor(id='pressure', name='Pressure sensor', unit='Pascal', symbol='pa', measures='Pressure',
                            description='A pressure sensor of this weather station.',
                            adapter=adapter, adapter_measurement_fun=lambda a: a.pressure,
-                           type_iri='http://xwot.lexruee.ch/vocab/core-ext#PressureSensor'),
+                           type_iri='xwot-ext:PressureSensor'),
 
         'humidity': Sensor(id='humidity', name='Humidity sensor', unit='Percentage', symbol='%',
                            measures='Humidity',
                            description='A humidity sensor of this weather station.',
                            adapter=adapter, adapter_measurement_fun=lambda a: a.humidity,
-                           type_iri='http://xwot.lexruee.ch/vocab/core-ext#HumiditySensor'),
+                           type_iri='xwot-ext:HumiditySensor'),
 
         'altitude': Sensor(id='altitude', name='Altitude sensor', unit='Meters', symbol='m', measures='Altitude',
                            description='An altitude sensor of this weather station.',
                            adapter=adapter, adapter_measurement_fun=lambda a: a.altitude,
-                           type_iri='http://xwot.lexruee.ch/vocab/core-ext#AltitudeSensor'),
+                           type_iri='xwot-ext:AltitudeSensor'),
 
         'illuminance': Sensor(id='illuminance', name='Illuminance sensor', unit='Lux', symbol='lx',
                               measures='Illuminance',
                               description='An illuminance sensor of this weather station.',
                               adapter=adapter, adapter_measurement_fun=lambda a: a.illuminance,
-                              type_iri='http://xwot.lexruee.ch/vocab/core-ext#IlluminanceSensor'),
+                              type_iri='xwot-ext:IlluminanceSensor'),
 
         'color': Sensor(id='color', name='Color sensor', unit='Kelvin', symbol='k', measures='Temperature',
                         description='A color sensor of this weather station.',
                         adapter=adapter, adapter_measurement_fun=lambda a: a.color_temperature,
-                        type_iri='http://xwot.lexruee.ch/vocab/core-ext#TemperatureSensor')
+                        type_iri='xwot-ext:TemperatureSensor')
     }
 
     return _sensors

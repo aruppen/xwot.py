@@ -26,7 +26,7 @@ class LightBulb(XWOTContext, BaseModel):
             'roomAddress': room_address
         }
 
-        self.add_type('http://xwot.lexruee.ch/vocab/core-ext#LightBulb')
+        self.add_type('xwot-ext:LightBulb')
         self.add_link('switch')
         self.add_link('sensor')
 
@@ -83,7 +83,7 @@ class Switch(XWOTContext, Model):
             'name': name
         }
         self._adapter = adapter
-        self.add_type('http://xwot.lexruee.ch/vocab/core-ext#Switch')
+        self.add_type('xwot-ext:Switch')
         self.add_link('lightbulb')
 
     @property
@@ -123,7 +123,7 @@ class Sensor(XWOTSensor, Model):
     def __init__(self, adapter=LightBulbAdapter()):
         super(Sensor, self).__init__()
         self._adapter = adapter
-        self.add_type('http://xwot.lexruee.ch/vocab/core-ext#IlluminanceSensor')
+        self.add_type('xwot-ext:IlluminanceSensor')
         self.add_link('lightbulb')
 
     @property

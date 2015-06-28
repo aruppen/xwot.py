@@ -25,7 +25,7 @@ class Door(XWOTContext, BaseModel):
             'roomAddress': room_address
         }
 
-        self.add_type('http://xwot.lexruee.ch/vocab/core-ext#Door')
+        self.add_type('xwot-ext:Door')
         self.add_link('handle')
         self.add_link('lock')
 
@@ -82,7 +82,7 @@ class Lock(XWOTContext, Model):
             'name': name
         }
         self._adapter = adapter
-        self.add_type('http://xwot.lexruee.ch/vocab/core-ext#Lock')
+        self.add_type('xwot-ext:Lock')
         self.add_link('door')
 
     @property
@@ -127,7 +127,7 @@ class Handle(XWOTContext, Model):
             'name': name
         }
         self._adapter = adapter
-        self.add_type('http://xwot.lexruee.ch/vocab/core-ext#Lock')
+        self.add_type('xwot-ext:Lock')
         self.add_link('door')
 
     @property
