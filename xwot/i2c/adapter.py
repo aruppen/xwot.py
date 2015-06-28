@@ -48,7 +48,7 @@ class DoorAdapter(object):
     def close_state(self):
         state = self._adapter.read_byte(self.READ_CLOSE_STATE)
         if state == 1:
-            return "open"
+            return "opened"
         elif state == 0:
             return "closed"
         elif state == 2:
@@ -107,7 +107,7 @@ class WaterDispenserAdapter(object):
     def solenoid_valve_state(self):
         state = self._adapter.read_byte(self.READ_SOLENOID_VALVE_STATE)
         if state == 1:
-            return "open"
+            return "opened"
         elif state == 0:
             return "closed"
         else:
