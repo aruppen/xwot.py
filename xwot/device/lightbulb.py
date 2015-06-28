@@ -7,11 +7,12 @@
 
 from xwot.model import Context as XWOTContext
 from xwot.model import Sensor as XWOTSensor
+from xwot.model import Device as XWOTDevice
 from xwot.model import Model
 from xwot.model import BaseModel
 
 
-class LightBulb(XWOTContext, BaseModel):
+class LightBulb(XWOTDevice, BaseModel):
 
     __mutable_props__ = ['name', 'streetAddress', 'roomAddress', 'postalCode', 'addressLocality']
     __expose__ = __mutable_props__ + ['description', 'switch', 'sensor']

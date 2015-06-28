@@ -6,11 +6,12 @@
 """
 
 from xwot.model import Context as XWOTContext
+from xwot.model import Device as XWOTDevice
 from xwot.model import Model
 from xwot.model import BaseModel
 
 
-class Door(XWOTContext, BaseModel):
+class Door(XWOTDevice, BaseModel):
 
     __mutable_props__ = ['name', 'streetAddress', 'roomAddress', 'postalCode', 'addressLocality']
     __expose__ = __mutable_props__ + ['description', 'handle', 'lock']
