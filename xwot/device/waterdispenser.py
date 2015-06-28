@@ -9,9 +9,10 @@ from xwot.model import Model
 from xwot.model import BaseModel
 from xwot.model import Sensor as XWOTSensor
 from xwot.model import Context as XWOTContext
+from xwot.model import Device as XWOTDevice
 
 
-class WaterDispenser(XWOTContext, BaseModel):
+class WaterDispenser(XWOTDevice, BaseModel):
 
     __mutable_props__ = ['name', 'streetAddress', 'roomAddress', 'postalCode', 'addressLocality']
     __expose__ = __mutable_props__ + ['description', 'valve', 'sensor']
