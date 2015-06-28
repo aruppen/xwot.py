@@ -69,7 +69,7 @@ from xwot.i2c.adapter import DoorAdapter
 class Lock(XWOTContext, Model):
 
     __mutable_props__ = ['name', 'state']
-    __expose__ = __mutable_props__ + ['description']
+    __expose__ = __mutable_props__ + ['description', 'door']
 
     def __init__(self, name, adapter=DoorAdapter()):
         super(Lock, self).__init__()
@@ -79,6 +79,11 @@ class Lock(XWOTContext, Model):
         }
         self._adapter = adapter
         self.add_type('http://xwot.lexruee.ch/vocab/core-ext#Lock')
+        self.add_link('door')
+
+    @property
+    def door(self):
+        return '/door'
 
     @property
     def description(self):
@@ -105,7 +110,7 @@ class Lock(XWOTContext, Model):
 class Handle(XWOTContext, Model):
 
     __mutable_props__ = ['name', 'state']
-    __expose__ = __mutable_props__ + ['description']
+    __expose__ = __mutable_props__ + ['description', 'door']
 
     def __init__(self, name, adapter=DoorAdapter()):
         super(Handle, self).__init__()
@@ -115,6 +120,12 @@ class Handle(XWOTContext, Model):
         }
         self._adapter = adapter
         self.add_type('http://xwot.lexruee.ch/vocab/core-ext#Lock')
+        self.add_link('door')
+
+
+    @property
+    def door(self):
+        return '/door'
 
     @property
     def description(self):
