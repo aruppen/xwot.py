@@ -31,6 +31,10 @@ class LightBulb(XWOTContext, BaseModel):
         self.add_link('sensor')
 
     @property
+    def resource_path(self):
+        return '/lightbulb'
+
+    @property
     def name(self):
         return self._dic['name']
 
@@ -83,6 +87,10 @@ class Switch(XWOTContext, Model):
         self.add_link('lightbulb')
 
     @property
+    def resource_path(self):
+        return '/lightbulb/switch'
+
+    @property
     def description(self):
         return "A switch to turn off or on this light bulb."
 
@@ -117,6 +125,10 @@ class Sensor(XWOTSensor, Model):
         self._adapter = adapter
         self.add_type('http://xwot.lexruee.ch/vocab/core-ext#IlluminanceSensor')
         self.add_link('lightbulb')
+
+    @property
+    def resource_path(self):
+        return '/lightbulb/sensor'
 
     @property
     def name(self):

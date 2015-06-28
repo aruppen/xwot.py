@@ -30,6 +30,9 @@ class WeatherStation(XWOTDevice, BaseModel):
         self.add_type('http://xwot.lexruee.ch/vocab/core-ext#WeatherStation')
         self.add_link('sensors')
 
+    @property
+    def resource_path(self):
+        return '/weatherstation'
 
     @property
     def name(self):
@@ -78,6 +81,10 @@ class Sensor(XWOTSensor, CollectionMember, Model):
         self._adapter_measurement_fun = adapter_measurement_fun
         self.add_link('back_link1')
         self.add_link('back_link2')
+
+    @property
+    def resource_path(self):
+        return "/weatherstation/sensors/%s" % self._id
 
     @property
     def id(self):
@@ -179,6 +186,9 @@ class SensorCollection(Collection, Model):
         self._sensors = sensors
         self.add_link('back_link')
 
+    @property
+    def resource_path(self):
+        return '/weatherstation/sensors'
 
     @property
     def members(self):

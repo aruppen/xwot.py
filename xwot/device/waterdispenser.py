@@ -32,6 +32,10 @@ class WaterDispenser(XWOTDevice, BaseModel):
         self.add_link('sensor')
 
     @property
+    def resource_path(self):
+        return '/waterdispenser'
+
+    @property
     def name(self):
         return self._dic['name']
 
@@ -39,7 +43,6 @@ class WaterDispenser(XWOTDevice, BaseModel):
     def description(self):
         return "Hi there my name is %s. I'm a water dispenser and currently present in room %s at the location: %s, %s, %s" % \
                (self.name, self.roomAddress, self.streetAddress, self.addressLocality, self.postalCode)
-
     @property
     def valve(self):
         return '/waterdispenser/valve'
@@ -83,6 +86,9 @@ class Valve(XWOTContext, Model):
         self.add_type('http://xwot.lexruee.ch/vocab/core-ext#Valve')
         self.add_link('waterdispenser')
 
+    @property
+    def resource_path(self):
+        return '/waterdispenser/valve'
 
     @property
     def waterdispenser(self):
@@ -120,6 +126,9 @@ class Sensor(XWOTSensor, Model):
         self.add_type('http://xwot.lexruee.ch/vocab/core-ext#SoilMoistureSensor')
         self.add_link('waterdispenser')
 
+    @property
+    def resource_path(self):
+        return '/waterdispenser/sensor'
 
     @property
     def waterdispenser(self):

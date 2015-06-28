@@ -30,6 +30,10 @@ class Door(XWOTContext, BaseModel):
         self.add_link('lock')
 
     @property
+    def resource_path(self):
+        return '/door'
+
+    @property
     def name(self):
         return self._dic['name']
 
@@ -82,6 +86,10 @@ class Lock(XWOTContext, Model):
         self.add_link('door')
 
     @property
+    def resource_path(self):
+        return '/door/lock'
+
+    @property
     def door(self):
         return '/door'
 
@@ -122,6 +130,9 @@ class Handle(XWOTContext, Model):
         self.add_type('http://xwot.lexruee.ch/vocab/core-ext#Lock')
         self.add_link('door')
 
+    @property
+    def resource_path(self):
+        return '/door/handle'
 
     @property
     def door(self):
