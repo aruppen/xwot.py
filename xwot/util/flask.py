@@ -68,15 +68,13 @@ SERIALIZERS = {
 
 def make_response(obj, default='application/ld+json', status=200):
     cts = request.accept_mimetypes
-    path = request.path
 
     if cts:
         content_type, _ = cts[0]
 
         if content_type in SERIALIZERS:
             fun_serializer = SERIALIZERS[content_type]
-            if path:
-                obj.resource_path = path
+
             doc = fun_serializer(obj)
             return Response(response=doc, status=status, content_type=content_type)
         else:
