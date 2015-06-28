@@ -93,8 +93,9 @@ class Entity(object):
         dic = self._get_dict()
         dic['@id'] = self.resource_path
         dic['@context'] = self.__contexts__ + self._contexts
-        dic['@type'] = self.__type__
-        dic['additionalType'] = self._types
+        dic['@type'] = [self.__type__]
+        dic['@type'] += self._types
+        #dic['additionalType'] = self._types
         dic['links'] = []
 
         for link in self._links:
@@ -143,7 +144,7 @@ class Collection(Resource):
         dic['members'] = []
 
         for member in self.members:
-            item_link = self._create_path([self.resource_path, member.id])
+            item_link = member.resource_path
             item_dic = {
                 'type': member.type,
                 'link': item_link
@@ -161,12 +162,13 @@ class Collection(Resource):
         dic = self._get_dict()
         dic['@id'] = self.resource_path
         dic['@context'] = self.__contexts__
-        dic['@type'] = self.__type__
-        dic['additionalType'] = self._types
+        dic['@type'] = [self.__type__]
+        dic['@type'] += self._types
+        #dic['additionalType'] = self._types
         dic['members'] = []
 
         for member in self.members:
-            item_link = self._create_path([self.resource_path, member.id])
+            item_link = member.resource_path
             item_dic = {
                 '@type': member.type,
                 '@id': item_link
