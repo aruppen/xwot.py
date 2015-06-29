@@ -110,7 +110,7 @@ class Valve(XWOTContext, Model):
         if dic.get('state') == 'closed':
             self._adapter.close_solenoid_valve()
 
-        if dic.get('state') == 'open':
+        if dic.get('state') == 'opened':
             self._adapter.open_solenoid_valve()
 
         self._dic['name'] = str(dic.get('name', self._dic['name']))
