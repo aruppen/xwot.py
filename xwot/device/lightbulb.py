@@ -114,6 +114,8 @@ class Switch(XWOTContext, Model):
         if dic.get('state') == 'on':
             self._adapter.switch_on()
 
+        _s = self._adapter.state  # fix strange bug
+
         self._dic['name'] = str(dic.get('name', self._dic['name']))
 
 
