@@ -43,7 +43,7 @@ class Compiler(object):
     def _check_input_file(self, file_path):
         # check if input file exists
         if not os.path.exists(file_path):
-            print "Input file does not exist: %s " % file_path
+            print("Input file does not exist: %s " % file_path)
             sys.exit(1)
 
     def _clean_tree(self, root_node):
