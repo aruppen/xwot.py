@@ -14,6 +14,9 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
         visitor.BaseVisitor.__init__(self)
         self._out = OutputPrinter()
 
+    def _create_symbol_name(self, path):
+        return path.replace("/", "_").replace("-", "_").replace(".", "_")
+
     def before(self):
         self._out.code([
                            '#',
@@ -130,7 +133,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                "# %s '%s'" % (method.upper(), node.fullpath()),
                                '#',
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
-                               "def handle%s_%s():" % (node.fullpath().replace("/", "_"), method),
+                               "def handle%s_%s():" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
@@ -143,7 +146,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                "# %s '%s'" % (method.upper(), node.fullpath()),
                                '#',
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
-                               "def handle%s_%s():" % (node.fullpath().replace("/", "_"), method),
+                               "def handle%s_%s():" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
@@ -156,7 +159,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                "# %s '%s'" % (method.upper(), node.fullpath()),
                                '#',
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
-                               "def handle%s_%s():" % (node.fullpath().replace("/", "_"), method),
+                               "def handle%s_%s():" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
@@ -169,7 +172,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                "# %s '%s'" % (method.upper(), node.fullpath()),
                                '#',
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
-                               "def handle%s_%s():" % (node.fullpath().replace("/", "_"), method),
+                               "def handle%s_%s():" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
@@ -182,7 +185,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                "# %s '%s'" % (method.upper(), node.fullpath()),
                                '#',
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
-                               "def handle%s_%s():" % (node.fullpath().replace("/", "_"), method),
+                               "def handle%s_%s():" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
@@ -195,7 +198,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                "# %s '%s'" % (method.upper(), node.fullpath()),
                                '#',
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
-                               "def handle%s_%s():" % (node.fullpath().replace("/", "_"), method),
+                               "def handle%s_%s():" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
@@ -208,7 +211,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                "# %s '%s'" % (method.upper(), node.fullpath()),
                                '#',
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
-                               "def handle%s_%s():" % (node.fullpath().replace("/", "_"), method),
+                               "def handle%s_%s():" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
@@ -221,7 +224,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                "# %s '%s'" % (method.upper(), node.fullpath()),
                                '#',
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
-                               "def handle%s_%s():" % (node.fullpath().replace("/", "_"), method),
+                               "def handle%s_%s():" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
