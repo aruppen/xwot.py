@@ -78,7 +78,7 @@ class SinatraBackendBuilder(visitor.BaseVisitor):
                 ]),
                 'end'
             ]),
-        ], ["xwot", "RootResource" ])
+        ], ["xwot", node.name()])
         self.after_resource(node)
 
     def handle_resource(self, node):
@@ -94,7 +94,7 @@ class SinatraBackendBuilder(visitor.BaseVisitor):
                         ]),
                     'end'
                 ]),
-            ], [ "xwot", node.name() ])
+            ], ["xwot", node.name()])
 
     def handle_device_resource(self, node):
         for method in ['get', 'put']:
@@ -109,7 +109,7 @@ class SinatraBackendBuilder(visitor.BaseVisitor):
                         ]),
                     'end'
                 ]),
-            ], [ "xwot", node.name() ])
+            ], ["xwot", node.name()])
 
     def handle_sensor_resource(self, node):
         for method in ['get']:
@@ -124,7 +124,7 @@ class SinatraBackendBuilder(visitor.BaseVisitor):
                         ]),
                     'end'
                 ]),
-            ], [ "xwot", node.name() ])
+            ], ["xwot", node.name()])
 
     def handle_tag_resource(self, node):
         for method in ['get']:
@@ -139,7 +139,7 @@ class SinatraBackendBuilder(visitor.BaseVisitor):
                         ]),
                     'end'
                 ]),
-            ], [ "xwot", node.name() ])
+            ], ["xwot", node.name()])
 
     def handle_context_resource(self, node):
         for method in ['get', 'put']:
@@ -154,7 +154,7 @@ class SinatraBackendBuilder(visitor.BaseVisitor):
                         ]),
                     'end'
                 ]),
-            ], [ "xwot", node.name() ])
+            ], ["xwot", node.name()])
 
     def handle_service_resource(self, node):
         for method in ['get', 'post', 'put', 'delete']:
@@ -169,7 +169,7 @@ class SinatraBackendBuilder(visitor.BaseVisitor):
                         ]),
                     'end'
                 ]),
-            ], [ "xwot", node.name() ])
+            ], ["xwot", node.name()])
 
     def handle_actuator_resource(self, node):
         for method in ['put']:
@@ -184,7 +184,7 @@ class SinatraBackendBuilder(visitor.BaseVisitor):
                         ]),
                     'end'
                 ]),
-            ], [ "xwot", node.name() ])
+            ], ["xwot", node.name()])
 
     def handle_publisher_resource(self, node):
         for method in ['get', 'post']:
@@ -199,7 +199,7 @@ class SinatraBackendBuilder(visitor.BaseVisitor):
                         ]),
                     'end'
                 ]),
-            ], [ "xwot", node.name() ])
+            ], ["xwot", node.name()])
 
     def output(self):
         # get all created files
