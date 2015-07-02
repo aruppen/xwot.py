@@ -104,7 +104,7 @@ class ExpressBackendBuilder(visitor.BaseVisitor):
                 ]),
                 '});'
             ]),
-        ], ["xwot", "RootResource" ])
+        ], ["xwot", node.name()])
         self.after_resource(node)
 
     def handle_resource(self, node):
