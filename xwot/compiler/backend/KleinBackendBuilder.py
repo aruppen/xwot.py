@@ -14,6 +14,9 @@ class KleinBackendBuilder(visitor.BaseVisitor):
         visitor.BaseVisitor.__init__(self)
         self._out = OutputPrinter()
 
+    def _create_symbol_name(self, path):
+        return path.replace("/", "_").replace("-", "_").replace(".", "_")
+
     def before(self):
         self._out.code([
                            '#',
@@ -126,7 +129,7 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                                "# %s '%s'" % (method.upper(), node.fullpath()),
                                '#',
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
-                               "def handle%s_%s(request):" % (node.fullpath().replace("/", "_"), method),
+                               "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
@@ -139,7 +142,7 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                                "# %s '%s'" % (method.upper(), node.fullpath()),
                                '#',
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
-                               "def handle%s_%s(request):" % (node.fullpath().replace("/", "_"), method),
+                               "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
@@ -152,7 +155,7 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                                "# %s '%s'" % (method.upper(), node.fullpath()),
                                '#',
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
-                               "def handle%s_%s(request):" % (node.fullpath().replace("/", "_"), method),
+                               "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
@@ -165,7 +168,7 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                                "# %s '%s'" % (method.upper(), node.fullpath()),
                                '#',
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
-                               "def handle%s_%s(request):" % (node.fullpath().replace("/", "_"), method),
+                               "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
@@ -178,7 +181,7 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                                "# %s '%s'" % (method.upper(), node.fullpath()),
                                '#',
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
-                               "def handle%s_%s(request):" % (node.fullpath().replace("/", "_"), method),
+                               "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
@@ -191,7 +194,7 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                                "# %s '%s'" % (method.upper(), node.fullpath()),
                                '#',
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
-                               "def handle%s_%s(request):" % (node.fullpath().replace("/", "_"), method),
+                               "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
@@ -204,7 +207,7 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                                "# %s '%s'" % (method.upper(), node.fullpath()),
                                '#',
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
-                               "def handle%s_%s(request):" % (node.fullpath().replace("/", "_"), method),
+                               "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
@@ -217,7 +220,7 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                                "# %s '%s'" % (method.upper(), node.fullpath()),
                                '#',
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
-                               "def handle%s_%s(request):" % (node.fullpath().replace("/", "_"), method),
+                               "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
