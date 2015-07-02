@@ -124,7 +124,7 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                        ], ["xwot_app", node.name()])
 
     def handle_resource(self, node):
-        for method in ['GET', 'POST', 'PUT', 'DELETE']:
+        for method in ['GET', 'PUT']:
             self._out.code([
                                '#',
                                "# %s '%s'" % (method.upper(), node.fullpath()),

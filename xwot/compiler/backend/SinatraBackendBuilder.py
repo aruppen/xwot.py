@@ -82,7 +82,7 @@ class SinatraBackendBuilder(visitor.BaseVisitor):
         self.after_resource(node)
 
     def handle_resource(self, node):
-        for method in ['get', 'post', 'put', 'delete']:
+        for method in ['get', 'put']:
             self._out.code([
                 self._out.indent([
                     '#',
