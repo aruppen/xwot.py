@@ -182,3 +182,48 @@ class DHTAdapter(object):
     @property
     def humidity(self):
         return self._adapter.read_float(self.READ_HUMIDITY)
+
+
+class WindowAdapter(object):
+    CMD_UNLOCK = 0x01
+    CMD_LOCK = 0x02
+    CMD_OPEN = 0x03
+    CMD_CLOSE = 0x04
+
+    CMD_READ_LOCK_STATE = 0x09
+    CMD_READ_CLOSE_STATE = 0x0A
+
+    def __init__(self, bus=1, i2c_addr=0x04):
+        self._adapter = Adapter(bus=bus, i2c_addr=i2c_addr)
+
+    def unlock(self):
+        return self._adapter.write_byte(self.CMD_UNLOCK)
+
+    def lock(self):
+        return self._adapter.write_byte(self.CMD_LOCK)
+
+    def open(self):
+        return self._adapter.write_byte(self.CMD_OPEN)
+
+    def close(self):
+        return self._adapter.write_byte(self.CMD_CLOSE)
+
+    @property
+    def lock_state(self):
+        state = self._adapter.read_byte(self.CMD_READ_LOCK_STATE)
+        if state == 1:
+            return "locked"
+        elif state == 0:
+            return "unlocked"
+        else:
+            return None
+
+    @property
+    def close_state(self):
+        state = self._adapter.read_byte(self.CMD_READ_CLOSE_STATE)
+        if state == 1:
+            return "closed"
+        elif state == 0:
+            return "opened"
+        else:
+            return None
