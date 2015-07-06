@@ -6,7 +6,7 @@ It features among others some handy tools and some example xwot devices:
  * xwot.compiler - compiler for generating a skeleton xWoT web application based on the xWoT meta-model
    * xwot.compiler.backend - different backends
    * xwot.compiler.frontend - visitor, parser, description builder and processing tools
- * xwot.device - example xwot devices (weather station, water dispenser, light bulb, door)
+ * xwot.device - example xwot devices (weather station, water dispenser, light bulb, door, window)
  * xwot.i2c.adapter - i2c adapters for xwot devices
  * xwot.model - xwot models
  * xwot.cmd - set of xwot commands like xwotc (compiler), xwotd (description builder)
