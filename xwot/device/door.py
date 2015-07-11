@@ -128,7 +128,7 @@ class Handle(XWOTContext, Model):
             'name': name
         }
         self._adapter = adapter
-        self.add_type('xwot-ext:Lock')
+        self.add_type('xwot-ext:Handle')
         self.add_link('door')
 
     @property
