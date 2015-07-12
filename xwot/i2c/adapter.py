@@ -48,9 +48,9 @@ class DoorAdapter(object):
     def close_state(self):
         state = self._adapter.read_byte(self.CMD_READ_CLOSE_STATE)
         if state == 1:
-            return "opened"
-        elif state == 0:
             return "closed"
+        elif state == 0:
+            return "opened"
         elif state == 2:
             return "transition"
         else:
