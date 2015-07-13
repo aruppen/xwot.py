@@ -116,6 +116,8 @@ class Switch(XWOTContext, Model):
 
         self._dic['name'] = str(dic.get('name', self._dic['name']))
 
+        return 200
+
 
 class Sensor(XWOTSensor, Model):
 

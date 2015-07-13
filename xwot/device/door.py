@@ -115,6 +115,8 @@ class Lock(XWOTContext, Model):
 
         self._dic['name'] = str(dic.get('name', self._dic['name']))
 
+        return 200
+
 
 class Handle(XWOTContext, Model):
 
@@ -159,3 +161,5 @@ class Handle(XWOTContext, Model):
             self._adapter.open()
 
         self._dic['name'] = str(dic.get('name', self._dic['name']))
+
+        return 200
