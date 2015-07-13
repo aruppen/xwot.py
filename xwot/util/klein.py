@@ -19,13 +19,13 @@ def make_response(obj, request, default='application/ld+json', status=200):
     if content_type in SERIALIZERS:
         fun_serializer = SERIALIZERS[content_type]
         doc = fun_serializer(obj)
-        request.setHeader(content_type)
+        request.setHeader('Content-Type', content_type)
         request.setResponseCode(status)
         return doc
     else:
         fun_serializer = SERIALIZERS[default]
         doc = fun_serializer(obj)
-        request.setHeader(default)
+        request.setHeader('Content-Type', default)
         request.setResponseCode(status)
         return doc
 
