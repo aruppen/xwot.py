@@ -1,3 +1,10 @@
+# encoding: utf-8
+"""
+@author     Alexander Rüedlinger <a.rueedlinger@gmail.com>
+@date       13.07.2015
+
+"""
+
 SERIALIZERS = {
     'application/json': lambda obj: obj.to_json(),
     'application/xml': lambda obj: obj.to_xml(),
@@ -8,12 +15,9 @@ SERIALIZERS = {
 
 def make_response(obj, request, default='application/ld+json', status=200):
     content_type = request.getHeader('Accept')
-    path = request.uri
 
     if content_type in SERIALIZERS:
         fun_serializer = SERIALIZERS[content_type]
-        if path:
-            obj.resource_path = path
         doc = fun_serializer(obj)
         request.setHeader(content_type)
         request.setResponseCode(status)
