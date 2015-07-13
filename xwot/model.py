@@ -223,7 +223,7 @@ class Model(object):
         if content_type in ['application/json', 'application/ld+json']:
             return self.handle_update(dic)
         elif content_type in ['application/xml']:
-            dic = dic.get([self.__class__.__name__], {})
+            dic = dic.get(self.__class__.__name__, {})
             return self.handle_update(dic)
         else:
             return 400
