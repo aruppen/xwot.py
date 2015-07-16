@@ -229,3 +229,30 @@ class WindowAdapter(object):
             return "opened"
         else:
             return None
+
+
+class ShutterAdapter(object):
+
+    CMD_UP = 0x01
+    CMD_DOWN = 0x02
+
+    CMD_READ_STATE = 0x09  # byte value
+
+    def __init__(self, bus=1, i2c_addr=0x05):
+        self._adapter = Adapter(bus=bus, i2c_addr=i2c_addr)
+
+    def up(self):
+        return self._adapter.write_byte(self.CMD_UP)
+
+    def down(self):
+        return self._adapter.write_byte(self.CMD_DOWN)
+
+    @property
+    def state(self):
+        state = self._adapter.read_byte(self.CMD_READ_STATE)
+        if state == 1:
+            return "up"
+        elif state == 0:
+            return "down"
+        else:
+            return None
