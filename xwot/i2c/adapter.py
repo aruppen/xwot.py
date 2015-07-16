@@ -235,6 +235,7 @@ class ShutterAdapter(object):
 
     CMD_UP = 0x01
     CMD_DOWN = 0x02
+    CMD_STOP = 0x03
 
     CMD_READ_STATE = 0x09  # byte value
 
@@ -247,6 +248,9 @@ class ShutterAdapter(object):
     def down(self):
         return self._adapter.write_byte(self.CMD_DOWN)
 
+    def stop(self):
+        return self._adapter.write_byte(self.CMD_STOP)
+
     @property
     def state(self):
         state = self._adapter.read_byte(self.CMD_READ_STATE)
@@ -254,5 +258,7 @@ class ShutterAdapter(object):
             return "up"
         elif state == 0:
             return "down"
+        elif state == 2:
+            return "transition"
         else:
             return None
