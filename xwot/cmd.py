@@ -18,7 +18,7 @@ def xwotc():
 
     backends = Compiler.BACKENDS.keys()
     parser = argparse.ArgumentParser(description='xwot compiler')
-    parser.add_argument('-p', dest='platform', type=str, default='flask', choices=backends, nargs='?',
+    parser.add_argument('-p', dest='platform', type=str, default='klein', choices=backends, nargs='?',
                         help='platform to use')
 
     parser.add_argument('-o', dest='output_dir', type=str, default='out-app', nargs='?',
