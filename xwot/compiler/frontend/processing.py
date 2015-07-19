@@ -174,7 +174,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'uri': {
                 "@id": self.path() + '/' + node.uri()
             },
-            'name': node.name(),
+            'label': node.name(),
             'sameAs': "http://www.productontology.org/id/Web_resource",
             'additionalType': {
                 '@id': "http://xwot.lexruee.ch/vocab/core#Resource"
@@ -199,7 +199,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'uri': {
                 "@id": self.path() + '/' + node.uri()
             },
-            'name': node.name(),
+            'label': node.name(),
             'sameAs': "http://www.productontology.org/id/Computer_apliance",
             'additionalType': {
                 '@id': "http://xwot.lexruee.ch/vocab/core#Device"
@@ -225,7 +225,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'uri': {
                 "@id": self.path() + '/' + node.uri()
             },
-            'name': node.name(),
+            'label': node.name(),
             'sameAs': "http://www.productontology.org/id/Sensor",
             'additionalType': {
                 '@id': "http://xwot.lexruee.ch/vocab/core#Sensor"
@@ -251,7 +251,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'uri': {
                 "@id": self.path() + '/' + node.uri()
             },
-            'name': node.name(),
+            'label': node.name(),
             'sameAs': "http://www.productontology.org/id/Service",
             'additionalType': {
                 '@id': "http://xwot.lexruee.ch/vocab/core#Service"
@@ -266,7 +266,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'uri': {
                 "@id": self.path() + '/' + node.uri()
             },
-            'name': node.name(),
+            'label': node.name(),
             ("%s" % self.TYPE): 'xwot:Actuator',
             'sameAs': "http://www.productontology.org/id/Actuator",
             'additionalType': {
@@ -292,7 +292,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'uri': {
                 "@id": self.path() + '/' + node.uri()
             },
-            'name': node.name(),
+            'label': node.name(),
             'sameAs': "http://www.productontology.org/id/Automatic_identification_and_data_capture",
             'additionalType': {
                 '@id': "http://xwot.lexruee.ch/vocab/core#Tag"
@@ -318,7 +318,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'uri': {
                 "@id": self.path() + '/' + node.uri()
             },
-            'name': node.name(),
+            'label': node.name(),
             'sameAs': "http://www.productontology.org/id/Context",
             'additionalType': {
                 '@id': "http://xwot.lexruee.ch/vocab/core#Context"
@@ -344,7 +344,7 @@ class JSONLDDescriptionPrinter(Visitor):
             'uri': {
                 "@id": self.path() + '/' + node.uri()
             },
-            'name': node.name(),
+            'label': node.name(),
             'sameAs': "http://www.productontology.org/id/Publish%E2%80%93subscribe_pattern",
             'additionalType': {
                 '@id': "http://xwot.lexruee.ch/vocab/core#Publisher"
@@ -356,7 +356,7 @@ class JSONLDDescriptionPrinter(Visitor):
 
     def visit_device(self, node):
         device = {
-            'name': node.name(),
+            'label': node.name(),
             ("%s" % self.TYPE): 'xwot:Device',
             ("%s" % self.CHILDREN): []
         }
@@ -372,21 +372,21 @@ class JSONLDDescriptionPrinter(Visitor):
 
     def visit_sensor(self, node):
         sensor = {
-            'name': node.name(),
+            'label': node.name(),
             ("%s" % self.TYPE): 'xwot:Sensor'
         }
         self._current.append(sensor)
 
     def visit_actuator(self, node):
         actuator = {
-            'name': node.name(),
+            'label': node.name(),
             ("%s" % self.TYPE): 'xwot:Actuator'
         }
         self._current.append(actuator)
 
     def visit_tag(self, node):
         tag = {
-            'name': node.name(),
+            'label': node.name(),
             ("%s" % self.TYPE): 'xwot:Tag'
         }
         self._current.append(tag)
