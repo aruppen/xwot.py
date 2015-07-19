@@ -1,7 +1,7 @@
 #encoding: utf-8
 """
 @author     Alexander Rüedlinger <a.rueedlinger@gmail.com>
-@date       6.07.2015
+@date       19.07.2015
 
 """
 
@@ -12,12 +12,13 @@ from xwot.model import BaseModel
 
 from xwot.i2c.adapter import WindowAdapter
 from xwot.i2c.adapter import ShutterAdapter
+from xwot.device.window import Handle as WindowHandle
 
 
 class Window(XWOTDevice, BaseModel):
 
     __mutable_props__ = ['name', 'streetAddress', 'roomAddress', 'postalCode', 'addressLocality']
-    __expose__ = __mutable_props__ + ['description', 'handle', 'lock']
+    __expose__ = __mutable_props__ + ['description', 'handle', 'shutter']
 
     def __init__(self, name, street_address, postal_code, address_locality, room_address):
         super(Window, self).__init__()
@@ -31,7 +32,7 @@ class Window(XWOTDevice, BaseModel):
 
         self.add_type('xwot-ext:Window')
         self.add_link('handle')
-        self.add_link('lock')
+        self.add_link('shutter')
 
     @property
     def resource_path(self):
@@ -51,8 +52,8 @@ class Window(XWOTDevice, BaseModel):
         return '/window/handle'
 
     @property
-    def lock(self):
-        return '/window/lock'
+    def shutter(self):
+        return '/window/shutter'
 
     @property
     def streetAddress(self):
@@ -71,24 +72,29 @@ class Window(XWOTDevice, BaseModel):
         return self._dic['roomAddress']
 
 
-class Lock(XWOTContext, Model):
+class Handle(WindowHandle):
 
+    def __init__(self, name, adapter=WindowAdapter()):
+        super(Handle, self).__init__(name=name, adapter=adapter)
+
+
+class Shutter(XWOTContext, Model):
     __mutable_props__ = ['name', 'state']
     __expose__ = __mutable_props__ + ['description', 'window']
 
-    def __init__(self, name, adapter=WindowAdapter()):
-        super(Lock, self).__init__()
+    def __init__(self, name, adapter=ShutterAdapter()):
+        super(Shutter, self).__init__()
 
         self._dic = {
             'name': name
         }
         self._adapter = adapter
-        self.add_type('xwot-ext:Lock')
+        self.add_type('xwot-ext:Shutter')
         self.add_link('window')
 
     @property
     def resource_path(self):
-        return '/window/lock'
+        return '/window/shutter'
 
     @property
     def window(self):
@@ -96,69 +102,22 @@ class Lock(XWOTContext, Model):
 
     @property
     def description(self):
-        return "A lock of this window which can be locked and unlocked."
+        return "A shutter of this window which can be moved up and moved down."
 
     @property
     def state(self):
-        return self._adapter.lock_state
+        return self._adapter.state
 
     @property
     def name(self):
         return self._dic['name']
 
     def handle_update(self, dic):
-        if dic.get('state') == 'locked':
-            self._adapter.lock()
+        if dic.get('state') == 'down':
+            self._adapter.down()
 
-        if dic.get('state') == 'unlocked':
-            self._adapter.unlock()
-
-        self._dic['name'] = str(dic.get('name', self._dic['name']))
-
-        return 200
-
-
-class Handle(XWOTContext, Model):
-
-    __mutable_props__ = ['name', 'state']
-    __expose__ = __mutable_props__ + ['description', 'window']
-
-    def __init__(self, name, adapter=WindowAdapter()):
-        super(Handle, self).__init__()
-
-        self._dic = {
-            'name': name
-        }
-        self._adapter = adapter
-        self.add_type('xwot-ext:Handle')
-        self.add_link('window')
-
-    @property
-    def resource_path(self):
-        return '/window/handle'
-
-    @property
-    def window(self):
-        return '/window'
-
-    @property
-    def description(self):
-        return "A handle of this window which can be closed and opened."
-
-    @property
-    def state(self):
-        return self._adapter.close_state
-
-    @property
-    def name(self):
-        return self._dic['name']
-
-    def handle_update(self, dic):
-        if dic.get('state') == 'closed':
-            self._adapter.close()
-
-        if dic.get('state') == 'opened':
-            self._adapter.open()
+        if dic.get('state') == 'up':
+            self._adapter.up()
 
         self._dic['name'] = str(dic.get('name', self._dic['name']))
 
