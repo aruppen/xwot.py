@@ -10,6 +10,9 @@ from xwot.model import Device as XWOTDevice
 from xwot.model import Model
 from xwot.model import BaseModel
 
+from xwot.i2c.adapter import WindowAdapter
+from xwot.i2c.adapter import ShutterAdapter
+
 
 class Window(XWOTDevice, BaseModel):
 
@@ -66,9 +69,6 @@ class Window(XWOTDevice, BaseModel):
     @property
     def roomAddress(self):
         return self._dic['roomAddress']
-
-
-from xwot.i2c.adapter import WindowAdapter
 
 
 class Lock(XWOTContext, Model):
@@ -159,6 +159,52 @@ class Handle(XWOTContext, Model):
 
         if dic.get('state') == 'opened':
             self._adapter.open()
+
+        self._dic['name'] = str(dic.get('name', self._dic['name']))
+
+        return 200
+
+
+class Shutter(XWOTContext, Model):
+    __mutable_props__ = ['name', 'state']
+    __expose__ = __mutable_props__ + ['description', 'window']
+
+    def __init__(self, name, adapter=ShutterAdapter()):
+        super(Shutter, self).__init__()
+
+        self._dic = {
+            'name': name
+        }
+        self._adapter = adapter
+        self.add_type('xwot-ext:Shutter')
+        self.add_link('window')
+
+    @property
+    def resource_path(self):
+        return '/window/shutter'
+
+    @property
+    def window(self):
+        return '/window'
+
+    @property
+    def description(self):
+        return "A shutter of this window which can be moved up and moved down."
+
+    @property
+    def state(self):
+        return self._adapter.state
+
+    @property
+    def name(self):
+        return self._dic['name']
+
+    def handle_update(self, dic):
+        if dic.get('state') == 'down':
+            self._adapter.down()
+
+        if dic.get('state') == 'up':
+            self._adapter.up()
 
         self._dic['name'] = str(dic.get('name', self._dic['name']))
 
