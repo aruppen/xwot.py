@@ -171,7 +171,7 @@ def create_sensors():
         'color': Sensor(id='color', name='Color sensor', unit='Kelvin', symbol='k', measures='Temperature',
                         description='A color sensor of this weather station.',
                         adapter=adapter, adapter_measurement_fun=lambda a: a.color_temperature,
-                        type_iri='xwot-ext:TemperatureSensor')
+                        type_iri='xwot-ext:ColorSensor')
     }
 
     return _sensors
