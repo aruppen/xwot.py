@@ -200,7 +200,7 @@ class JSONLDDescriptionPrinter(Visitor):
                 "@id": self.path() + '/' + node.uri()
             },
             'label': node.name(),
-            'sameAs': "http://www.productontology.org/id/Computer_apliance",
+            'sameAs': "http://www.productontology.org/id/Computer_appliance",
             'additionalType': {
                 '@id': "http://xwot.lexruee.ch/vocab/core#Device"
             },
