@@ -102,7 +102,7 @@ class Shutter(XWOTContext, Model):
 
     @property
     def description(self):
-        return "A shutter of this window which can be moved up and moved down."
+        return "A shutter window which can be moved up and moved down."
 
     @property
     def state(self):
