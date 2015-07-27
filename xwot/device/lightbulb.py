@@ -93,7 +93,7 @@ class Switch(XWOTContext, Model):
 
     @property
     def description(self):
-        return "A switch to turn off or on this light bulb."
+        return "A light switch to turn off or on."
 
     @property
     def lightbulb(self):
