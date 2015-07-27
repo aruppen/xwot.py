@@ -96,7 +96,7 @@ class Valve(XWOTContext, Model):
 
     @property
     def description(self):
-        return "A valve that can be used for opening or closing the water supply of this water dispenser."
+        return "A valve that can be opened or closed. It controls the water supply of this water dispenser."
 
     @property
     def state(self):
