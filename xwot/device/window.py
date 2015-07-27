@@ -96,7 +96,7 @@ class Lock(XWOTContext, Model):
 
     @property
     def description(self):
-        return "A lock of this window which can be locked and unlocked."
+        return "A window lock which can be locked and unlocked."
 
     @property
     def state(self):
@@ -143,7 +143,7 @@ class Handle(XWOTContext, Model):
 
     @property
     def description(self):
-        return "A handle of this window which can be closed and opened."
+        return "A window handle which can be closed and opened."
 
     @property
     def state(self):
