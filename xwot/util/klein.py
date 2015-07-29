@@ -17,7 +17,7 @@ SERIALIZERS = {
     'application/ld+json': lambda obj: obj.to_jsonld()
 }
 
-
+# TODO: fix bug
 def cors(origin='*', methods=None, max_age=2520, headers=None):
     if methods is not None:
         methods = ', '.join(sorted(x.upper() for x in methods))
