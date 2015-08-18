@@ -262,3 +262,65 @@ class ShutterAdapter(object):
             return "transition"
         else:
             return None
+
+
+class GPSAdapter(object):
+    CMD_READ_GPS_STATE = 0x01  # byte value
+    CMD_READ_LONGITUDE = 0x02  # float value
+    CMD_READ_LATITUDE = 0x03  # float value
+    CMD_READ_ALTITUDE = 0x04  # float value
+
+    BUFFER_LENGTH = 10
+
+    def __init__(self, bus=1, i2c_addr=0x05):
+        self._adapter = Adapter(bus=bus, i2c_addr=i2c_addr)
+        self._buffer = {
+        'lat': [0] * self.BUFFER_LENGTH,
+        'lng': [0] * self.BUFFER_LENGTH,
+        'alt': [0] * self.BUFFER_LENGTH
+        }
+        self._lat_index = 0
+        self._lng_index = 0
+        self._alt_index = 0
+        self._state = False
+
+    def _add_lat(self, value):
+        if value is not None:
+            self._lat_index = (self._lat_index + 1) % self.BUFFER_LENGTH
+            self._buffer['lat'][self._lat_index] = value
+
+    def _add_lng(self, value):
+        if value is not None:
+            self._lng_index = (self._lng_index + 1) % self.BUFFER_LENGTH
+            self._buffer['lng'][self._lng_index] = value
+
+    def _add_alt(self, value):
+        if value is not None:
+            self._alt_index = (self._alt_index + 1) % self.BUFFER_LENGTH
+            self._buffer['alt'][self._alt_index] = value
+
+    @property
+    def state(self):
+        self._state = self._adapter.read_byte(self.CMD_READ_GPS_STATE)
+        if self._state:
+            return True
+        else:
+            return False
+
+    @property
+    def longitude(self):
+        value = self._adapter.read_float(self.CMD_READ_LONGITUDE)
+        self._add_lng(value)
+        return self._buffer['lng'][self._lng_index]
+
+    @property
+    def latitude(self):
+        value = self._adapter.read_float(self.CMD_READ_LATITUDE)
+        self._add_lat(value)
+        return self._buffer['lat'][self._lat_index]
+
+    @property
+    def altitude(self):
+        value = self._adapter.read_float(self.CMD_READ_ALTITUDE)
+        self._add_alt(value)
+        return self._buffer['alt'][self._alt_index]
