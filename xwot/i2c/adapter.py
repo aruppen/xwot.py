@@ -265,6 +265,7 @@ class ShutterAdapter(object):
 
 
 class GPSAdapter(object):
+
     CMD_READ_GPS_STATE = 0x01  # byte value
     CMD_READ_LONGITUDE = 0x02  # float value
     CMD_READ_LATITUDE = 0x03  # float value
@@ -282,7 +283,7 @@ class GPSAdapter(object):
         self._lat_index = 0
         self._lng_index = 0
         self._alt_index = 0
-        self._state = False
+        self._found = False
 
     def _add_lat(self, value):
         if value is not None:
@@ -301,11 +302,18 @@ class GPSAdapter(object):
 
     @property
     def state(self):
-        self._state = self._adapter.read_byte(self.CMD_READ_GPS_STATE)
-        if self._state:
+        return self._found_gps()
+
+    def _found_gps(self):
+        _state = self._adapter.read_byte(self.CMD_READ_GPS_STATE)
+        if _state:
             return True
         else:
             return False
+
+    @property
+    def found(self):
+        return self._found_gps()
 
     @property
     def longitude(self):
