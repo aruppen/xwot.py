@@ -6,7 +6,6 @@
 """
 
 from __future__ import absolute_import
-from functools import wraps
 
 __all__ = ['cors', 'make_response']
 
@@ -17,8 +16,8 @@ SERIALIZERS = {
     'application/ld+json': lambda obj: obj.to_jsonld()
 }
 
-# TODO: fix bug
-def cors(origin='*', methods=None, max_age=2520, headers=None):
+
+def cors(request, origin='*', methods=None, max_age=2520, headers=None):
     if methods is not None:
         methods = ', '.join(sorted(x.upper() for x in methods))
     else:
@@ -29,19 +28,10 @@ def cors(origin='*', methods=None, max_age=2520, headers=None):
     else:
         headers = 'x-prototype-version,x-requested-with'
 
-    def deco(f):
-        def _call(f, *_args, **_kwargs):
-            return f(*_args, **_kwargs)
-
-        def _f(request, *a, **kw):
-            request.setHeader('Access-Control-Allow-Origin', origin)
-            request.setHeader('Access-Control-Allow-Methods', methods)
-            request.setHeader('Access-Control-Allow-Headers', headers)
-            request.setHeader('Access-Control-Max-Age', max_age)
-            return _call(f, request, *a, **kw)
-        return _f
-
-    return deco
+    request.setHeader('Access-Control-Allow-Origin', origin)
+    request.setHeader('Access-Control-Allow-Methods', methods)
+    request.setHeader('Access-Control-Allow-Headers', headers)
+    request.setHeader('Access-Control-Max-Age', max_age)
 
 
 def make_response(obj, request, default='application/ld+json', status=200):
@@ -59,5 +49,3 @@ def make_response(obj, request, default='application/ld+json', status=200):
         request.setHeader('Content-Type', default)
         request.setResponseCode(status)
         return doc
-
-
