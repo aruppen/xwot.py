@@ -70,9 +70,9 @@ class GPSWeatherStation(WeatherStation):
     __expose__ = __mutable_props__ + ['description', 'sensors', 'gps', 'streetAddress', 'roomAddress', 'postalCode',
                                       'addressLocality']
 
-    def __init__(self):
-        super(GPSWeatherStation, self).__init__(name='GPS Weather Station', street_address='', room_address='Unknown',
-                                                postal_code='', address_locality='')
+    def __init__(self, room_address='Unknown'):
+        super(GPSWeatherStation, self).__init__(name='GPS Weather Station', street_address='',
+                                                room_address=room_address, postal_code='', address_locality='')
         self.add_link('gps')
 
     @property
