@@ -43,10 +43,12 @@ CONTENT_TYPES = {
 
 
 def deserialize(data, content_type):
-    print(content_type)
-    print(data)
-    if content_type in CONTENT_TYPES and data:
-        deserializer = CONTENT_TYPES[content_type]
-        res = deserializer(data)
-        return res
-    return {}
+    try:
+        if content_type in CONTENT_TYPES and data:
+            deserializer = CONTENT_TYPES[content_type]
+            res = deserializer(data)
+            return res
+        else:
+            return {}
+    except:
+        return {}
