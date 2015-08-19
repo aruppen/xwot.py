@@ -225,8 +225,7 @@ from xwot.i2c.adapter import GPSAdapter
 
 class GPS(XWOTDevice, Model):
 
-    __mutable_props__ = ['name', 'state']
-    __expose__ = ['name', 'state', 'latitude', 'longitude', 'elevation' 'description', 'back_link']
+    __expose__ = ['name', 'description', 'state', 'latitude', 'longitude', 'elevation' 'description', 'back_link']
 
     def __init__(self):
         super(GPS, self).__init__()
