@@ -12,6 +12,8 @@ from xwot.model import Sensor as XWOTSensor
 from xwot.model import Collection
 from xwot.model import CollectionMember
 
+__all__ = ['WeatherStation', 'GPSWeatherStation', 'SensorCollection', 'GPS']
+
 
 class WeatherStation(XWOTDevice, BaseModel):
     __mutable_props__ = ['name', 'streetAddress', 'roomAddress', 'postalCode', 'addressLocality']
@@ -70,9 +72,9 @@ class GPSWeatherStation(WeatherStation):
     __expose__ = __mutable_props__ + ['description', 'sensors', 'gps', 'streetAddress', 'roomAddress', 'postalCode',
                                       'addressLocality']
 
-    def __init__(self, room_address='Unknown'):
-        super(GPSWeatherStation, self).__init__(name='GPS Weather Station', street_address='',
-                                                room_address=room_address, postal_code='', address_locality='')
+    def __init__(self, name='GPS Weather Station', room_address='Unknown'):
+        super(GPSWeatherStation, self).__init__(name=name, room_address=room_address, street_address='',
+                                                postal_code='', address_locality='')
         self.add_link('gps')
 
     @property
