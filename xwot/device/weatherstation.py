@@ -64,6 +64,22 @@ class WeatherStation(XWOTDevice, BaseModel):
         return self._dic['roomAddress']
 
 
+class GPSWeatherStation(WeatherStation):
+
+    __mutable_props__ = ['name', 'roomAddress']
+    __expose__ = __mutable_props__ + ['description', 'sensors', 'gps', 'streetAddress', 'roomAddress', 'postalCode',
+                                      'addressLocality']
+
+    def __init__(self):
+        super(GPSWeatherStation, self).__init__(name='GPS Weather Station', street_address='', room_address='Unknown',
+                                                postal_code='', address_locality='')
+        self.add_link('gps')
+
+    @property
+    def gps(self):
+        return '/weatherstation/gps'
+
+
 class Sensor(XWOTSensor, CollectionMember, Model):
     __expose__ = ['name', 'unit', 'measures', 'description', 'measurement', 'symbol', 'waterdispenser',
                   'back_link1', 'back_link2']
@@ -201,3 +217,56 @@ class SensorCollection(Collection, Model):
     def handle_update(self, dic):
         pass
 
+
+from xwot.i2c.adapter import GPSAdapter
+
+
+class GPS(XWOTDevice, Model):
+
+    __mutable_props__ = ['name', 'state']
+    __expose__ = ['name', 'state', 'latitude', 'longitude', 'elevation' 'description', 'back_link']
+
+    def __init__(self):
+        super(GPS, self).__init__()
+        self._adapter = GPSAdapter()
+        self.add_type('schema:GeoCoordinates')
+        self.add_link('back_link')
+
+    @property
+    def resource_path(self):
+        return '/weatherstation/gps'
+
+    @property
+    def state(self):
+        if self._adapter.found:
+            return 'found'
+        else:
+            return 'lost'
+
+    @property
+    def latitude(self):
+        return self._adapter.latitude
+
+    @property
+    def longitude(self):
+        return self._adapter.longitude
+
+    @property
+    def elevation(self):
+        return self._adapter.elevation
+
+    @property
+    def back_link(self):
+        return '/weatherstation'
+
+    @property
+    def description(self):
+        return "A GPS navigation device is a device that accurately calculates geographical location " \
+               "by receiving information from GPS satellites."
+
+    @property
+    def name(self):
+        return 'GPS device'
+
+    def handle_update(self, dic):
+        pass

@@ -269,7 +269,7 @@ class GPSAdapter(object):
     CMD_READ_GPS_STATE = 0x01  # byte value
     CMD_READ_LONGITUDE = 0x02  # float value
     CMD_READ_LATITUDE = 0x03  # float value
-    CMD_READ_ALTITUDE = 0x04  # float value
+    CMD_READ_ELEVATION = 0x04  # float value
 
     BUFFER_LENGTH = 10
 
@@ -286,12 +286,12 @@ class GPSAdapter(object):
         self._found = False
 
     def _add_lat(self, value):
-        if value is not None:
+        if value is not None and value != -1:
             self._lat_index = (self._lat_index + 1) % self.BUFFER_LENGTH
             self._buffer['lat'][self._lat_index] = value
 
     def _add_lng(self, value):
-        if value is not None:
+        if value is not None and value != -1:
             self._lng_index = (self._lng_index + 1) % self.BUFFER_LENGTH
             self._buffer['lng'][self._lng_index] = value
 
@@ -328,7 +328,7 @@ class GPSAdapter(object):
         return self._buffer['lat'][self._lat_index]
 
     @property
-    def altitude(self):
-        value = self._adapter.read_float(self.CMD_READ_ALTITUDE)
+    def elevation(self):
+        value = self._adapter.read_float(self.CMD_READ_ELEVATION)
         self._add_alt(value)
         return self._buffer['alt'][self._alt_index]
