@@ -65,6 +65,26 @@ class WeatherStation(XWOTDevice, BaseModel):
     def roomAddress(self):
         return self._dic['roomAddress']
 
+    @streetAddress.setter
+    def streetAddress(self, v):
+        self._dic['streetAddress'] = v
+
+    @postalCode.setter
+    def postalCode(self, v):
+        self._dic['postalCode'] = v
+
+    @addressLocality.setter
+    def addressLocality(self, v):
+        self._dic['addressLocality'] = v
+
+    @roomAddress.setter
+    def roomAddress(self, v):
+        self._dic['roomAddress'] = v
+
+    @property
+    def sensors(self):
+        return '/weatherstation/sensors'
+
 
 class GPSWeatherStation(WeatherStation):
 
