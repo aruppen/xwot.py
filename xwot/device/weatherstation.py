@@ -159,7 +159,10 @@ class Sensor(XWOTSensor, CollectionMember, Model):
     @property
     def measurement(self):
         val = self._adapter_measurement_fun(self._adapter)
-        return round(val, 2)
+        if val is not None:
+            return round(val, 2)
+        else:
+            return val
 
     def handle_update(self, dic):
         pass
