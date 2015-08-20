@@ -268,6 +268,10 @@ class GPS(XWOTDevice, Model):
             return 'lost'
 
     @property
+    def found(self):
+        return self._adapter.founds
+
+    @property
     def latitude(self):
         return self._adapter.latitude
 
