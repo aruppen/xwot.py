@@ -109,3 +109,15 @@ optional arguments:
 ```
 xwotd flask smart-room-example_enhanced.xwot description.jsonld
 ```
+
+
+## License & Copyright
+
+```
+xwot.py  - Python tools for the extended Web of Things
+Copyright (C) 2015  Alexander Rüedlinger
+Copyright (C) 2015  Andreas Ruppen
+
+xwot.py is licensed under the GPL 3.0.
+
+```
