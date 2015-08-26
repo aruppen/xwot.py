@@ -20,7 +20,7 @@ It features among others some handy tools and some example xwot devices:
 
 ### Dependencies
 ```
-sudo apt-get install python-pip python-dev build-essential libffi-dev
+sudo apt-get install python-pip python-dev build-essential libffi-dev python-smbus i2c-tools libi2c-dev
 ```
 
 ### from source
