@@ -1,6 +1,6 @@
-# xWoT.py
+# xwot.py
 
-xWoT.py is a python package for creating xWoT web applications based on the [xWoT meta-model](http://diuf.unifr.ch/drupal/sites/diuf.unifr.ch.drupal.softeng/files/file/publications/ruppena/meta-model.pdf)
+xwot.py is a python package for creating xWoT web applications based on the [xWoT meta-model](http://diuf.unifr.ch/drupal/sites/diuf.unifr.ch.drupal.softeng/files/file/publications/ruppena/meta-model.pdf)
 introducded by Andreas Ruppen and Jacques Pasquier.
 
 For more details visit the website of the [Software Engineering Research Group / University of Fribourg](https://diuf.unifr.ch/drupal/softeng/).
