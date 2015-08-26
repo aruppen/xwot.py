@@ -37,8 +37,8 @@ setup(
     description="xwot",
     author="Alexander Rüedlinger",
     author_email="a.rueedlinger@gmail.com",
-    license="MIT",
-    classifiers=[],
+    license="GPLv3",
+    classifiers=['License :: OSI Approved :: GNU General Public License v3 (GPLv3)'],
     ext_modules=[],
     long_description="""\
 xwot.py
