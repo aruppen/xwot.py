@@ -1,11 +1,11 @@
 # xwot.py
 
-xwot.py is a python package for creating xWoT web applications based on the [xWoT meta-model](http://diuf.unifr.ch/drupal/sites/diuf.unifr.ch.drupal.softeng/files/file/publications/ruppena/meta-model.pdf)
-introducded by Andreas Ruppen and Jacques Pasquier.
+xwot.py is a collection of Pyhton tools developing xWoT web applications based on the [xWoT meta-model](http://diuf.unifr.ch/drupal/sites/diuf.unifr.ch.drupal.softeng/files/file/publications/ruppena/meta-model.pdf)
+introduced by Andreas Ruppen and Jacques Pasquier.
 
 For more details visit the website of the [Software Engineering Research Group / University of Fribourg](https://diuf.unifr.ch/drupal/softeng/).
 
-It features among others some handy tools and some example xwot devices:
+Content:
  * xwot.compiler - compiler for generating a skeleton xWoT web application based on the xWoT meta-model
    * xwot.compiler.backend - different backends
    * xwot.compiler.frontend - visitor, parser, description builder and processing tools
