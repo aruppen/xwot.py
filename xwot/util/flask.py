@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-__author__ = 'Alexander Rüedlinger'
 
 from __future__ import absolute_import
 
@@ -26,6 +25,7 @@ from datetime import timedelta
 from flask import request, current_app
 from functools import update_wrapper
 
+__author__ = 'Alexander Rüedlinger'
 __all__ = ['cors', 'make_response']
 
 
