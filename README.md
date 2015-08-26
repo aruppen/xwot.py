@@ -1,6 +1,6 @@
 # xwot.py
 
-xwot.py is a collection of Pyhton tools developing xWoT web applications based on the [xWoT meta-model](http://diuf.unifr.ch/drupal/sites/diuf.unifr.ch.drupal.softeng/files/file/publications/ruppena/meta-model.pdf)
+xwot.py is a collection of Python tools for developing xWoT web applications based on the [xWoT meta-model](http://diuf.unifr.ch/drupal/sites/diuf.unifr.ch.drupal.softeng/files/file/publications/ruppena/meta-model.pdf)
 introduced by Andreas Ruppen and Jacques Pasquier.
 
 For more details visit the website of the [Software Engineering Research Group / University of Fribourg](https://diuf.unifr.ch/drupal/softeng/).
