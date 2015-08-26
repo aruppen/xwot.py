@@ -18,6 +18,11 @@ It features among others some handy tools and some example xwot devices:
 
 ## Installation
 
+### Dependencies
+```
+sudo apt-get install python-pip python-dev build-essential libffi-dev
+```
+
 ### from source
 ```
 git clone https://github.com/lexruee/xwot.py
