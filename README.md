@@ -39,7 +39,7 @@ for different programming platforms such as:
  * python
  * nodejs
 
-Currently there are four basic backends implemented for:
+Currently there are four basic backends available:
 
  * [sinatra / ruby](http://www.sinatrarb.com/)
  * [flask / python](http://flask.pocoo.org/)
