@@ -27,9 +27,7 @@ sudo python setup.py install
 
 ### pip installer
 
-```
-sudo pip install xwot
-```
+TODO
 
 ## xWoT Commands
 
