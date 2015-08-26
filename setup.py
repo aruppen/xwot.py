@@ -24,7 +24,7 @@ from setuptools import setup, find_packages
 VERSION = "1.0.1"
 
 setup(
-    name="xwot",
+    name="xwot-py",
     packages=find_packages('.', exclude=["tests", "test"]),
     entry_points={
         'console_scripts': [
@@ -41,9 +41,10 @@ setup(
     classifiers=[],
     ext_modules=[],
     long_description="""\
-xWoT
+xwot.py
 -------------------------------------
 
+xwot.py - Python tools for the extended Web of Things
 
 """
 )
