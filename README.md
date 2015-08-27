@@ -19,6 +19,15 @@ Content:
 ## Installation
 
 ### Dependencies
+
+* build-essential
+* libffi-dev
+* python-dev
+* python-pip
+* python-smbus
+* i2c-tools
+* libi2c-dev
+
 ```
 sudo apt-get install python-pip python-dev build-essential libffi-dev python-smbus i2c-tools libi2c-dev
 ```
