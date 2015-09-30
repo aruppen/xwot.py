@@ -21,6 +21,8 @@ __author__ = 'Alexander Rüedlinger'
 
 import argparse
 from xwot.compiler import Compiler
+import sqlite3
+import os
 
 
 backends = Compiler.BACKENDS.keys()
@@ -36,3 +38,12 @@ parser.add_argument(dest='xwot_file', metavar='f', type=str,
 args = parser.parse_args()
 compiler = Compiler(input_file=args.xwot_file, output_dir=args.output_dir, platform=args.platform)
 compiler.compile()
+
+conn = sqlite3.connect(os.path.join(args.output_dir,'clients.db'))
+conn.execute('CREATE TABLE if not exists "Resource" (id integer primary key autoincrement, name text);')
+conn.execute('CREATE TABLE if not exists "SensorEvent" (id integer primary key autoincrement, data text, subscriberid int);')
+conn.execute('CREATE TABLE if not exists "Subscriber" (id integer primary key autoincrement, uri text, method text, accept text, resourceid int);')
+conn.commit()
+conn.close()
+
+os.mkdir(os.path.join(args.output_dir,'static'), 0755)
