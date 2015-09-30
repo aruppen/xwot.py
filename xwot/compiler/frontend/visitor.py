@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 __author__ = 'Alexander Rüedlinger'
+import copy
 
 
 class Visitable:
@@ -52,6 +53,9 @@ class Visitor(object):
         raise NotImplementedError
 
     def visit_publisher_resource(self, node):
+        raise NotImplementedError
+
+    def visit_publisher_client_resource(self, node):
         raise NotImplementedError
 
     def visit_device(self, node):
@@ -154,6 +158,17 @@ class BaseVisitor(Visitor):
         self.handle_publisher_resource(node)
         self.after_resource(node)
 
+        node = copy.deepcopy(node)
+        nodename = 'ClientResource'.join(node._name.rsplit('Resource', 1))
+        node._name = nodename
+        node._fullpath = node._fullpath+'/<clientid>'
+        self._nodes.append(node)
+        self.before_resource(node)
+        self.handle_publisher_client_resource(node)
+        self.after_resource(node)
+
+
+
     def visit_device(self, node):
         pass
 
@@ -193,3 +208,5 @@ class BaseVisitor(Visitor):
     def handle_publisher_resource(self, node):
         pass
 
+    def handle_publisher_client_resource(self, node):
+        pass

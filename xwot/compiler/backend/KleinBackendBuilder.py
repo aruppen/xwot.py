@@ -17,10 +17,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+
 __author__ = 'Alexander Rüedlinger'
 
 from helper import OutputPrinter
 from xwot.compiler.frontend import visitor
+
+
 
 
 class KleinBackendBuilder(visitor.BaseVisitor):
@@ -29,7 +32,7 @@ class KleinBackendBuilder(visitor.BaseVisitor):
         self._out = OutputPrinter()
 
     def _create_symbol_name(self, path):
-        return path.replace("/", "_").replace("-", "_").replace(".", "_")
+        return path.replace("/", "_").replace("-", "_").replace(".", "_").replace('<', '').replace('>', '')
 
     def before(self):
         self._out.code([
@@ -63,6 +66,8 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                            'app = Klein()',
                            ], ["xwot_app", "__init__"])
 
+
+
     def after(self):
         self._out.code([
                            "import %s" % node.name() for node in self._nodes
@@ -77,6 +82,10 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                            '',
                            'import xwot_app',
                            'from xwot_app import app',
+                           'from xwot.util.klein import make_response',
+                           'from xwot.util import deserialize',
+                           'from xwot.util.klein import cors',
+                           'from twisted.internet import task, reactor',
                            '',
                            'import yadp',
                            'yadp.debug()',
@@ -109,6 +118,11 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                            '#',
                            '',
                            'from xwot_app import app',
+                            'from xwot_app import app',
+                            'from xwot.util.klein import make_response',
+                            'from xwot.util import deserialize',
+                            'from xwot.util.klein import cors',
+                            'from twisted.internet import task, reactor',
                            ''
                        ], ["xwot_app", node.name()])
 
@@ -126,6 +140,7 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                            '',
                            'import xwot_app',
                            'from xwot_app import app',
+                           'from twisted.web.static import File',
                            '',
                            '',
                            "@app.route('/')",
@@ -133,11 +148,21 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                            self._out.indent([
                                "request.setHeader('Content-Type', 'application/ld+json')",
                                'return xwot_app.jsonld_description_str'
-                           ])
+                           ]),
+                           '',
+                           '',
+                           "@app.route('/static/', branch=True)",
+                           "def static_files(request):",
+                           self._out.indent([
+                            'return File("./static")'
+                            ]),
+                           '',
+                           '',
+
                        ], ["xwot_app", node.name()])
 
     def handle_resource(self, node):
-        for method in ['GET', 'PUT']:
+        for method in ['GET', 'PUT', 'OPTIONS']:
             self._out.code([
                                '#',
                                "# %s '%s'" % (method.upper(), node.fullpath()),
@@ -145,12 +170,14 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
                                "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
+                                   "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
+                                   "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
                            ], ["xwot_app", node.name()])
 
     def handle_device_resource(self, node):
-        for method in ['GET', 'PUT']:
+        for method in ['GET', 'PUT', 'OPTIONS']:
             self._out.code([
                                '#',
                                "# %s '%s'" % (method.upper(), node.fullpath()),
@@ -158,12 +185,14 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
                                "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
+                                   "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
+                                   "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
                            ], ["xwot_app", node.name()])
 
     def handle_sensor_resource(self, node):
-        for method in ['GET']:
+        for method in ['GET', 'OPTIONS']:
             self._out.code([
                                '#',
                                "# %s '%s'" % (method.upper(), node.fullpath()),
@@ -171,12 +200,14 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
                                "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
+                                   "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
+                                   "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
                            ], ["xwot_app", node.name()])
 
     def handle_tag_resource(self, node):
-        for method in ['GET']:
+        for method in ['GET', 'OPTIONS']:
             self._out.code([
                                '#',
                                "# %s '%s'" % (method.upper(), node.fullpath()),
@@ -184,12 +215,14 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
                                "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
+                                   "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
+                                   "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
                            ], ["xwot_app", node.name()])
 
     def handle_context_resource(self, node):
-        for method in ['GET', 'PUT']:
+        for method in ['GET', 'PUT', 'OPTIONS']:
             self._out.code([
                                '#',
                                "# %s '%s'" % (method.upper(), node.fullpath()),
@@ -197,12 +230,14 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
                                "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
+                                   "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
+                                   "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
                            ], ["xwot_app", node.name()])
 
     def handle_service_resource(self, node):
-        for method in ['GET', 'POST', 'PUT', 'DELETE']:
+        for method in ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']:
             self._out.code([
                                '#',
                                "# %s '%s'" % (method.upper(), node.fullpath()),
@@ -210,12 +245,14 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
                                "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
+                                   "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
+                                   "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
                            ], ["xwot_app", node.name()])
 
     def handle_actuator_resource(self, node):
-        for method in ['PUT']:
+        for method in ['PUT', 'OPTIONS']:
             self._out.code([
                                '#',
                                "# %s '%s'" % (method.upper(), node.fullpath()),
@@ -223,22 +260,222 @@ class KleinBackendBuilder(visitor.BaseVisitor):
                                "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
                                "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
+                                   "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
+                                   "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
                            ], ["xwot_app", node.name()])
 
     def handle_publisher_resource(self, node):
-        for method in ['GET', 'POST']:
-            self._out.code([
-                               '#',
-                               "# %s '%s'" % (method.upper(), node.fullpath()),
-                               '#',
-                               "@app.route('%s', methods=['%s'])" % (node.fullpath(), method),
-                               "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), method),
-                               self._out.indent([
-                                   'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
-                               ])
-                           ], ["xwot_app", node.name()])
+        self._out.code([
+            'import json',
+            'import logging',
+            'from templates.tpl_client import ClientElement',
+            'from templates.tpl_clients import ClientsElement',
+            'from twisted.web.template import flattenString',
+            'from autobahn.twisted.resource import WebSocketResource, HTTPChannelHixie76Aware',
+            'from xwot.util.WebSocketSupport import xWoTStreamerProtocol',
+            'from xwot.util.WebSocketSupport import xWoTBroadcastFactory',
+            'from  xwot.util.SubscriberDB import SubscriberDB',
+            'from xwot.util.SampleHardware import SampleHardware'
+        ], ["xwot_app", node.name()])
+
+        self._out.code([
+            '#',
+           "# %s '%s'" % ('GET', node.fullpath()),
+           '#',
+           "@app.route('%s', methods=['%s'])" % (node.fullpath(), 'GET'),
+           "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), 'GET'),
+            self._out.indent([
+                    "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
+                    "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
+                    'dbclient = SubscriberDB.getAllClients()',
+                    'logging.debug(request.requestHeaders)',
+                    'accept_type = request.requestHeaders.getRawHeaders("Accept")[0]',
+                    'clients = ""',
+                    'if not None:',
+                    '    if accept_type == "application/json":',
+                    '        request.setHeader("Content-Type", "application/json; charset=UTF-8")',
+                    '        request.setResponseCode(200)',
+                    '        for cl in dbclient:',
+                    '            clients += str(\'{"id":"%s", "uri":"%s", "method":"%s", "accept":"%s"}, \' % (cl[0], cl[1], cl[2], cl[3]))',
+                    "        return str('{\"clients\": {\"client\":[%s]}}' % (clients[:-2]))",
+                    '    elif accept_type == "application/xml":',
+                    '        request.setHeader("Content-Type", "application/xml; charset=UTF-8")',
+                    '        request.setResponseCode(200)',
+                    '        for cl in dbclient:',
+                    "            clients += str('<client><id>%s</id><uri>%s</uri><method>%s</method><accept>%s</accept></client> ' % (cl[0], cl[1], cl[2], cl[3]))",
+                    "        return str('<clients>%s</clients>' % (clients))",
+                    '    else:',
+                    '        request.write("<!DOCTYPE html>\\n")',
+                    '        flattenString(request, ClientsElement(dbclient)).addCallback(request.write)',
+                    '        request.finish()'
+            ])
+        ], ["xwot_app", node.name()])
+
+        self._out.code([
+            '#',
+           "# %s '%s'" % ('POST', node.fullpath()),
+           '#',
+           "@app.route('%s', methods=['%s'])" % (node.fullpath(), 'POST'),
+           "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), 'POST'),
+            self._out.indent([
+                    "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
+                    "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
+                    'json_data = json.loads(request.content.getvalue())',
+                    'logging.debug(json_data)',
+                    'logging.debug(request.requestHeaders)',
+                    'accept_type = request.requestHeaders.getRawHeaders("Accept")[0]',
+                    "lastrowid = SubscriberDB.insertClient(json_data['uri'], json_data['method'], json_data['accept'], '1')",
+                    'if not None:',
+                    '    if accept_type == "application/json":',
+                    '        request.setHeader("Content-Type", "application/json; charset=UTF-8")',
+                    '        request.setResponseCode(200)',
+                    "        return str('{\"id\":\"%s\", \"uri\":\"%s\", \"method\":\"%s\", \"accept\":\"%s\"}' % (lastrowid, json_data['uri'], json_data['method'], json_data['accept']))",
+                    '    elif accept_type == "application/xml":',
+                    '        request.setHeader("Content-Type", "application/xml; charset=UTF-8")',
+                    '        request.setResponseCode(200)',
+                    "        return str('<client><id>%s</id><uri>%s</uri><method>%s</method><accept>%s</accept></client>' % (lastrowid, json_data['uri'], json_data['method'], json_data['accept']))",
+                    '    else:',
+                    '        request.write("<!DOCTYPE html>\\n")',
+                    "        flattenString(request, ClientElement(lastrowid, json_data['uri'], json_data['method'], json_data['accept'], '')).addCallback(request.write)",
+                    '        request.finish()'
+            ])
+        ], ["xwot_app", node.name()])
+
+        self._out.code([
+            '#',
+           "# %s '%s'" % ('WS', node.fullpath()),
+           '#',
+           "@app.route('%s/', branch=True)" % (node.fullpath()),
+           "def handle%s_ws(request):" % (self._create_symbol_name(node.fullpath())),
+            self._out.indent([
+                'ServerFactory = xWoTBroadcastFactory',
+                "shutter = SampleHardware()",
+                'factory = ServerFactory("ws://localhost:5000/", shutter, debug = False,  debugCodePaths = False)',
+                'factory.protocol = xWoTStreamerProtocol',
+                'factory.setProtocolOptions(allowHixie76 = True)',
+                'return WebSocketResource(factory)'
+            ])
+        ], ["xwot_app", node.name()])
+        self._out.code([
+            '#',
+            "# %s '%s'" % ('OPTIONS', node.fullpath()),
+            '#',
+            "@app.route('%s', methods=['%s'])" % (node.fullpath(), 'OPTIONS'),
+            "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), 'OPTIONS'),
+            self._out.indent([
+                "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
+                "request.setHeader('Allow', 'GET, PUT, OPTIONS')"
+            ])
+         ], ["xwot_app", node.name()])
+
+    def handle_publisher_client_resource(self, node):
+        #nodename = 'ClientResource'.join(node._name.rsplit('Resource', 1))
+        self._out.code([
+            'from twisted.web.server import NOT_DONE_YET',
+            'import logging',
+            'from templates.tpl_client import ClientElement',
+            'from twisted.web.template import Element, renderer, XMLFile, flattenString',
+            'from  xwot.util.SubscriberDB import SubscriberDB',
+        ], ["xwot_app", node.name()])
+
+        self._out.code([
+            '#'
+            "# %s '%s'" % ('OPTIONS', node.fullpath()),
+            '#',
+            "@app.route('%s', methods=['%s'])" % (node.fullpath(), 'OPTIONS'),
+            "def handle%s_%s(request, clientid):" % (self._create_symbol_name(node.fullpath()), 'OPTIONS'),
+            self._out.indent([
+                "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
+                "request.setHeader('Allow', 'GET, PUT, OPTIONS')"
+            ])
+        ], ["xwot_app", node.name()])
+
+        self._out.code([
+            '#'
+            "# %s '%s'" % ('GET', node.fullpath()),
+            '#',
+            "@app.route('%s', methods=['%s'])" % (node.fullpath(), 'GET'),
+            "def handle%s_%s(request, clientid):" % (self._create_symbol_name(node.fullpath()), 'GET'),
+            self._out.indent([
+                "logging.debug(request.requestHeaders)",
+                "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
+                "accept_type = request.requestHeaders.getRawHeaders('Accept')[0].split(',')[0]",
+                "client = SubscriberDB.getClient(clientid)",
+                "if not None:",
+                "    if 'application/json' in accept_type:",
+                "        request.setHeader('Content-Type', 'application/json; charset=UTF-8')",
+                "        request.setResponseCode(200)",
+                "        return str('{\"id\":\"%s\", \"uri\":\"%s\", \"method\":\"%s\", \"accept\":\"%s\"}' % (client[0], client[1], client[2], client[3]))",
+                "    elif accept_type == 'application/xml':",
+                "        request.setHeader('Content-Type', 'application/xml; charset=UTF-8')",
+                "        request.setResponseCode(200)",
+                "        return str('<client><id>%s</id><uri>%s</uri><method>%s</method><accept>%s</accept></client>' % (client[0], client[1], client[2], client[3]))",
+                "    else:",
+                "        request.write('<!DOCTYPE html>\\n')",
+                "        flattenString(request, ClientElement(client[0], client[1], client[2], client[3], '')).addCallback(request.write)",
+                "        request.finish()",
+            ])
+        ], ["xwot_app", node.name()])
+
+        self._out.code([
+            '#'
+            "# %s '%s'" % ('PUT', node.fullpath()),
+            '#',
+            "@app.route('%s', methods=['%s'])" % (node.fullpath(), 'PUT'),
+            "def handle%s_%s(request, clientid):" % (self._create_symbol_name(node.fullpath()), 'PUT'),
+            self._out.indent([
+                'logging.debug(request.requestHeaders)',
+                "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
+                "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
+                'accept_type = request.requestHeaders.getRawHeaders("Accept")[0].split(',')[0]',
+                '#TODO Update the client in the databse',
+                'client = SubscriberDB.getClient(clientid)',
+                'if not None:',
+                '    if "application/json" in accept_type:',
+                '        request.setHeader("Content-Type", "application/json; charset=UTF-8")',
+                '        request.setResponseCode(200)',
+                '        return str(\'{"id":"%s", "uri":"%s", "method":"%s", "accept":"%s"}\' % (client[0], client[1], client[2], client[3]))',
+                '    elif "application/xml" in accept_type:',
+                '        request.setHeader("Content-Type", "application/xml; charset=UTF-8")',
+                '        request.setResponseCode(200)',
+                '        return str(\'<client><id>%s</id><uri>%s</uri><method>%s</method><accept>%s</accept></client>\' % (client[0], client[1], client[2], client[3]))',
+                '    else:',
+                '        request.write("<!DOCTYPE html>\\n")',
+                '        flattenString(request, ClientElement(client[0], client[1], client[2], client[3], '')).addCallback(request.write)',
+                '        request.finish()',
+            ])
+        ], ["xwot_app", node.name()])
+
+        self._out.code([
+            '#'
+            "# %s '%s'" % ('DELETE', node.fullpath()),
+            '#',
+            "@app.route('%s', methods=['%s'])" % (node.fullpath(), 'DELETE'),
+            "def handle%s_%s(request, clientid):" % (self._create_symbol_name(node.fullpath()), 'DELETE'),
+            self._out.indent([
+                "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
+                "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
+                'logging.debug(request.requestHeaders)',
+                'accept_type = request.requestHeaders.getRawHeaders("Accept")[0].split(',')[0]',
+                'client = SubscriberDB.getClient(clientid)',
+                'SubscriberDB.deleteQuery(clientid)',
+                'if not None:',
+                '    if "application/json" in accept_type:',
+                '        request.setHeader("Content-Type", "application/json; charset=UTF-8")',
+                '        request.setResponseCode(200)',
+                '        return str(\'{"id":"%s", "uri":"%s", "method":"%s", "accept":"%s"}\' % (client[0], client[1], client[2], client[3]))',
+                '    elif "application/xml" in accept_type:',
+                '        request.setHeader("Content-Type", "application/xml; charset=UTF-8")',
+                '        request.setResponseCode(200)',
+                '        return str(\'<client><id>%s</id><uri>%s</uri><method>%s</method><accept>%s</accept></client>\' % (client[0], client[1], client[2], client[3]))',
+                '    else:',
+                '        request.write("<!DOCTYPE html>\\n")',
+                '        flattenString(request, ClientElement(client[0], client[1], client[2], client[3], '')).addCallback(request.write)',
+                '        request.finish()',
+            ])
+        ], ["xwot_app", node.name()])
 
     def _runserver_tac(self):
         return """# coding: utf-8
