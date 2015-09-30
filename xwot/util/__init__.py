@@ -55,9 +55,11 @@ CONTENT_TYPES = {
 
 
 def deserialize(data, content_type):
+    _list = content_type.split(';')  # parse content type headers e.g.: application/json;charset=UTF-8
     try:
-        if content_type in CONTENT_TYPES and data:
-            deserializer = CONTENT_TYPES[content_type]
+        _content_type = _list[0]
+        if _content_type in CONTENT_TYPES and data:
+            deserializer = CONTENT_TYPES[_content_type]
             res = deserializer(data)
             return res
         else:

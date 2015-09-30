@@ -234,9 +234,12 @@ class Model(object):
     __mutable_props__ = []
 
     def update(self, dic, content_type):
-        if content_type in ['application/json', 'application/ld+json']:
+        _list = content_type.split(';') # parse content type headers e.g.: application/json;charset=UTF-8
+        _content_type = _list[0]
+
+        if _content_type in ['application/json', 'application/ld+json']:
             return self.handle_update(dic)
-        elif content_type in ['application/xml']:
+        elif _content_type in ['application/xml']:
             dic = dic.get(self.__class__.__name__, {})
             return self.handle_update(dic)
         else:
