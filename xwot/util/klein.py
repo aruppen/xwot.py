@@ -39,7 +39,7 @@ def cors(request, origin='*', methods=None, max_age=2520, headers=None):
     if headers is not None:
         headers = ', '.join(headers)
     else:
-        headers = 'x-prototype-version,x-requested-with'
+        headers = 'origin,x-prototype-version,x-requested-with,content-type,accept'
 
     request.setHeader('Access-Control-Allow-Origin', origin)
     request.setHeader('Access-Control-Allow-Methods', methods)
