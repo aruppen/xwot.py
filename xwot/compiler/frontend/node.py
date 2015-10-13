@@ -50,6 +50,9 @@ class Entity(object, Visitable):
     def set_name(self, name):
         self._name = name
 
+    def set_fullpath(self, path):
+        self._fullpath = path
+
     def attributes(self):
         return self._attributes
 
