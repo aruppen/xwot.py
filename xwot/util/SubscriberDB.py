@@ -13,7 +13,7 @@ class SubscriberDB():
         return result
 
     @staticmethod
-    def insertClient(uri, method, accept, resource=1):
+    def insertClient(uri, method, accept, resource='1'):
         conn = sqlite3.connect('clients.db')
         c = conn.cursor()
         c.execute("insert into Subscriber (uri, method, accept, resourceid) values ('"+uri+"', '"+method+"', '"+accept+"', '"+resource+"')")
