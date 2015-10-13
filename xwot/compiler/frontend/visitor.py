@@ -158,14 +158,16 @@ class BaseVisitor(Visitor):
         self.handle_publisher_resource(node)
         self.after_resource(node)
 
-        node = copy.deepcopy(node)
-        nodename = 'ClientResource'.join(node._name.rsplit('Resource', 1))
-        node._name = nodename
-        node._fullpath = node._fullpath+'/<clientid>'
-        self._nodes.append(node)
-        self.before_resource(node)
-        self.handle_publisher_client_resource(node)
-        self.after_resource(node)
+        node2 = copy.deepcopy(node)
+        nodename = 'ClientResource'.join(node2.name().rsplit('Resource', 1))
+        if node.name() == nodename:
+            nodename += 'Client'
+        node2.set_name(nodename)
+        node2.set_fullpath(node2.fullpath()+'/<clientid>')
+        self._nodes.append(node2)
+        self.before_resource(node2)
+        self.handle_publisher_client_resource(node2)
+        self.after_resource(node2)
 
 
 
