@@ -3,5 +3,6 @@
 xwot.egg-info/
 build/
 dist/
+xwot_py.egg-info/
 
 out-app/
