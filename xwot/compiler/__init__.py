@@ -80,6 +80,15 @@ class Compiler(object):
 
             with open(file_name, 'w+') as f:
                 f.write(code)
+        if self._platform in ['flask', 'klein']:
+            try:
+                os.mkdir(os.path.join(self._output_dir,'xwot_app/templates'), 0755)
+                os.mkdir(os.path.join(self._output_dir,'static'), 0755)
+            except  OSError, e:
+                if e.errno != 17:
+                    raise
+                pass
+
 
     def _create_description(self, root_node):
         file_name = os.path.join(self._output_dir, 'description.jsonld')

@@ -45,5 +45,3 @@ conn.execute('CREATE TABLE if not exists "SensorEvent" (id integer primary key a
 conn.execute('CREATE TABLE if not exists "Subscriber" (id integer primary key autoincrement, uri text, method text, accept text, resourceid int);')
 conn.commit()
 conn.close()
-
-os.mkdir(os.path.join(args.output_dir,'static'), 0755)
