@@ -169,7 +169,6 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                "def handle%s_%s():" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
-                                   "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
                            ], ["xwot_app", node.name()])
@@ -184,7 +183,6 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                "def handle%s_%s():" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
-                                   "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
                            ], ["xwot_app", node.name()])
@@ -199,7 +197,6 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                "def handle%s_%s():" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
-                                   "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
                            ], ["xwot_app", node.name()])
@@ -214,7 +211,6 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                "def handle%s_%s():" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
-                                   "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
                            ], ["xwot_app", node.name()])
@@ -229,7 +225,6 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                "def handle%s_%s():" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
-                                   "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
                            ], ["xwot_app", node.name()])
@@ -244,7 +239,6 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                "def handle%s_%s():" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
-                                   "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
                            ], ["xwot_app", node.name()])
@@ -259,7 +253,6 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
                                "def handle%s_%s():" % (self._create_symbol_name(node.fullpath()), method),
                                self._out.indent([
                                    "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
-                                   "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                                    'return "Name: %s , Hello at: %s"' % (node.name(), node.fullpath())
                                ])
                            ], ["xwot_app", node.name()])
@@ -286,7 +279,6 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
            "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), 'GET'),
             self._out.indent([
                     "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
-                    "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                     'dbclient = SubscriberDB.getAllClients()',
                     'logging.debug(request.requestHeaders)',
                     'accept_type = request.requestHeaders.getRawHeaders("Accept")[0]',
@@ -319,7 +311,6 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
            "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), 'POST'),
             self._out.indent([
                     "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
-                    "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                     'json_data = json.loads(request.content.getvalue())',
                     'logging.debug(json_data)',
                     'logging.debug(request.requestHeaders)',
@@ -364,7 +355,6 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
             "def handle%s_%s(request):" % (self._create_symbol_name(node.fullpath()), 'OPTIONS'),
             self._out.indent([
                 "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
-                "request.setHeader('Allow', 'GET, PUT, OPTIONS')"
             ])
          ], ["xwot_app", node.name()])
 
@@ -386,7 +376,6 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
             "def handle%s_%s(request, clientid):" % (self._create_symbol_name(node.fullpath()), 'OPTIONS'),
             self._out.indent([
                 "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
-                "request.setHeader('Allow', 'GET, PUT, OPTIONS')"
             ])
         ], ["xwot_app", node.name()])
 
@@ -426,7 +415,6 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
             self._out.indent([
                 'logging.debug(request.requestHeaders)',
                 "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
-                "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                 'accept_type = request.requestHeaders.getRawHeaders("Accept")[0].split(',')[0]',
                 '#TODO Update the client in the databse',
                 'client = SubscriberDB.getClient(clientid)',
@@ -454,7 +442,6 @@ class FlaskBackendBuilder(visitor.BaseVisitor):
             "def handle%s_%s(request, clientid):" % (self._create_symbol_name(node.fullpath()), 'DELETE'),
             self._out.indent([
                 "cors(request, methods=['GET', 'PUT', 'OPTIONS'])",
-                "request.setHeader('Allow', 'GET, PUT, OPTIONS')",
                 'logging.debug(request.requestHeaders)',
                 'accept_type = request.requestHeaders.getRawHeaders("Accept")[0].split(',')[0]',
                 'client = SubscriberDB.getClient(clientid)',
