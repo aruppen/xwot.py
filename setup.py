@@ -33,7 +33,7 @@ setup(
         ]
     },
     version=VERSION,
-    install_requires=['dicttoxml==1.6.6', 'xmltodict==0.9.2'],
+    install_requires=['dicttoxml==1.6.6', 'xmltodict==0.9.2', 'autobahn==0.10.9'],
     description="xwot",
     author="Alexander Rüedlinger",
     author_email="a.rueedlinger@gmail.com",
